@@ -28,7 +28,7 @@ the Stardog server itself, a user can access their Stardog server via:
 
 3. Configure the Stardog server as needed and create a configuration for On-Prem.
 
-> **Note:**
+> **Note**:
 > Example configurations are provided in this repository.
 
 4. Create and run the container.
