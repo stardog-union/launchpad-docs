@@ -33,9 +33,9 @@ The way this configuration works is a user provides their Stardog username and p
 
 1. Execute the following command from this directory to bring up the On-Prem service.
 
-```
-docker-compose up -d
-```
+    ```
+    docker-compose up -d
+    ```
 
 2. Visit [http://localhost:8080](http://localhost:8080) in your browser.
 
@@ -52,4 +52,4 @@ In the example:
 
 - `PASSWORD_AUTH_ENABLED` is set to `true`. This allows users to provide a Stardog username and password for authentication in the login dialog. This is actually the default setting, but is included here for completeness.
 - `COOKIE_SECRET` is set to `some-secret`. In production, this should actually be set to something secure and much more random. This secret is used to sign cookies used by the application.
-- `FRIENDLY_NAME` is set to `Stardog Applications`. This is just optional text that is configurable to display to the user on the login dialog.
+- `FRIENDLY_NAME` is set to `Stardog Applications`. This is just optional text to display to the user on the login dialog. This text will be inserted after `Connect to`.
