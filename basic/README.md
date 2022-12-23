@@ -14,8 +14,8 @@ The way this configuration works is a user provides their Stardog username and p
 - Docker Compose installed
 - A Stardog server running locally on port `5820`. 
 
-> **Note:**
-> If you have a Stardog server running elsewhere (locally or not), this is fine, just modify the `STARDOG_INTERNAL_ENDPOINT` and `STARDOG_EXTERNAL_ENDPOINT` in the [`.env`](.env) file as needed.
+  > **Note:**
+  > If you have a Stardog server running elsewhere (locally or not), this is fine, just modify the `STARDOG_INTERNAL_ENDPOINT` and `STARDOG_EXTERNAL_ENDPOINT` in the [`.env`](.env) file as needed.
 
 
 ## Stardog Server Requirements
