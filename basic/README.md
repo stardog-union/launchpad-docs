@@ -14,7 +14,7 @@ The way this configuration works is a user provides their Stardog username and p
 - Docker Compose installed
 - A Stardog server running locally on port `5820`. 
 
-  > **Note:**
+  > **Note**:
   > If you have a Stardog server running elsewhere (locally or not), this is fine, just modify the `STARDOG_INTERNAL_ENDPOINT` and `STARDOG_EXTERNAL_ENDPOINT` in the [`.env`](.env) file as needed.
 
 
@@ -38,6 +38,6 @@ The way this configuration works is a user provides their Stardog username and p
 docker-compose up -d
 ```
 
-2. Visit [http://localhost:8080]("http://localhost:8080") in your browser.
+2. Visit [http://localhost:8080](http://localhost:8080) in your browser.
 
 
