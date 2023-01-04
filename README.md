@@ -28,9 +28,8 @@ sequenceDiagram
   title Basic Auth (Stardog Username & Password) Flow
   On-Prem->>Stardog: Successful user/pass authentication
   Stardog->>On-Prem: Stardog issued JWT returned
-  Note over Stardog,On-Prem: On-Prem saves profile information <br> contained in IdP JWT in a cookie and discards it.
-  On-Prem->>Stardog: Stardog API requests with On-Prem JWT
-  Note over On-Prem,Stardog: On-Prem generates its JWTs <br> Stardog server is configured to accept <br> using information contained in the cookie.
+  Note over Stardog,On-Prem: On-Prem saves Stardog JWT in a cookie for later use.
+  On-Prem->>Stardog: Stardog API requests with Stardog JWT 
 ```
  
 ```mermaid
