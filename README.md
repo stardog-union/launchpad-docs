@@ -9,8 +9,39 @@ the Stardog server itself, a user can access their Stardog server via:
 
 - [Basic Auth (Stardog username and password)](./basic/)
 - Kerberos
-- Google SSO
+- [Google SSO](./google/)
 - Keycloak SSO
+
+## How it Works
+
+There are 2 main flows (Kerberos being the exception) used by the On-Prem application with respect to authentication.
+
+1. Basic Auth (Stardog username and password)
+2. Identity Provider (e.g. Google)
+
+Both authentication flows utilize Stardog's [OAuth 2.0 Integration](https://docs.stardog.com/operating-stardog/security/oauth-integration). In short, Stardog can produce JWT tokens it can then accept for authenticated API requests. Stardog can also be configured to accept JWT tokens issued by a trusted issuer and optionally auto-create users if roles from the IdP are mapped properly to pre-defined Stardog roles.
+
+High-level diagrams:
+
+```mermaid
+sequenceDiagram
+  title Basic Auth (Stardog Username & Password) Flow
+  On-Prem->>Stardog: Successful user/pass authentication
+  Stardog->>On-Prem: Stardog issued JWT returned
+  Note over Stardog,On-Prem: On-Prem saves profile information <br> contained in IdP JWT in a cookie and discards it.
+  On-Prem->>Stardog: Stardog API requests with On-Prem JWT
+  Note over On-Prem,Stardog: On-Prem generates its JWTs Stardog server is configured to accept using information contained in the cookie.
+```
+ 
+```mermaid
+sequenceDiagram
+  title Identity Provider (IdP) Flow
+  On-Prem->>IdP: Successful user authentication
+  IdP->>On-Prem: IdP JWT returned
+  Note over IdP,On-Prem: On-Prem saves profile information <br> contained in IdP JWT in a cookie and discards it.
+  On-Prem->>Stardog: Stardog API requests with On-Prem JWT
+  Note over On-Prem,Stardog: On-Prem generates its JWTs Stardog server <br> is configured to accept using information contained in the cookie.
+```
 
 ## Get Started
 
