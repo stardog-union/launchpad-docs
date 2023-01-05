@@ -10,7 +10,7 @@ the Stardog server itself, a user can access their Stardog server via:
 - [Basic Auth (Stardog username and password)](./basic/)
 - Kerberos
 - [Google SSO](./google/)
-- Keycloak SSO
+- [Keycloak](./keycloak/)
 
 ## How it Works
 
