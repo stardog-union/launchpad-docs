@@ -6,6 +6,18 @@ The purpose of this example is to demonstrate how to deploy and configure On-Pre
 
 This integration is built on top of the Stardog Platform’s [Role Mapping](https://docs.stardog.com/operating-stardog/security/oauth-integration#role-mapping) feature as part of its OAuth 2.0 integration. As long as users in Keycloak are assigned roles that match pre-defined ones in Stardog, the users will be auto-created in Stardog and assigned permissions that correspond to their role assignment(s). This allows an administrator to have a single source of truth for managing the roles (and thus permissions) of a user since auto-created users cannot be explicitly assigned permissions.
 
+```bash
+$ stardog-admin role list
++--------+
+|  Role  |
++--------+
+| reader |
+| writer |
++--------+
+```
+
+![Keycloak User Roles](./img/keycloak-user-roles.png)
+
 ## How This Works
 
 1. A user clicks the "Sign in with Keycloak" button during login
