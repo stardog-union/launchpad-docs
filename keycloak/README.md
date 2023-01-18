@@ -168,3 +168,29 @@ In the example's [configuration](./.env):
 - `FRIENDLY_NAME` is set to `Stardog Applications`. This is just optional text to display to the user on the login dialog. This text will be inserted after `Connect to`.
 
   ![Friendly Name](./img/friendly-name.png)
+
+# Stardog API and Keycloak
+
+If you access your Stardog server using its [HTTP API](https://stardog-union.github.io/http-docs/), you can also use tokens obtained from Keycloak to authenticate and authorize your API calls.
+
+Continuing the example above, add another issuer to the jwt.yaml file that we use when configuring the Stardog server to accept signed tokens from Keycloak. This time we configure the Keycloak server as a token issuer:
+
+```yaml
+issuers:
+  <ON-PREM_ISSUER_FROM_ABOVE>
+
+  <KEYCLOAK_REALM_URL>:
+    usernameField: preferred_username
+    rolesField: realm_access
+    audience: account
+    algorithms:
+      RS256:
+        keyUrl: <KEYCLOAK_REALM_URL>/protocol/openid-connect/certs
+    autoCreateUsers: True
+    allowedGroupIdentifiers:
+      - roles
+```
+
+In this case, `<KEYCLOAK_REALM_URL>` is the address of your Keycloak server and realm (e.g., `https://<IP>:<PORT>/realms/<REALM>`). Depending on how you have configured Keycloak to generate tokens, you may need to adjust the `usernameField` and `audience` values.
+
+After making this change, you will need to restart your Stardog server for the change to take effect.
