@@ -169,7 +169,7 @@ In the example's [configuration](./.env):
 
   ![Friendly Name](./img/friendly-name.png)
 
-# Stardog API and Keycloak
+## Stardog API and Keycloak
 
 If you access your Stardog server using its [HTTP API](https://stardog-union.github.io/http-docs/), you can also use tokens obtained from Keycloak to authenticate and authorize your API calls.
 
