@@ -76,7 +76,7 @@ sequenceDiagram
 
 ## Getting Help
 
-Issues are disabled on this repository for now. All support requests and feedback should be routed directly to either your dedicated Customer Success Manager (CSM) or Stardog Support. 
+Issues are disabled on this repository. All support requests and feedback should be routed directly to either your dedicated Customer Success Manager (CSM) or Stardog Support. 
 
 ## Configuration Options
 
