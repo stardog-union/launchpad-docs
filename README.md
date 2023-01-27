@@ -74,6 +74,10 @@ sequenceDiagram
 
     - On-Prem will always be served at port `8080` from the container. Map this port as needed.
 
+## Getting Help
+
+Issues are disabled on this repository. All support requests and feedback should be routed directly to either your dedicated Customer Success Manager (CSM) or Stardog Support. 
+
 ## Configuration Options
 
 All available configuration options are listed in the table below:
