@@ -56,7 +56,7 @@ sequenceDiagram
 
 Below are steps with screenshots to create and register On-Prem as a Microsoft Application.
 
-1. Register a new [App Registration](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app#register-an-application) with the settings below:
+1. Create a new [App Registration](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app#register-an-application) with the settings below:
 
 ![App Registration](./img/app-registration.png)
 
