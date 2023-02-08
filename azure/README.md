@@ -108,29 +108,29 @@ Below are steps with screenshots to create and register On-Prem as a Microsoft A
 
 - The JWT configuration for the Stardog server needs to be customized. To provide a configuration file for JWT configuration to stardog set the following property in the `stardog.properties` file:
 
-```properties
-jwt.conf=/path/to/jwt.yaml
-```
+   ```properties
+   jwt.conf=/path/to/jwt.yaml
+   ```
 
-The `jwt.conf` property must point to a vaid YAML file. More information about the schema the YAML file should adhere to can be found in the [Stardog docs](https://docs.stardog.com/operating-stardog/security/oauth-integration#configuring-stardog). For Stardog to accept tokens issued by On-Prem the following section must be added to the `issuers` section in the config file.
+   The `jwt.conf` property must point to a vaid YAML file. More information about the schema the YAML file should adhere to can be found in the [Stardog docs](https://docs.stardog.com/operating-stardog/security/oauth-integration#configuring-stardog). For Stardog to accept tokens issued by On-Prem the following section must be added to the `issuers` section in the config file.
 
-```yaml
-issuers:
-  <JWT_ISSUER>:
-    usernameField: username
-    audience: <STARDOG_EXTERNAL_ENDPOINT> 
-    algorithms:
-      RS256:
-        keyUrl: <BASE_URL>/.well-known/jwks.json
-    autoCreateUsers: True
-    allowedGroupIdentifiers:
-      - azure.microsoft.com/<AZURE_TENANT_ID>
-```
+   ```yaml
+   issuers:
+     <JWT_ISSUER>:
+       usernameField: username
+       audience: <STARDOG_EXTERNAL_ENDPOINT> 
+       algorithms:
+         RS256:
+           keyUrl: <BASE_URL>/.well-known/jwks.json
+       autoCreateUsers: True
+       allowedGroupIdentifiers:
+         - azure.microsoft.com/<AZURE_TENANT_ID>
+   ```
 
-- Be sure to replace `<JWT_ISSUER>`,`<STARDOG_EXTERNAL_ENDPOINT>` and `<BASE_URL>` with the values set in the [`.env`](./.env) file and `<AZURE_TENANT_ID>` with the [Azure Tenant ID](https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-to-find-tenant#find-tenant-id-through-the-azure-portal) the users authenticating are in.
+   - Be sure to replace `<JWT_ISSUER>`,`<STARDOG_EXTERNAL_ENDPOINT>` and `<BASE_URL>` with the values set in the [`.env`](./.env) file and `<AZURE_TENANT_ID>` with the [Azure Tenant ID](https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-to-find-tenant#find-tenant-id-through-the-azure-portal) the users authenticating are in.
 
-  > **Note**:
-  > `JWT_ISSUER` by default is set to the value of `BASE_URL`. There is no need to provide the `JWT_ISSUER` environment variable if you are fine using the default. In this case provide the value of `BASE_URL` as `JWT_ISSUER` in the above yaml.
+     > **Note**:
+     > `JWT_ISSUER` by default is set to the value of `BASE_URL`. There is no need to provide the `JWT_ISSUER` environment variable if you are fine using the default. In this case provide the value of `BASE_URL` as `JWT_ISSUER` in the above yaml.
 
 ## Run the Example
 
