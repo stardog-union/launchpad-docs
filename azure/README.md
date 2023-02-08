@@ -21,7 +21,7 @@ $ stardog-admin role list
 
 1. A user clicks the "Sign in with Microsoft" button during login
 
-2. If the user successfully authenticates they are redirected the On-Prem home page where they can enter the Stardog Apps.
+2. If the user successfully authenticates, they are redirected to the On-Prem home page where they can enter the Stardog Apps.
 
    > **Note**:
    > In order for the Azure AD user signing in to On-Prem to be auto-created in Stardog, the user must be a member of a group in Azure AD that follows the naming convention `stardog_<rolename>`. The `<rolename>` **must** be pre-defined in Stardog.
