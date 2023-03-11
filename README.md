@@ -31,7 +31,7 @@ sequenceDiagram
   On-Prem->>Stardog: Successful user/pass authentication
   Stardog->>On-Prem: Stardog issued JWT returned
   Note over Stardog,On-Prem: On-Prem saves Stardog JWT in a session for later use.
-  On-Prem->>Stardog: Stardog API requests with Stardog JWT 
+  On-Prem->>Stardog: Stardog API requests with Stardog JWT
 ```
 
 ```mermaid
@@ -48,13 +48,13 @@ sequenceDiagram
 
 1. Login in to the Docker registry:
 
-```
+```bash
 docker login stardog-stardog-apps.jfrog.io
 ```
 
 2. Pull the latest image:
 
-```
+```bash
 docker pull stardog-stardog-apps.jfrog.io/cloud-login:onprem-current
 ```
 
@@ -65,16 +65,24 @@ docker pull stardog-stardog-apps.jfrog.io/cloud-login:onprem-current
 
 4. Create and run the container.
 
-   ```
+   ```bash
    docker run \
-     --env-file .env \
-     -p 8080:8080 \
-     --rm \
-     --name stardog-apps \
-     stardog-stardog-apps.jfrog.io/cloud-login:onprem-current
+       --env-file .env \
+       -p 8080:8080 \
+       --rm \
+       --name stardog-apps \
+       stardog-stardog-apps.jfrog.io/cloud-login:onprem-current
+
+   docker run -d \
+       --name stardog-onprem \
+       --env-file .env \
+       -p 0.0.0.0:8080:8080 \
+       --rm \
+       --add-host host.docker.internal:host-gateway \
+       stardog-stardog-apps.jfrog.io/cloud-login:onprem-current
    ```
 
-   - On-Prem will always be served at port `8080` from the container. Map this port as needed.
+   On-Prem will always be served at port `8080` from the container. Map this port as needed.
 
 ## Getting Help
 
