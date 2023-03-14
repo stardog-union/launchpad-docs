@@ -99,7 +99,7 @@ Below is a diagram describing the above:
 
 ![OnPrem Stardog Communications](./assets/onprem-sd-comms.png)
 
-A configuration option, `STARDOG_SERVER_CERT_PATH`, is provided for the backend service running in the On-Prem container to verify the Stardog server's SSL certificate, just like a web browser does. This can be particularly helpful if you've secured your Stardog server using a self-signed certificate.`STARDOG_SERVER_CERT_PATH` should be set to the path inside the On-Prem Docker container. You will need to mount a volume containing the cert to the OnPrem
+A configuration option, `STARDOG_SERVER_CERT_PATH`, is provided for the backend service running in the On-Prem container to verify the Stardog server's SSL certificate, just like a web browser does. This can be particularly helpful if you've secured your Stardog server using a self-signed certificate.`STARDOG_SERVER_CERT_PATH` should be set to the path inside the On-Prem Docker container where the certificate is located. You will need to mount a volume on the host machine containing the cert to the On-Prem container.
 
 ```
 docker run \
