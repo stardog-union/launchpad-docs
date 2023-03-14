@@ -84,41 +84,41 @@ Issues are disabled on this repository. All support requests and feedback should
 
 If users authenticate via **BasicAuth** or **Kerberos**, API requests to Stardog from On-Prem originate from 2 different locations.
 
-> **Note**:
-> For users authenticating with an IdP, API requests to Stardog from On-Prem will only originate from the user's browser.
-
-1. The Docker container running the application backend
+1. The Docker container running the backend login service
 
 - uses the `STARDOG_INTERNAL_ENDPOINT` environment variable for requests to Stardog
 
-2. The user's browser - the OnPrem front end and Stardog Applications (Studio, Explorer, Designer)
+2. The user's browser - the On-Prem front end and Stardog Applications (Studio, Explorer, Designer)
 
 - uses the `STARDOG_EXTERNAL_ENDPOINT` environment variable for requests to Stardog
+
+> **Note**:
+> For users authenticating with an IdP, API requests to Stardog from On-Prem will only originate from the user's browser.
 
 Below is a diagram describing the above:
 
 ![OnPrem Stardog Communications](./assets/onprem-sd-comms.png)
 
-A configuration option, `STARDOG_SERVER_CERT_PATH`, is provided for the OnPrem container to verify the Stardog server's SSL certificate, just like a web browser does. This can be particularly helpful if you've secured your Stardog server using a self-signed certificate.`STARDOG_SERVER_CERT_PATH` should be set to the path inside the OnPrem docker container. You will need to mount a directory containing the cert to the OnPrem
+A configuration option, `STARDOG_SERVER_CERT_PATH`, is provided for the backend service running in the On-Prem container to verify the Stardog server's SSL certificate, just like a web browser does. This can be particularly helpful if you've secured your Stardog server using a self-signed certificate.`STARDOG_SERVER_CERT_PATH` should be set to the path inside the On-Prem Docker container. You will need to mount a volume containing the cert to the OnPrem
 
 ```
 docker run \
   --env-file .env \
   -p 8080:8080 \
-  -v /host-machine/certs:/certs
+  -v /host-machine/certs:/certs \
   --rm \
   --name stardog-apps \
   stardog-stardog-apps.jfrog.io/cloud-login:onprem-current
 ```
 
-- In the above example, a directory on the host machine `/host-machine/certs` is mounted to the `/certs` directory inside the Docker container. Suppose a certificate was contained in the directory called `myCert.crt`, then `STARDOG_SERVER_CERT_PATH` should be set to `/certs/myCert.crt`
+- In the above example, a directory on the host machine `/host-machine/certs` is mounted to the `/certs` directory inside the Docker container. Suppose a certificate was contained in the directory named `myCert.crt`, then `STARDOG_SERVER_CERT_PATH` should be set to `/certs/myCert.crt`
 
 > **Note**:
-> The above configuration option only performs SSL cert validation for communications between the login service running in Docker and Stardog, **not** the On-Prem front end and the Stardog Applications themselves (Studio, Designer, Explorer). Users will need to configure their browsers to ensure communications between their browser and Stardog can be made.
+> The above configuration option only performs SSL cert validation for communications between the backend login service running in Docker and Stardog, **not** the On-Prem front end and the Stardog Applications themselves (Studio, Designer, Explorer). Users will need to configure their browsers to ensure communications between their browser and Stardog can be made.
 
 ## Client Side Certificates
 
-Configuration options are also provided to specify a client side certificate for communications between the OnPrem container and the Stardog server.
+Configuration options are also provided to specify a client side certificate for communications between the On-Prem container and the Stardog server.
 
 - `STARDOG_CLIENT_CERT_PATH`: the path inside the Docker container to the client side certificate
 - `STARDOG_CLIENT_CERT_PRIVATE_KEY_PATH`the path inside the Docker container to the client side certificate's private key
