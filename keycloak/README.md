@@ -93,7 +93,7 @@ Below are steps with screenshots to create a Keycloak OpenID Connect Client.
   >   "realm_access": {
   >       "roles": [
   >         "reader",
-            "writer"
+  >         "writer"
   >       ]
   >    },
   >   "scope": "openid profile email",
