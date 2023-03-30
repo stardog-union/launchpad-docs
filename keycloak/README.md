@@ -74,12 +74,32 @@ Below are steps with screenshots to create a Keycloak OpenID Connect Client.
 
 ![Keycloak Client Mapper](./img/keycloak-client/mappers.png)
 
-  - Ensure the following settings are set. These are the default:
+- Ensure the following settings are set. These are the default:
 
-    ![Keycloak Client Realm Roles Mapper](./img/keycloak-client/realm-roles-mapper.png)
+  ![Keycloak Client Realm Roles Mapper](./img/keycloak-client/realm-roles-mapper.png)
 
-    > **Note**:
-    > It is very important to ensure the **Token Claim Name** is set to `realm_access.roles`. On-Prem expects the `realm_access.roles` claim to be included in the ID token.
+  > **Note**:
+  > By default, On-Prem expects the `realm_access.roles` claim to be included in the **ID token**. This can be configured with the `KEYCLOAK_TOKEN_ROLES_CLAIM` environment variable. See [Configuring the ID Token Role Claim](#configuring-the-id-token-role-claim) for additional details.
+  >
+  > Example Keycloak ID token with `realm_access.roles` claim:
+  >
+  > ```json
+  > {
+  >   "exp": 1678894749,
+  >   "iat": 1678894449,
+  >   "auth_time": 1678894448,
+  >   "jti": "71ed7f0e-64db-4cfa-86a4-e89c05cb365f",
+  >   "iss": "http://35.90.111.82:8080/realms/portal",
+  >   "realm_access": {
+  >       "roles": [
+  >         "reader",
+  >         "writer"
+  >       ]
+  >    },
+  >   "scope": "openid profile email",
+  >   ...more claims
+  > }
+  > ```
 
 ### Stardog Server Requirements
 
@@ -105,7 +125,7 @@ The `jwt.conf` property must point to a vaid YAML file. More information about t
 issuers:
   <JWT_ISSUER>:
     usernameField: username
-    audience: <STARDOG_EXTERNAL_ENDPOINT> 
+    audience: <STARDOG_EXTERNAL_ENDPOINT>
     algorithms:
       RS256:
         keyUrl: <BASE_URL>/.well-known/jwks.json
@@ -139,7 +159,7 @@ issuers:
 > ```bash
 > $ stardog-admin role add writer
 > Successfully added role writer.
-> 
+>
 > $ stardog-admin role grant -a "write" -o "*:*" writer
 > Successfully granted the permission.
 > ```
@@ -150,8 +170,8 @@ issuers:
 
 In the example's [configuration](./.env):
 
-- `KEYCLOAK_AUTH_ENABLED` enables Keycloak authentication. 
-  - `KEYCLOAK_CLIENT_ID` is the Keycloak OpenID Connect Client ID of the client being used for authentication. 
+- `KEYCLOAK_AUTH_ENABLED` enables Keycloak authentication.
+  - `KEYCLOAK_CLIENT_ID` is the Keycloak OpenID Connect Client ID of the client being used for authentication.
   - `KEYCLOAK_CLIENT_SECRET` is the client secret for the KEYCLOAK Oauth 2.0 Client being used for authentication.
   - `KEYCLOAK_ENDPOINT` is the URL of the Keycloak server
   - `KEYCLOAK_REALM` is the realm the client is located in
@@ -168,6 +188,58 @@ In the example's [configuration](./.env):
 - `FRIENDLY_NAME` is set to `Stardog Applications`. This is just optional text to display to the user on the login dialog. This text will be inserted after `Connect to`.
 
   ![Friendly Name](./img/friendly-name.png)
+
+## Configuring the ID Token Role Claim
+
+The environment variable `KEYCLOAK_TOKEN_ROLES_CLAIM` can be used to override the location in which On-Prem will search for the authenticating user's roles in the Keycloak ID token. By default, On-Prem will search in `realm_access.roles`
+
+The Keycloak docs describe the token claim syntax with the following description:
+
+> Name of the claim to insert into the token. This can be a fully qualified name like 'address.street'. In this case, a nested json object will be created. To prevent nesting and use dot literally, escape the dot with backslash (.).
+
+On-Prem uses this same syntax for the `KEYCLOAK_TOKEN_ROLES_CLAIM`.
+
+For example, suppose `KEYCLOAK_TOKEN_ROLES_CLAIM` was set to `the.best.roles` - On-Prem would expected the roles to be contained in the ID token like:
+
+```json
+{
+  "exp": 1678894749,
+  "iat": 1678894449,
+  "auth_time": 1678894448,
+  "jti": "71ed7f0e-64db-4cfa-86a4-e89c05cb365f",
+  "iss": "http://35.90.111.82:8080/realms/portal",
+  "the": {
+      "best": {
+          "roles": [
+                "reader",
+                "writer"
+           ]
+       },
+   },
+  "scope": "openid profile email",
+  ...more claims
+}
+```
+
+Here's another example where the escape syntax (`\.`) is used. Suppose `KEYCLOAK_TOKEN_ROLES_CLAIM` was set to `stardog\.com.great\.roles` - On-Prem would expected the roles to be contained in the ID token like:
+
+```json
+{
+  "exp": 1678894749,
+  "iat": 1678894449,
+  "auth_time": 1678894448,
+  "jti": "71ed7f0e-64db-4cfa-86a4-e89c05cb365f",
+  "iss": "http://35.90.111.82:8080/realms/portal",
+  "stardog.com": {
+      "great.roles": [
+            "reader",
+            "writer"
+       ]
+   },
+  "scope": "openid profile email",
+  ...more claims
+}
+```
 
 ## Stardog API and Keycloak
 
