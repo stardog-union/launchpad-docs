@@ -73,6 +73,7 @@ docker pull stardog-stardog-apps.jfrog.io/cloud-login:onprem-current
        --name stardog-apps \
        stardog-stardog-apps.jfrog.io/cloud-login:onprem-current
 
+   # for linux
    docker run -d \
        --name stardog-onprem \
        --env-file .env \
