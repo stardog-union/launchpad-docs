@@ -130,7 +130,25 @@ If desired, the `STARDOG_CLIENT_CERT_PRIVATE_KEY_PATH` can be omitted by bundlin
 
 ## Accessing Launchpad with HTTPS
 
-To enable communication between the front end (i.e., your browser) and Stardog via HTTPS, you can configure a reverse proxy, such as [nginx](https://nginx.org/en/). Once you have set up your proxy, set the `BASE_URL` variable in your `.env` file to its address. You will need to recreate your Docker containers after updating your `.env` file.
+To enable communication between the front end (i.e., your browser) and Launchpad via HTTPS, you can configure a reverse proxy, such as [nginx](https://nginx.org/en/). Once you have set up your proxy, set the `BASE_URL` variable in your `.env` file to its address. You will need to recreate your Docker containers after updating your `.env` file.
+
+An example nginx config file is below:
+```yaml
+version: '3'
+services:
+     nginx:
+         user: root
+         container_name: nginx
+         hostname: nginx
+         image: nginx
+         restart: unless-stopped
+         ports:
+             - 9443:443
+         volumes:
+             - /path/to/conf/nginx:/etc/nginx/conf.d
+             - /path/to/SSL:/etc/ssl/private
+             - /path/to/nginx:/var/log/nginx
+```
 
 ## Configuration Options
 
