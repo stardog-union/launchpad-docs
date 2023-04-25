@@ -114,7 +114,7 @@ docker run \
 - In the above example, a directory on the host machine `/host-machine/certs` is mounted to the `/certs` directory inside the Docker container. Suppose a CA bundle was contained in the directory named `ca-chain.cert.pem`, then `STARDOG_SERVER_CERT_PATH` should be set to `/certs/ca-chain.cer.pem`.
 
 > **Note**:
-> The above configuration option only performs SSL cert validation for communications between the backend login service running in Docker and Stardog, **not** the On-Prem front end and the Stardog Applications themselves (Studio, Designer, Explorer). To enable communication between the front end (i.e., your browser) and Stardog via HTTPS, you can configure a reverse proxy, such as [nginx](https://nginx.org/en/). Once you have set up your proxy, set the `BASE_URL` variable in your `.env` file to its address. You will need to recreate new Docker containers after updating your `.env` file.
+> The above configuration option only performs SSL cert validation for communications between the backend login service running in Docker and Stardog, **not** the On-Prem front end and the Stardog Applications themselves (Studio, Designer, Explorer). Users will need to configure their browsers to ensure communications between their browser and Stardog can be made.
 
 ## Client Side Certificates
 
@@ -127,6 +127,10 @@ If desired, the `STARDOG_CLIENT_CERT_PRIVATE_KEY_PATH` can be omitted by bundlin
 
 > **Warning**:
 > The private key to your client certificate **must** be unencrypted.
+
+## Accessing Launchpad with HTTPS
+
+To enable communication between the front end (i.e., your browser) and Stardog via HTTPS, you can configure a reverse proxy, such as [nginx](https://nginx.org/en/). Once you have set up your proxy, set the `BASE_URL` variable in your `.env` file to its address. You will need to recreate your Docker containers after updating your `.env` file.
 
 ## Configuration Options
 
