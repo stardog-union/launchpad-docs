@@ -130,7 +130,7 @@ If desired, the `STARDOG_CLIENT_CERT_PRIVATE_KEY_PATH` can be omitted by bundlin
 
 ## Accessing Launchpad with HTTPS
 
-To enable communication between the front end (i.e., your browser) and Launchpad via HTTPS, you can configure a reverse proxy, such as [nginx](https://nginx.org/en/). Once you have set up your proxy, set the `BASE_URL` variable in your `.env` file to its address. You will need to recreate your Docker containers after updating your `.env` file.
+To enable HTTPS communications for Launchpad, you can configure a reverse proxy or load balancer, such as [nginx](https://nginx.org/en/). Once you have set up your proxy/load balancer, set the `BASE_URL` environment variable to its address. 
 
 An example nginx config file is below:
 ```yaml
