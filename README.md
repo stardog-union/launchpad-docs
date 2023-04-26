@@ -132,23 +132,7 @@ If desired, the `STARDOG_CLIENT_CERT_PRIVATE_KEY_PATH` can be omitted by bundlin
 
 To enable HTTPS communications for Launchpad, you can configure a reverse proxy or load balancer, such as [nginx](https://nginx.org/en/). Once you have set up your proxy/load balancer, set the `BASE_URL` environment variable to its address. 
 
-An example nginx config file is below:
-```yaml
-version: '3'
-services:
-     nginx:
-         user: root
-         container_name: nginx
-         hostname: nginx
-         image: nginx
-         restart: unless-stopped
-         ports:
-             - 9443:443
-         volumes:
-             - /path/to/conf/nginx:/etc/nginx/conf.d
-             - /path/to/SSL:/etc/ssl/private
-             - /path/to/nginx:/var/log/nginx
-```
+To secure communications between Stardog and Launchpad, see [SSL Cert Verification](./README.md#ssl-cert-verification).
 
 ## Configuration Options
 
