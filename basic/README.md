@@ -33,7 +33,7 @@ The way this configuration works is a user provides their Stardog username and p
 
 1. Execute the following command from this directory to bring up the On-Prem service.
 
-    ```
+    ```bash
     docker-compose up -d
     ```
 
