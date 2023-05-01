@@ -1,8 +1,8 @@
 version: "3.2"
 services:
 
-  on-prem:
-    image: stardog-stardog-apps.jfrog.io/cloud-login:onprem-current 
+  launchpad:
+    image: stardog-stardog-apps.jfrog.io/cloud-login:launchpad-current 
     restart: always
     ports:
       - 8080:8080
