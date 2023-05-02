@@ -1,10 +1,10 @@
 # Azure AD Example
 
-The purpose of this example is to demonstrate how to deploy and configure On-Prem to allow users to sign in with [Azure Active Directory](https://azure.microsoft.com/en-us/products/active-directory) and access the configured Stardog server via Stardog Applications.
+The purpose of this example is to demonstrate how to deploy and configure Launchpad to allow users to sign in with [Azure Active Directory](https://azure.microsoft.com/en-us/products/active-directory) and access the configured Stardog server via Stardog Applications.
 
 ![Azure AD Login](./img/azure.gif)
 
-This integration is built on top of the Stardog Platform’s [Role Mapping](https://docs.stardog.com/operating-stardog/security/oauth-integration#role-mapping) feature as part of its OAuth 2.0 integration. In short, as long as users in Azure AD have membership in groups that conform to the naming structure of `stardog_<rolename>`, and the `<rolename>`(s) are pre-defined in Stardog, the users will be auto-created in Stardog and assigned permissions that correspond to their role assignment(s). This allows an administrator to have a single source of truth for managing the roles (and thus permissions) of a user since auto-created users cannot be explicitly assigned permissions.
+This integration is built on top of the Stardog Platform’s [Role Mapping](https://docs.stardog.com/operating-stardog/security/oauth-integration#role-mapping) feature as part of its OAuth 2.0 integration. In short, as long as users in Azure AD have membership in groups that conform to the naming structure of `stardog_<rolename>`, and the `<rolename>`(s) are pre-defined in Stardog, the users will be auto-created in Stardog and assigned permissions that correspond to their role assignment(s). This allows an administrator to have a single source of truth for managing the roles (and thus permissions) of a user, since auto-created users cannot be explicitly assigned permissions.
 
 ```bash
 $ stardog-admin role list
@@ -19,24 +19,24 @@ $ stardog-admin role list
 
 ## How This Works
 
-1. A user clicks the "Sign in with Microsoft" button during login
+1. A user clicks the "Sign in with Microsoft" button during login.
 
-2. If the user successfully authenticates, they are redirected to the On-Prem home page where they can enter the Stardog Apps.
+2. If the user successfully authenticates, they are redirected to the Launchpad home page where they can enter the Stardog Apps.
 
    > **Note**:
-   > In order for the Azure AD user signing in to On-Prem to be auto-created in Stardog, the user must be a member of a group in Azure AD that follows the naming convention `stardog_<rolename>`. The `<rolename>` **must** be pre-defined in Stardog.
+   > In order for the Azure AD user signing in to Launchpad to be auto-created in Stardog, the user must be a member of a group in Azure AD that follows the naming convention `stardog_<rolename>`. The `<rolename>` **must** be pre-defined in Stardog.
 
-At a high level, when a user authenticates with Azure AD, a JWT is exchanged between Azure AD and On-Prem. On-Prem gets information from the Azure AD JWT (notably the user's email and group membership) and discards it. This information contained in the Azure AD JWT is then used by On-Prem to encode the JWT tokens it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWT tokens issued by On-Prem.
+At a high level, when a user authenticates with Azure AD, a JWT is exchanged between Azure AD and Launchpad. Launchpad gets information from the Azure AD JWT (notably the user's email and group membership) and discards it. This information contained in the Azure AD JWT is then used by Launchpad to encode the JWTs it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWTs issued by Launchpad.
 
 Diagram demonstrating the flow described above:
 
 ```mermaid
 sequenceDiagram
-  On-Prem->>Azure AD: Successful user authentication
-  Azure AD->>On-Prem: Azure AD JWT returned
-  Note over Azure AD,On-Prem: On-Prem saves profile information <br> contained in Azure AD JWT in a session and discards it.
-  On-Prem->>Stardog: Stardog API requests with On-Prem JWT
-  Note over On-Prem,Stardog: On-Prem generates its JWTs Stardog server is configured to accept using information contained in the session.
+  Launchpad->>Azure AD: Successful user authentication
+  Azure AD->>Launchpad: Azure AD JWT returned
+  Note over Azure AD,Launchpad: Launchpad saves profile information <br> contained in Azure AD JWT in a session and discards it.
+  Launchpad->>Stardog: Stardog API requests with Launchpad JWT
+  Note over Launchpad,Stardog: Launchpad generates its JWTs Stardog server is configured to accept using information contained in the session.
 ```
 
 ## Prerequisites
@@ -45,7 +45,7 @@ sequenceDiagram
 
 - Docker Compose installed
 
-- A registed application with the [Microsoft Identity Platform](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app#register-an-application). See [How to Register the Application](#how-to-register-the-application) for more details on configuration required.
+- A registered application with the [Microsoft Identity Platform](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app#register-an-application). See [How to Register the Application](#how-to-register-the-application) for more details on configuration required.
 
 - A Stardog server running locally on port `5820`. See [Stardog Server Requirements](#stardog-server-requirements) for additional info.
 
@@ -54,7 +54,7 @@ sequenceDiagram
 
 ### How to Register the Application
 
-Below are steps with screenshots to create and register On-Prem as a Microsoft Application.
+Below are steps with screenshots to create and register Launchpad as a Microsoft Application.
 
 1. Create a new [App Registration](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app#register-an-application) with the settings below:
 
@@ -64,7 +64,7 @@ Below are steps with screenshots to create and register On-Prem as a Microsoft A
 
 - Provide a name for the application
 - Select the supported account types
-- Created a **Web** redirect URI of `<BASE_URL>/oauth/azure/redirect`
+- Create a **Web** redirect URI of `<BASE_URL>/oauth/azure/redirect`
 
 2. Under **Authentication > Implicit grant and hybrid flows**, select **Access** and **ID** Tokens and click **Save**.
 
@@ -80,7 +80,7 @@ Below are steps with screenshots to create and register On-Prem as a Microsoft A
 
 - Copy or make note of the **Value** of the secret. This will be used later.
 
-4. Under **Expose an API**, set the appropriate application scopes required by On-Prem and assigned them to the registered application.
+4. Under **Expose an API**, set the appropriate application scopes required by Launchpad and assigned them to the registered application.
 
 ![App Expose API](./img/app-expose-api.png)
 
@@ -106,13 +106,13 @@ Below are steps with screenshots to create and register On-Prem as a Microsoft A
   > **Note**:
   > By default this property is set to `false`, so you can likely omit this.
 
-- The JWT configuration for the Stardog server needs to be customized. To provide a configuration file for JWT configuration to stardog set the following property in the `stardog.properties` file:
+- The JWT configuration for the Stardog server needs to be customized. To provide a configuration file for JWT configuration to Stardog, set the following property in the `stardog.properties` file:
 
    ```properties
    jwt.conf=/path/to/jwt.yaml
    ```
 
-   The `jwt.conf` property must point to a vaid YAML file. More information about the schema the YAML file should adhere to can be found in the [Stardog docs](https://docs.stardog.com/operating-stardog/security/oauth-integration#configuring-stardog). For Stardog to accept tokens issued by On-Prem the following section must be added to the `issuers` section in the config file.
+   The `jwt.conf` property must point to a valid YAML file. More information about the schema the YAML file should adhere to can be found in the [Stardog docs](https://docs.stardog.com/operating-stardog/security/oauth-integration#configuring-stardog). For Stardog to accept tokens issued by Launchpad, the following section must be added to the `issuers` section in the config file.
 
    ```yaml
    issuers:
@@ -127,14 +127,14 @@ Below are steps with screenshots to create and register On-Prem as a Microsoft A
          - azure.microsoft.com/<AZURE_TENANT_ID>
    ```
 
-   - Be sure to replace `<JWT_ISSUER>`,`<STARDOG_EXTERNAL_ENDPOINT>` and `<BASE_URL>` with the values set in the [`.env`](./.env) file and `<AZURE_TENANT_ID>` with the [Azure Tenant ID](https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-to-find-tenant#find-tenant-id-through-the-azure-portal) the users authenticating are in.
+   - Be sure to replace `<JWT_ISSUER>`,`<STARDOG_EXTERNAL_ENDPOINT>` and `<BASE_URL>` with the values set in the [`.env`](./.env) file and `<AZURE_TENANT_ID>` with the [Azure Tenant ID](https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-to-find-tenant#find-tenant-id-through-the-azure-portal) belonging to the users authenticating.
 
      > **Note**:
      > `JWT_ISSUER` by default is set to the value of `BASE_URL`. There is no need to provide the `JWT_ISSUER` environment variable if you are fine using the default. In this case provide the value of `BASE_URL` as `JWT_ISSUER` in the above yaml.
 
 ## Run the Example
 
-1. Execute the following command from this directory to bring up the On-Prem service.
+1. Execute the following command from this directory to bring up the Launchpad service.
 
    ```
    docker-compose up
@@ -145,7 +145,7 @@ Below are steps with screenshots to create and register On-Prem as a Microsoft A
 3. Click the "Sign in with Microsoft" button.
 
 > **Note**:
-> In order for the Azure AD user signing in to On-Prem to be auto-created in Stardog, the user must be a member of a group in Azure AD that follows the naming convention `stardog_<rolename>`. The `<rolename>` **must** be pre-defined in Stardog.
+> In order for the Azure AD user signing in to Launchpad to be auto-created in Stardog, the user must be a member of a group in Azure AD that follows the naming convention `stardog_<rolename>`. The `<rolename>` **must** be pre-defined in Stardog.
 >
 > To add a role and grant permissions to it using the Stardog CLI:
 >
@@ -171,11 +171,11 @@ In the example's [configuration](./.env):
 
 - `JWK_LOCATION` is the location inside the Docker container where a public/private key pair should be. Note how in the [`docker-compose.yml`](./docker-compose.yml) a volume containing an RSA public/private key pair is mounted. There is a `README` contained in the [`jwk`](./jwk) directory containing instructions on how to generate a new public/private key pair. The private key is used by the application to sign JWTs, which will be sent for Stardog API requests. The public key is used by the Stardog server to verify the tokens sent by the application.
 
-- The image is being run and used locally for demo purposes. `BASE_URL` is set to `http://localhost:8080`. As a result, `SECURE` is set to `false` since the `BASE_URL` is a non-https URL. The login service assumes `https` and will not work properly without this flag being set to false. Port `8080` is used in the `BASE_URL` because it is mapped to the container's port `8080` in the `ports` section of the [`docker-compose.yml`](docker-compse.yml). If the container's port `8080` was mapped to port `9000` on the Docker host, `BASE_URL` would be set equal to `http://localhost:9000`
+- The image is being run and used locally for demo purposes. `BASE_URL` is set to `http://localhost:8080`. As a result, `SECURE` is set to `false` since the `BASE_URL` is a non-https URL. The login service assumes `https` and will not work properly without this flag being set to false. Port `8080` is used in the `BASE_URL` because it is mapped to the container's port `8080` in the `ports` section of the [`docker-compose.yml`](docker-compse.yml). If the container's port `8080` was mapped to port `9000` on the Docker host, `BASE_URL` would be set equal to `http://localhost:9000`.
 
 - `STARDOG_EXTERNAL_ENDPOINT` is set to `http://localhost:5820`. This is the address your browser will make Stardog API requests to.
 
-- `STARDOG_INTERNAL_ENDPOINT` is set to `http://host.docker.internal:5820`. This is the address the on-prem container will make Stardog API requests to. This is required in this case in order for the Docker container to distinguish between what's running on the Docker host and the container itself. See the [Docker documentation](https://docs.docker.com/desktop/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host) for additional information.
+- `STARDOG_INTERNAL_ENDPOINT` is set to `http://host.docker.internal:5820`. This is the address the Launchpad container will make Stardog API requests to. This is required in this case in order for the Docker container to distinguish between what's running on the Docker host and the container itself. See the [Docker documentation](https://docs.docker.com/desktop/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host) for additional information.
 
   > **Note:**
   > If you have a Stardog server running remotely, set the `STARDOG_INTERNAL_ENDPOINT` to the same value as `STARDOG_EXTERNAL_ENDPOINT` in the [`.env`](.env) file.

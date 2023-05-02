@@ -1,27 +1,27 @@
 # Google SSO Example
 
-The purpose of this example configuration is to demonstrate how to deploy and configure On-Prem for a Stardog instance to allow users to sign in with Google SSO as their auth provider.
+The purpose of this example configuration is to demonstrate how to deploy and configure Launchpad for a Stardog instance to allow users to sign in with Google SSO as their auth provider.
 
 ![Google SSO Login](./img/google.gif)
 
 ## How This Works
 
-1. A user clicks the "Sign in with Google" button during login
-2. If the user successfully authenticates they are redirected the On-Prem home page where they can enter the Stardog Apps.
+1. A user clicks the "Sign in with Google" button during login.
+2. If the user successfully authenticates, they are redirected to the Launchpad home page, where they can enter the Stardog Apps.
    > **Note**:
-   > A Stardog user **must** exist on the server with a username matching the email that the Google user is authenticating with
+   > A Stardog user **must** exist on the server with a username matching the email that the Google user is authenticating with.
 
-At a high level, when a user authenticates with Google, a JWT is exchanged between Google and On-Prem. On-Prem gets information from the Google JWT (notably the user's email) and discards it. This information contained in the Google JWT is then used by On-Prem to encode the JWT tokens it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWT tokens issued by On-Prem.
+At a high level, when a user authenticates with Google, a JWT is exchanged between Google and Launchpad. Launchpad gets information from the Google JWT (notably the user's email) and discards it. This information contained in the Google JWT is then used by Launchpad to encode the JWTs it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWTs issued by Launchpad.
 
 Diagram demonstrating the flow described above:
 
 ```mermaid
 sequenceDiagram
-  On-Prem->>Google: Successful user authentication
-  Google->>On-Prem: Google JWT returned
-  Note over Google,On-Prem: On-Prem saves profile information <br> contained in Google JWT in a cookie and discards it.
-  On-Prem->>Stardog: Stardog API requests with On-Prem JWT
-  Note over On-Prem,Stardog: On-Prem generates its JWTs Stardog server is configured to accept using information contained in the cookie.
+  Launchpad->>Google: Successful user authentication
+  Google->>Launchpad: Google JWT returned
+  Note over Google,Launchpad: Launchpad saves profile information <br> contained in Google JWT in a cookie and discards it.
+  Launchpad->>Stardog: Stardog API requests with Launchpad JWT
+  Note over Launchpad,Stardog: Launchpad generates its JWTs Stardog server is configured to accept using information contained in the cookie.
 ```
 
 ## Prerequisites
@@ -36,7 +36,7 @@ sequenceDiagram
 
 ### Setting up the Google OAuth 2.0 Client
 
-Below are steps with screenshots to create a Google OAuth 2.0 Client. This client is required for On-Prem to authenticate users who wish to sign in with Google.
+Below are steps with screenshots to create a Google OAuth 2.0 Client. This client is required for Launchpad to authenticate users who wish to sign in with Google.
 
 1. Create a project:
 
@@ -78,13 +78,13 @@ Below are steps with screenshots to create a Google OAuth 2.0 Client. This clien
   > **Note**:
   > By default this property is set to `false`, so you can likely omit this.
 
-- The JWT configuration for the Stardog server needs to be customized. To provide a configuration file for JWT configuration to stardog set the following property in the `stardog.properties` file:
+- The JWT configuration for the Stardog server needs to be customized. To provide a configuration file for JWT configuration to Stardog set the following property in the `stardog.properties` file:
 
 ```properties
 jwt.conf=/path/to/jwt.yaml
 ```
 
-The `jwt.conf` property must point to a vaid YAML file. More information about the schema the YAML file should adhere to can be found in the [Stardog docs](https://docs.stardog.com/operating-stardog/security/oauth-integration#configuring-stardog). For Stardog to accept tokens issued by On-Prem the following section must be added to the `issuers` section in the config file.
+The `jwt.conf` property must point to a valid YAML file. More information about the schema the YAML file should adhere to can be found in the [Stardog docs](https://docs.stardog.com/operating-stardog/security/oauth-integration#configuring-stardog). For Stardog to accept tokens issued by Launchpad, the following section must be added to the `issuers` section in the config file.
 
 ```yaml
 issuers:
@@ -103,7 +103,7 @@ issuers:
 
 ## Run the Example
 
-1. Execute the following command from this directory to bring up the On-Prem service.
+1. Execute the following command from this directory to bring up the Launchpad service.
 
    ```
    docker-compose up
@@ -114,7 +114,7 @@ issuers:
 3. Click the "Sign in with Google" button.
 
   > **Note**:
-  > The user you are signing in with via Google must exist on the Stardog server with a username of the email you are signing in with.
+  > The Google user you are signing in with must exist on the Stardog server with a username of the email you are signing in with.
   > 
   > To add a user using the Stardog CLI:
   > ```bash
@@ -130,7 +130,7 @@ In the example's [configuration](./.env):
 - `JWK_LOCATION` is the location inside the Docker container where a public/private key pair should be. Note how in the [`docker-compose.yml`](./docker-compose.yml) a volume containing an RSA public/private key pair is mounted. There is a `README` contained in the [`jwk`](./jwk) directory containing instructions on how to generate a new public/private key pair. The private key is used by the application to sign JWTs, which will be sent for Stardog API requests. The public key is used by the Stardog server to verify the tokens sent by the application.
 - The image is being run and used locally for demo purposes. `BASE_URL` is set to `http://localhost:8080`. As a result, `SECURE` is set to `false` since the `BASE_URL` is a non-https URL. The login service assumes `https` and will not work properly without this flag being set to false. Port `8080` is used in the `BASE_URL` because it is mapped to the container's port `8080` in the `ports` section of the [`docker-compose.yml`](docker-compse.yml). If the container's port `8080` was mapped to port `9000` on the Docker host, `BASE_URL` would be set equal to `http://localhost:9000`
 - `STARDOG_EXTERNAL_ENDPOINT` is set to `http://localhost:5820`. This is the address your browser will make Stardog API requests to.
-- `STARDOG_INTERNAL_ENDPOINT` is set to `http://host.docker.internal:5820`. This is the address the on-prem container will make Stardog API requests to. This is required in this case in order for the Docker container to distinguish between what's running on the Docker host and the container itself. See the [Docker documentation](https://docs.docker.com/desktop/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host) for additional information.
+- `STARDOG_INTERNAL_ENDPOINT` is set to `http://host.docker.internal:5820`. This is the address the Launchpad container will make Stardog API requests to. This is required in this case in order for the Docker container to distinguish between what's running on the Docker host and the container itself. See the [Docker documentation](https://docs.docker.com/desktop/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host) for additional information.
 
   > **Note:**
   > If you have a Stardog server running remotely, set the `STARDOG_INTERNAL_ENDPOINT` to the same value as `STARDOG_EXTERNAL_ENDPOINT` in the [`.env`](.env) file.
