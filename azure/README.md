@@ -131,6 +131,20 @@ Below are steps with screenshots to create and register Launchpad as a Microsoft
 
      > **Note**:
      > `JWT_ISSUER` by default is set to the value of `BASE_URL`. There is no need to provide the `JWT_ISSUER` environment variable if you are fine using the default. In this case provide the value of `BASE_URL` as `JWT_ISSUER` in the above yaml.
+     > 
+     > Suppose the BASE_URL was set to http://localhost:8080, and `JWT_ISSUER` was not set. The jwt.yaml for the Stardog server would look  like:
+     > ```yaml
+     > issuers:
+     >   http://localhost:8080:
+     >     usernameField: username
+     >     audience: http://localhost:5820 
+     >     algorithms:
+     >       RS256:
+     >         keyUrl: http://localhost:8080/.well-known/jwks.json
+     >     autoCreateUsers: True
+     >     allowedGroupIdentifiers:
+     >       - azure.microsoft.com/aa12bb22-ccdd-3fff-4ggg-55h6666iii77
+     > ```
 
 ## Run the Example
 
