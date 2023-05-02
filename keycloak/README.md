@@ -25,7 +25,7 @@ $ stardog-admin role list
    > **Note**:
    > In order for the Keycloak user signing in to Launchpad to be auto-created in Stardog, the user must be assigned to a Keycloak role that is pre-defined in Stardog with the same name.
 
-At a high level, when a user authenticates with Keycloak, a JWT is exchanged between Keycloak and Launchpad. Launchpad gets information from the Keycloak JWT (notably the user's email and roles) and discards it. This information contained in the Keycloak JWT is then used by Launchpad to encode the JWT's it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWT's issued by Launchpad.
+At a high level, when a user authenticates with Keycloak, a JWT is exchanged between Keycloak and Launchpad. Launchpad gets information from the Keycloak JWT (notably the user's email and roles) and discards it. This information contained in the Keycloak JWT is then used by Launchpad to encode the JWTs it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWTs issued by Launchpad.
 
 Diagram demonstrating the flow described above:
 
@@ -35,7 +35,7 @@ sequenceDiagram
   Keycloak->>Launchpad: Keycloak JWT returned
   Note over Keycloak,Launchpad: Launchpad saves profile information <br> contained in Keycloak JWT in a cookie and discards it.
   Launchpad->>Stardog: Stardog API requests with Launchpad JWT
-  Note over Launchpad,Stardog: Launchpad generates its JWT's Stardog server is configured to accept using information contained in the cookie.
+  Note over Launchpad,Stardog: Launchpad generates its JWTs Stardog server is configured to accept using information contained in the cookie.
 ```
 
 ## Prerequisites
@@ -175,7 +175,7 @@ In the example's [configuration](./.env):
   - `KEYCLOAK_CLIENT_SECRET` is the client secret for the KEYCLOAK Oauth 2.0 Client being used for authentication.
   - `KEYCLOAK_ENDPOINT` is the URL of the Keycloak server.
   - `KEYCLOAK_REALM` is the realm the client is located in.
-- `JWK_LOCATION` is the location inside the Docker container where a public/private key pair should be. Note how in the [`docker-compose.yml`](./docker-compose.yml) a volume containing an RSA public/private key pair is mounted. There is a `README` contained in the [`jwk`](./jwk) directory containing instructions on how to generate a new public/private key pair. The private key is used by the application to sign JWT's, which will be sent for Stardog API requests. The public key is used by the Stardog server to verify the tokens sent by the application.
+- `JWK_LOCATION` is the location inside the Docker container where a public/private key pair should be. Note how in the [`docker-compose.yml`](./docker-compose.yml) a volume containing an RSA public/private key pair is mounted. There is a `README` contained in the [`jwk`](./jwk) directory containing instructions on how to generate a new public/private key pair. The private key is used by the application to sign JWTs, which will be sent for Stardog API requests. The public key is used by the Stardog server to verify the tokens sent by the application.
 - The image is being run and used locally for demo purposes. `BASE_URL` is set to `http://localhost:8080`. As a result, `SECURE` is set to `false` since the `BASE_URL` is a non-https URL. The login service assumes `https` and will not work properly without this flag being set to false. Port `8080` is used in the `BASE_URL` because it is mapped to the container's port `8080` in the `ports` section of the [`docker-compose.yml`](docker-compse.yml). If the container's port `8080` was mapped to port `9000` on the Docker host, `BASE_URL` would be set equal to `http://localhost:9000`.
 - `STARDOG_EXTERNAL_ENDPOINT` is set to `http://localhost:5820`. This is the address your browser will make Stardog API requests to.
 - `STARDOG_INTERNAL_ENDPOINT` is set to `http://host.docker.internal:5820`. This is the address the Launchpad container will make Stardog API requests to. This is required in this case in order for the Docker container to distinguish between what's running on the Docker host and the container itself. See the [Docker documentation](https://docs.docker.com/desktop/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host) for additional information.

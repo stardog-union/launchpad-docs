@@ -11,7 +11,7 @@ The purpose of this example configuration is to demonstrate how to deploy and co
    > **Note**:
    > A Stardog user **must** exist on the server with a username matching the email that the Google user is authenticating with.
 
-At a high level, when a user authenticates with Google, a JWT is exchanged between Google and Launchpad. Launchpad gets information from the Google JWT (notably the user's email) and discards it. This information contained in the Google JWT is then used by Launchpad to encode the JWT's it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWT's issued by Launchpad.
+At a high level, when a user authenticates with Google, a JWT is exchanged between Google and Launchpad. Launchpad gets information from the Google JWT (notably the user's email) and discards it. This information contained in the Google JWT is then used by Launchpad to encode the JWTs it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWTs issued by Launchpad.
 
 Diagram demonstrating the flow described above:
 
@@ -21,7 +21,7 @@ sequenceDiagram
   Google->>Launchpad: Google JWT returned
   Note over Google,Launchpad: Launchpad saves profile information <br> contained in Google JWT in a cookie and discards it.
   Launchpad->>Stardog: Stardog API requests with Launchpad JWT
-  Note over Launchpad,Stardog: Launchpad generates its JWT's Stardog server is configured to accept using information contained in the cookie.
+  Note over Launchpad,Stardog: Launchpad generates its JWTs Stardog server is configured to accept using information contained in the cookie.
 ```
 
 ## Prerequisites
@@ -127,7 +127,7 @@ issuers:
 In the example's [configuration](./.env):
 
 - `GOOGLE_AUTH_ENABLED` enables Google authentication. `GOOGLE_CLIENT_ID` is the Google OAuth 2.0 Client ID of the client being used for authentication. `GOOGLE_CLIENT_SECRET` is the client secret for the Google Oauth 2.0 Client being used for authentication.
-- `JWK_LOCATION` is the location inside the Docker container where a public/private key pair should be. Note how in the [`docker-compose.yml`](./docker-compose.yml) a volume containing an RSA public/private key pair is mounted. There is a `README` contained in the [`jwk`](./jwk) directory containing instructions on how to generate a new public/private key pair. The private key is used by the application to sign JWT's, which will be sent for Stardog API requests. The public key is used by the Stardog server to verify the tokens sent by the application.
+- `JWK_LOCATION` is the location inside the Docker container where a public/private key pair should be. Note how in the [`docker-compose.yml`](./docker-compose.yml) a volume containing an RSA public/private key pair is mounted. There is a `README` contained in the [`jwk`](./jwk) directory containing instructions on how to generate a new public/private key pair. The private key is used by the application to sign JWTs, which will be sent for Stardog API requests. The public key is used by the Stardog server to verify the tokens sent by the application.
 - The image is being run and used locally for demo purposes. `BASE_URL` is set to `http://localhost:8080`. As a result, `SECURE` is set to `false` since the `BASE_URL` is a non-https URL. The login service assumes `https` and will not work properly without this flag being set to false. Port `8080` is used in the `BASE_URL` because it is mapped to the container's port `8080` in the `ports` section of the [`docker-compose.yml`](docker-compse.yml). If the container's port `8080` was mapped to port `9000` on the Docker host, `BASE_URL` would be set equal to `http://localhost:9000`
 - `STARDOG_EXTERNAL_ENDPOINT` is set to `http://localhost:5820`. This is the address your browser will make Stardog API requests to.
 - `STARDOG_INTERNAL_ENDPOINT` is set to `http://host.docker.internal:5820`. This is the address the Launchpad container will make Stardog API requests to. This is required in this case in order for the Docker container to distinguish between what's running on the Docker host and the container itself. See the [Docker documentation](https://docs.docker.com/desktop/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host) for additional information.

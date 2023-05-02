@@ -26,7 +26,7 @@ $ stardog-admin role list
    > **Note**:
    > In order for the Azure AD user signing in to Launchpad to be auto-created in Stardog, the user must be a member of a group in Azure AD that follows the naming convention `stardog_<rolename>`. The `<rolename>` **must** be pre-defined in Stardog.
 
-At a high level, when a user authenticates with Azure AD, a JWT is exchanged between Azure AD and Launchpad. Launchpad gets information from the Azure AD JWT (notably the user's email and group membership) and discards it. This information contained in the Azure AD JWT is then used by Launchpad to encode the JWT's it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWT's issued by Launchpad.
+At a high level, when a user authenticates with Azure AD, a JWT is exchanged between Azure AD and Launchpad. Launchpad gets information from the Azure AD JWT (notably the user's email and group membership) and discards it. This information contained in the Azure AD JWT is then used by Launchpad to encode the JWTs it issues to communicate with the Stardog server. In order for this flow to work, the Stardog server must be configured to accept JWTs issued by Launchpad.
 
 Diagram demonstrating the flow described above:
 
@@ -36,7 +36,7 @@ sequenceDiagram
   Azure AD->>Launchpad: Azure AD JWT returned
   Note over Azure AD,Launchpad: Launchpad saves profile information <br> contained in Azure AD JWT in a session and discards it.
   Launchpad->>Stardog: Stardog API requests with Launchpad JWT
-  Note over Launchpad,Stardog: Launchpad generates its JWT's Stardog server is configured to accept using information contained in the session.
+  Note over Launchpad,Stardog: Launchpad generates its JWTs Stardog server is configured to accept using information contained in the session.
 ```
 
 ## Prerequisites
@@ -169,7 +169,7 @@ In the example's [configuration](./.env):
   - `AZURE_CLIENT_SECRET` is the client secret for the registered Azure app being used for authentication.
   - `AZURE_TENANT` is the Azure tenant type. You can limit the types of accounts that may log into your instance. The default `organizations` will limit users that are in the Azure AD that the application belongs too. See the possible values in the [Azure docs](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols#endpoints).
 
-- `JWK_LOCATION` is the location inside the Docker container where a public/private key pair should be. Note how in the [`docker-compose.yml`](./docker-compose.yml) a volume containing an RSA public/private key pair is mounted. There is a `README` contained in the [`jwk`](./jwk) directory containing instructions on how to generate a new public/private key pair. The private key is used by the application to sign JWT's, which will be sent for Stardog API requests. The public key is used by the Stardog server to verify the tokens sent by the application.
+- `JWK_LOCATION` is the location inside the Docker container where a public/private key pair should be. Note how in the [`docker-compose.yml`](./docker-compose.yml) a volume containing an RSA public/private key pair is mounted. There is a `README` contained in the [`jwk`](./jwk) directory containing instructions on how to generate a new public/private key pair. The private key is used by the application to sign JWTs, which will be sent for Stardog API requests. The public key is used by the Stardog server to verify the tokens sent by the application.
 
 - The image is being run and used locally for demo purposes. `BASE_URL` is set to `http://localhost:8080`. As a result, `SECURE` is set to `false` since the `BASE_URL` is a non-https URL. The login service assumes `https` and will not work properly without this flag being set to false. Port `8080` is used in the `BASE_URL` because it is mapped to the container's port `8080` in the `ports` section of the [`docker-compose.yml`](docker-compse.yml). If the container's port `8080` was mapped to port `9000` on the Docker host, `BASE_URL` would be set equal to `http://localhost:9000`.
 
