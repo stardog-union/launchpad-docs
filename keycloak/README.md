@@ -138,6 +138,20 @@ issuers:
 
   > **Note**:
   > `JWT_ISSUER` by default is set to the value of `BASE_URL`. There is no need to provide the `JWT_ISSUER` environment variable if you are fine using the default.
+  > 
+  > Here is an example config file:
+  > ```yaml
+  > issuers:
+  >   http://localhost:8080:
+  >     usernameField: username
+  >     audience: http://localhost:5820 
+  >     algorithms:
+  >       RS256:
+  >         keyUrl: http://localhost:8080/.well-known/jwks.json
+  >     autoCreateUsers: True
+  >     allowedGroupIdentifiers:
+  >       - keycloakRoles
+  > ```
 
 ## Run the Example
 
