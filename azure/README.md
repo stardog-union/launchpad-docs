@@ -1,10 +1,14 @@
-# Azure AD Example
+# Azure AD Example (Basic mode)
 
 The purpose of this example is to demonstrate how to deploy and configure Launchpad to allow users to sign in with [Azure Active Directory](https://azure.microsoft.com/en-us/products/active-directory) and access the configured Stardog server via Stardog Applications.
 
+The example below describes how to configure Launchpad and Stardog to work in basic mode, using Azure AD as an OIDC identity provider. Basic mode is enabled by default.
+
+We also support an access token passthrough mode, wherein Launchpad requests an identity token from Azure AD for the purpose of authenticating the user, but it also requests an access token that is passed through to the Stardog server. An example of configuring access token passthrough mode is provided [here](./access-token-passthrough-mode.md).
+
 ![Azure AD Login](./img/azure.gif)
 
-This integration is built on top of the Stardog Platform’s [Role Mapping](https://docs.stardog.com/operating-stardog/security/oauth-integration#role-mapping) feature as part of its OAuth 2.0 integration. In short, as long as users in Azure AD have membership in groups that conform to the naming structure of `stardog_<rolename>`, and the `<rolename>`(s) are pre-defined in Stardog, the users will be auto-created in Stardog and assigned permissions that correspond to their role assignment(s). This allows an administrator to have a single source of truth for managing the roles (and thus permissions) of a user, since auto-created users cannot be explicitly assigned permissions.
+This integration is built on top of the Stardog Platform’s [Role Mapping](https://docs.stardog.com/operating-stardog/security/oauth-integration#role-mapping) feature as part of its OAuth 2.0 integration. In short, as long as users in Azure AD have membership in groups that conform to the naming structure of `stardog_<rolename>`, and the `<rolename>`(s) are pre-defined in Stardog, the users will be auto-created in Stardog and assigned permissions that correspond to their role assignment(s). This allows an administrator to have a single source of truth for managing the roles (and thus permissions) of a user, since auto-created users cannot be explicitly assigned to a role.
 
 ```bash
 $ stardog-admin role list
@@ -21,7 +25,7 @@ $ stardog-admin role list
 
 1. A user clicks the "Sign in with Microsoft" button during login.
 
-2. If the user successfully authenticates, they are redirected to the Launchpad home page where they can enter the Stardog Apps.
+2. If the user successfully authenticates, they are redirected to the Launchpad home page where they can launch the Stardog Apps.
 
    > **Note**:
    > In order for the Azure AD user signing in to Launchpad to be auto-created in Stardog, the user must be a member of a group in Azure AD that follows the naming convention `stardog_<rolename>`. The `<rolename>` **must** be pre-defined in Stardog.
@@ -34,9 +38,9 @@ Diagram demonstrating the flow described above:
 sequenceDiagram
   Launchpad->>Azure AD: Successful user authentication
   Azure AD->>Launchpad: Azure AD JWT returned
-  Note over Azure AD,Launchpad: Launchpad saves profile information <br> contained in Azure AD JWT in a session and discards it.
+  Note over Azure AD,Launchpad: Launchpad saves profile information <br> from Azure's JWT and discards it.
   Launchpad->>Stardog: Stardog API requests with Launchpad JWT
-  Note over Launchpad,Stardog: Launchpad generates its JWTs Stardog server is configured to accept using information contained in the session.
+  Note over Launchpad,Stardog: Launchpad generates a JWT that the Stardog server is <br> configured to accept, using information from Azure's JWT.
 ```
 
 ## Prerequisites
