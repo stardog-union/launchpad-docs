@@ -60,13 +60,11 @@ For reference, here is a Microsoft [quickstart guide](https://learn.microsoft.co
    - Make note of the **Application (client) ID**
    - Make note of the **Directory (tenant) ID**
 
-2. **Authentication Flow:** Under **Authentication > Implicit grant and hybrid flows**, select **Access tokens** and **ID tokens** and click **Save**.
-
-3. **Client Secret:** Under **Certificates & secrets**, create a **New client secret**.
+2. **Client Secret:** Under **Certificates & secrets**, create a **New client secret**.
 
    - Make note of the **Value** of the secret. You will not be able to view or copy the value of the secret after you leave this page.
 
-4. **Scopes:** Under **Expose an API**, add the following scopes. For each scope, set **Admins and users** in the **Who can consent?** option, enter the required display names and descriptions, and then click the **Add scope** button.
+3. **Scopes:** Under **Expose an API**, use the default suggested Application ID URI (`api://<client-id>` where `<client-id>` is the **Application (client) ID** noted in Step 1) and add the following scopes. For each scope, set **Admins and users** in the **Who can consent?** option, enter the required display names and descriptions, and then click the **Add scope** button.
 
    - `openid`
    - `email`
@@ -94,19 +92,32 @@ Here are steps to create and register Stardog as a Microsoft Application. Instea
 
    - Make note of the **Value** of the secret. You will not be able to view or copy the value of the secret after you leave this page.
 
-3. **API Permissions:** Under **API permissions**, add the following permissions. For each permission, choose **Delegated permssions**, select the permssion and click the **Add permissions** button.
+3. **API Permissions:** Under **API permissions**, add the following permissions (if not already present). For each permission, choose **Delegated permssions**, select the permssion and click the **Add permissions** button.
 
    - **AzureDatabricks** API, permission name `user_impersonation`
    - **Microsoft Graph** API, permission name `User.Read`
 
-4. **Scopes:** Under **Expose an API**, add the following scopes. For each scope, set **Admins and users** in the **Who can consent?** option, enter the required display names and descriptions, and then click the **Add scope** button.
+4. **Scopes:** Under **Expose an API**, use the default suggested Application ID URI (`api://<client-id>` where `<client-id>` is the **Application (client) ID** noted in Step 1) and add the following scopes. For each scope, set **Admins and users** in the **Who can consent?** option, enter the required display names and descriptions, and then click the **Add scope** button.
 
    - `user_login`
 
-5. **Roles Claim:** Under **Token configuration** click **Add groups claim**, select **Groups assigned to the application**, and click the **Add** button.
+5. **Roles Claim:** Under **App roles** click **Create app role**, enter the required settings, and click the **Apply** button:
+
+   - Provide a **Display name**, for example, `App Reader/Writer`
+   - Select the **Allowed member types** of `Users/Groups`
+   - Provide a **Value**, for example, `app_reader_writer`
+   - Provide a **Description**
+   - Click the **Apply** button
+   
+   Next configure the Azure AD user to be used when logging in to Launchpad, adding the `app_reader_writer` claim to the user's access token:
+   - Click the **How do I assign App roles** link and click the **Enterprise applications** link
+   - Click the **Assign users and groups** link and click the **Add user/group** button
+   - Click the **None Selected** link and search for the user to granted the new app role
+   - Click the checkbox next to the user's name and click the **Select** button
+   - The **Add Assignment** page should now show `1 user selected`, and the new role (`App Reader/Writer`) listed under **Select a role**; click the **Assign** button
 
    > **Note:**
-   > This is one way of including a roles claim in the access token that Azure AD generates. Another is to define an app role (on the **App Roles** tab) and then assign users the app role in the **Enterprise applications** service definition for this registered application.
+   > This is one way of including a roles claim in the access token that Azure AD generates for an authenticated user. In an enterprise deployment, you would likely want users to present a groups claim, which you can add in the **Token configuration** section.
 
 6. **Token Version 2:** Under **Manifest**, change the value of `"accessTokenAcceptedVersion"` from `null` to `2`.
 
@@ -135,6 +146,14 @@ Here are steps to create and register Stardog as a Microsoft Application. Instea
    The `jwt.conf` property must point to a valid YAML file. More information about the schema the YAML file should adhere to can be found in the [Stardog docs](https://docs.stardog.com/operating-stardog/security/oauth-integration#configuring-stardog). For Stardog to accept access tokens issued by Azure AD, the following section must be added to the `issuers` section in the config file.
 
    ```yaml
+   confVersion: "1.0"
+   deploymentName: stardog-server
+
+   signer:
+      algorithm: HS256
+      secret: "some-kind-of-secret-key-here"
+      issuer: http://localhost:5820
+
    issuers:
      https://login.microsoftonline.com/<AZURE_TENANT_ID>/v2.0:
        usernameField: preferred_username
@@ -147,6 +166,9 @@ Here are steps to create and register Stardog as a Microsoft Application. Instea
    ```
 
    - You will need to replace `<AZURE_TENANT_ID>` and `<AZURE_CLIENT_ID>` with the values noted in step 1 of the instructions for registering the Stardog Application.
+
+   > **Note:**
+   > The `signer:` section configures the Stardog server to issue tokens for basic auth users. You can omit this section if you do not want users to be able to sign in to Stardog via Launchpad using a username and password.
 
 ### Launchpad Environment Settings
 
