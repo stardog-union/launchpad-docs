@@ -32,7 +32,9 @@ sequenceDiagram
   Note over Launchpad,Stardog: Launchpad uses the Azure access token that <br> the Stardog server is configured to accept.
 ```
 
-## Prerequisites
+## Configuration Steps
+
+### Prerequisites
 
 - Docker installed
 - Docker Compose installed
@@ -63,6 +65,9 @@ For reference, here is a Microsoft [quickstart guide](https://learn.microsoft.co
 2. **Client Secret:** Under **Certificates & secrets**, create a **New client secret**.
 
    - Make note of the **Value** of the secret. You will not be able to view or copy the value of the secret after you leave this page.
+
+   > **Note**:
+   > If you want to authenticate Launchpad to Azure using a client certificate (instead of a client secret), see [Using a Certificate](./client-certificate-config.md) for details.
 
 3. **Scopes:** Under **Expose an API**, use the default suggested Application ID URI (`api://<client-id>` where `<client-id>` is the **Application (client) ID** noted in Step 1) and add the following scopes. For each scope, set **Admins and users** in the **Who can consent?** option, enter the required display names and descriptions, and then click the **Add scope** button.
 
@@ -183,7 +188,7 @@ We provide an example Docker [configuration .env file](./.env) that you will nee
 
 1. Execute the following command from this directory to bring up the Launchpad service.
 
-   ```
+   ```bash
    docker-compose up
    ```
 

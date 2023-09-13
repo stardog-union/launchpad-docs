@@ -84,6 +84,9 @@ Below are steps with screenshots to create and register Launchpad as a Microsoft
 
 - Copy or make note of the **Value** of the secret. This will be used later.
 
+> **Note**:
+> If you want to authenticate Launchpad to Azure using a client certificate (instead of a client secret), see [Using a Certificate](./client-certificate-config.md) for details.
+
 4. Under **Expose an API**, set the appropriate application scopes required by Launchpad and assigned them to the registered application.
 
 ![App Expose API](./img/app-expose-api.png)
