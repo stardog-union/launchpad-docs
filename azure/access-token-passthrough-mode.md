@@ -1,12 +1,14 @@
 # Azure AD Example (Access Token Passthrough mode)
 
-This example builds on the [basic mode example](./README.md), adding support for access token passthrough mode, wherein Launchpad requests an identity token from Azure AD for the purpose of authenticating the user, but it also requests an access token that it passes through to the Stardog server. The Stardog server can then use the credentials of the logged-in user when connecting to a data source for the purpose of querying a virtual graph. In this example, the data source is hosted in Databricks.
+This example builds on the [basic mode example](./README.md), adding support for access token passthrough mode, wherein Launchpad requests an identity token from Azure AD for the purpose of authenticating the user, but it also requests an access token that it passes through to the Stardog server.
+
+The access token from Azure AD, as opposed to the launchpad-generated token used in basic mode, is required for the virtual graph passthrough feature. The virtual graph passthrough feature allows Stardog to exchange its access token for a data source access token so that the data source can be accessed with the credentials of the logged-in user when querying a virtual graph. In this example, the data source is hosted in Databricks.
 
 The Pass-Through Authentication mode for Stardog is documented [here](https://docs.stardog.com/virtual-graphs/data-sources/passthrough-authentication). Note that this feature was added in the [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) release of the Stardog Platform.
 
 ## A Little More Detail
 
-In [basic mode](./README.md), Launchpad uses Azure AD as an OIDC identity provider, requesting an identity token for an authenticated user. Launchpad receives a JSON Web Token (JWT) from Azure AD, extracts some information from the token, and then constructs a new JWT that is used to interact with Stardog.
+In [basic mode](./README.md), Launchpad uses Azure AD as an OIDC identity provider, requesting an identity token for an authenticated user. Launchpad receives a JSON Web Token (JWT) from Azure AD, extracts some information from the token, determines the user's group membership by calling the Microsoft Graph API, and then constructs a new JWT that is used to interact with Stardog.
 
 In **access token passthrough mode**, Launchpad requests both an identity token and an access token from Azure AD for an authenticated user. Launchpad uses the identity token to verify that the user has properly authenticated with Azure AD, and then the identity token is discarded. The access token is used as-is in all interactions with the Stardog server (both from Launchpad and from the Stardog Applications). This access token passthrough mode allows Stardog to act on behalf of the Azure AD user when connecting to a data source.
 
@@ -46,7 +48,7 @@ sequenceDiagram
 
 ### How to Register the Launchpad Application
 
-Here are steps to create and register Launchpad as a Microsoft Application. Note that these are almost identical to the steps in the [basic mode example](./README.md#how-to-register-the-application), except that the `Directory.Read.All` scope is not required for the Launchpad registered application when using access token passthrough mode.
+Here are steps to create and register Launchpad as a Microsoft Web Application. Note that these are almost identical to the steps in the [basic mode example](./README.md#how-to-register-the-application), except that the `Directory.Read.All` scope is not required for the Launchpad registered application when using access token passthrough mode.
 
 For reference, here is a Microsoft [quickstart guide](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app#register-an-application) about registering an application.
 

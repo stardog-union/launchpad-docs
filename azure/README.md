@@ -4,7 +4,7 @@ The purpose of this example is to demonstrate how to deploy and configure Launch
 
 The example below describes how to configure Launchpad and Stardog to work in basic mode, using Azure AD as an OIDC identity provider. Basic mode is enabled by default.
 
-We also support an access token passthrough mode, wherein Launchpad requests an identity token from Azure AD for the purpose of authenticating the user, but it also requests an access token that is passed through to the Stardog server. An example of configuring access token passthrough mode is provided [here](./access-token-passthrough-mode.md).
+Launchpad also supports access token passthrough mode, wherein Launchpad requests an identity token from Azure AD for the purpose of authenticating the user, but it also requests an access token that is passed through to the Stardog server. An example of configuring access token passthrough mode is provided [here](./access-token-passthrough-mode.md).
 
 ![Azure AD Login](./img/azure.gif)
 
@@ -40,7 +40,7 @@ sequenceDiagram
   Azure AD->>Launchpad: Azure AD JWT returned
   Note over Azure AD,Launchpad: Launchpad saves profile information <br> from Azure's JWT and discards it.
   Launchpad->>Stardog: Stardog API requests with Launchpad JWT
-  Note over Launchpad,Stardog: Launchpad generates a JWT that the Stardog server is <br> configured to accept, using information from Azure's JWT.
+  Note over Launchpad,Stardog: Launchpad generates a JWT that the Stardog server is configured to accept, <br> using information from Azure's JWT and the Microsoft Graph API.
 ```
 
 ## Prerequisites
