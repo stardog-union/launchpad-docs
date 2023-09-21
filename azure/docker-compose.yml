@@ -10,3 +10,6 @@ services:
       - .env
     volumes:
       - ./jwk:/jwk
+      # set the following if using Azure AD with a client cert
+      #- ./launchpad.key.pem:/launchpad.key.pem
+      #- ./launchpad.cert.pem:/launchpad.cert.pem
