@@ -2,6 +2,8 @@
 
 This repository contains documentation and example configurations for Stardog Launchpad.
 
+Here are the [release notes](./release-notes.md).
+
 ## Overview
 
 Launchpad is a login service for a **single** Stardog instance for access to Stardog Applications (Studio, Explorer, Designer). With the right configurations for Launchpad and
