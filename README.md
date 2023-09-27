@@ -57,7 +57,7 @@ docker login stardog-stardog-apps.jfrog.io
 2. Pull the latest image:
 
 ```
-docker pull stardog-stardog-apps.jfrog.io/cloud-login:launchpad-current
+docker pull stardog-stardog-apps.jfrog.io/launchpad:current
 ```
 
 3. Configure the Stardog server as needed and create a configuration for Launchpad.
@@ -73,7 +73,7 @@ docker pull stardog-stardog-apps.jfrog.io/cloud-login:launchpad-current
      -p 8080:8080 \
      --rm \
      --name stardog-launchpad \
-     stardog-stardog-apps.jfrog.io/cloud-login:launchpad-current
+     stardog-stardog-apps.jfrog.io/launchpad:current
    ```
 
    - Launchpad will always be served at port `8080` from the container. Map this port as needed.
@@ -111,7 +111,7 @@ docker run \
   -v /host-machine/certs:/certs \
   --rm \
   --name stardog-launchpad \
-  stardog-stardog-apps.jfrog.io/cloud-login:launchpad-current
+  stardog-stardog-apps.jfrog.io/launchpad:current
 ```
 
 - In the above example, a directory on the host machine `/host-machine/certs` is mounted to the `/certs` directory inside the Docker container. Suppose a CA bundle was contained in the host directory and named `ca-chain.cert.pem`. Then, `STARDOG_SERVER_CERT_PATH` should be set to `/certs/ca-chain.cert.pem`.

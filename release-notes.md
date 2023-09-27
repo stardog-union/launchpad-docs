@@ -15,18 +15,18 @@ docker login stardog-stardog-apps.jfrog.io
 2. Pull the latest image:
 
 ```bash
-docker pull stardog-stardog-apps.jfrog.io/cloud-login:launchpad-current
+docker pull stardog-stardog-apps.jfrog.io/launchpad:current
 ```
 
 ## Version Scheme
 
-Stardog Launchpad container releases are versioned as `vX.Y.Z` where:
+Stardog Launchpad releases are versioned as `vX.Y.Z` where:
 
    - `X` represents the (minimum) version of the Stardog platform required to use all current Launchpad features; this value will increment when the minimum required version of Stardog changes
    - `Y` represents the current version of Launchpad features; this value will increment when new features or bug fixes are added to the Launchpad login web app
    - `Z` represents the versions of the Stardog Applications included in the Docker container (see the table below); this value will increment when one or more of the Stardog Applications are updated
 
-# Launchpad Container Releases
+# Launchpad Releases
 
 | Release | Stardog Version | Designer Version | Explorer Version | Studio Version |
 | ------- | --------------- | ---------------- | ---------------- | -------------- |

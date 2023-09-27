@@ -2,7 +2,7 @@ version: "3.2"
 services:
 
   launchpad:
-    image: stardog-stardog-apps.jfrog.io/cloud-login:launchpad-current
+    image: stardog-stardog-apps.jfrog.io/launchpad:current
     restart: always
     ports:
       - 8080:8080
