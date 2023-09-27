@@ -1,6 +1,6 @@
 # Launchpad Release Notes
 
-Stardog Launchpad is distributed as a Docker container, which includes the Launchpad login web app together with the Stardog Applications (Studio, Explorer, and Designer). The Stardog Platform server is not included in the Launchpad Docker container.
+Stardog Launchpad is distributed as a Docker image, which includes the Launchpad login web app together with the Stardog Applications (Studio, Explorer, and Designer). The Stardog Platform server is not included in the Launchpad Docker image.
 
 ## Getting the Current Version of Launchpad
 
@@ -24,7 +24,7 @@ Stardog Launchpad releases are versioned as `vX.Y.Z` where:
 
    - `X` represents the (minimum) version of the Stardog platform required to use all current Launchpad features; this value will increment when the minimum required version of Stardog changes
    - `Y` represents the current version of Launchpad features; this value will increment when new features or bug fixes are added to the Launchpad login web app
-   - `Z` represents the versions of the Stardog Applications included in the Docker container (see the table below); this value will increment when one or more of the Stardog Applications are updated
+   - `Z` represents the versions of the Stardog Applications included in the Docker image (see the table below); this value will increment when one or more of the Stardog Applications are updated
 
 # Launchpad Releases
 
