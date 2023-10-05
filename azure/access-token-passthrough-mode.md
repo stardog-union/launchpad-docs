@@ -223,7 +223,7 @@ In the example's [configuration](./.env):
    - `AZURE_CLIENT_SECRET` is the client secret for the registered Azure app being used for authentication.
    - `AZURE_TENANT` is the Azure tenant type. You can limit the types of accounts that may log into your instance. The default `organizations` will limit users that are in the Azure AD that the application belongs too. See the possible values in the [Azure docs](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols#endpoints).
    - `AZURE_AUTH_TOKEN_TYPE` must be un-commented and set to `access_token`.
-   - `AZURE_STARDOG_SCOPE` must be un-commented and have the `<Stardog-Client-ID>` part replaced with the **Application (client) ID** value for the Stardog Application.
+   - `AZURE_STARDOG_SCOPE` must be un-commented and have the `<Stardog-Client-ID>` part replaced with the **Application (client) ID** value for the Stardog Application, so that it is set to `AZURE_STARDOG_SCOPE=api://<Stardog-Client-ID>/user_login`.
 
 - The image is being run and used locally for demo purposes. `BASE_URL` is set to `http://localhost:8080`. As a result, `SECURE` is set to `false` since the `BASE_URL` is a non-https URL. The login service assumes `https` and will not work properly without this flag being set to false. Port `8080` is used in the `BASE_URL` because it is mapped to the container's port `8080` in the `ports` section of the [`docker-compose.yml`](docker-compse.yml). If the container's port `8080` was mapped to port `9000` on the Docker host, `BASE_URL` would be set equal to `http://localhost:9000`.
 
