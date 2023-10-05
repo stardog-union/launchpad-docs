@@ -184,7 +184,7 @@ We provide an example Docker [configuration .env file](./.env) that you will nee
    - For the line `AZURE_CLIENT_ID=<client-id>`, replace `<client-id>` with the value noted in step 1 of the instructions for registering the Launchpad Application.
    - For the line `AZURE_CLIENT_SECRET=<client-secret>`, replace `<client-secret>` with the value noted in step 3 of the instructions for registering the Launchpad Application.
    - Un-comment the line `AZURE_AUTH_TOKEN_TYPE` and set its value to `access_token`.
-   - Un-comment the line `AZURE_STARDOG_SCOPE` and replace `<Stardog-Client-ID>` with the value noted in step 1 of the instructions for registering the Stardog Application.
+   - Un-comment the line `AZURE_STARDOG_SCOPE` and replace `<Stardog-Client-ID>` with the value noted in step 1 of the instructions for registering the Stardog Application, so that it is set to `AZURE_STARDOG_SCOPE=api://<Stardog-Client-ID>/user_login`.
 
 ## Run the Example
 
