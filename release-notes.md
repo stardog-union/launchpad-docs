@@ -36,7 +36,7 @@ Stardog Launchpad releases are versioned as `vX.Y.Z` where:
 ## 2.1.1 Release (2023-12-13)
 
 ### Launchpad Updates
-- Add option to show/hide password auth inputs (#CLOUD-1276)
+- Add option to show/hide password auth inputs (#CLOUD-1276); see [config doc](./?tab=readme-ov-file#configuration-options)
 - Ensure access token for AzureAD auth is refreshed (#CLOUD-1371)
 
 ## 2.0.0 Release (2023-09-27)
