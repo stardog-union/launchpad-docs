@@ -28,7 +28,7 @@ Stardog Launchpad releases are versioned as `vX.Y.Z` where:
 
 # Launchpad Releases
 
-| Release | Stardog Version\n (minimum) | Designer Version | Explorer Version | Studio Version |
+| Release | Stardog Version | Designer Version | Explorer Version | Studio Version |
 | ------- | --------------- | ---------------- | ---------------- | -------------- |
 | 2.0.0   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.24.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2240-release) | [1.26.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1263-release) | [4.1.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v411-release) |
 | 2.1.1   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.28.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2280-release) | [1.28.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1280-release) | [4.3.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v433-release) |
