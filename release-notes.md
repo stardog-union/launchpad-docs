@@ -35,6 +35,13 @@ Stardog Launchpad releases are versioned as `vX.Y.Z` where:
 | 2.2.2   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.30.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2301-release) | [1.32.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1320-release) | [4.4.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v440-release) |
 | 2.2.3   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.32.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2321-release) | [2.3.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v230-release) | [5.2.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v520-release) |
 | 2.3.4   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.33.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2330-release) | [2.5.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v251-release) | [5.4.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v542-release) |
+| 2.4.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) |
+
+## 2.4.5 Release (2024-08-08)
+
+- Apps: Fix for expired access tokens not being refreshed (#VET-4525)
+- Studio: Adjusted webpack chunk size to reduce GETs during load (#CLOUD-2403, #VET-4894)
+- Launchpad: Added support for Geoaxis IDP
 
 ## 2.3.4 Release (2024-06-14)
 
