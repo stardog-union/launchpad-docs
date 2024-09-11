@@ -36,6 +36,11 @@ Stardog Launchpad releases are versioned as `vX.Y.Z` where:
 | 2.2.3   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.32.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2321-release) | [2.3.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v230-release) | [5.2.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v520-release) |
 | 2.3.4   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.33.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2330-release) | [2.5.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v251-release) | [5.4.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v542-release) |
 | 2.4.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) |
+| 2.5.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) |
+
+## 2.5.5 Release (2024-09-11)
+
+- Launchpad: Added support for Azure US Government Cloud (#CLOUD-2520)
 
 ## 2.4.5 Release (2024-08-08)
 
@@ -50,6 +55,7 @@ Stardog Launchpad releases are versioned as `vX.Y.Z` where:
 - Remove unused components to mitigate critical CVEs (#CLOUD-2322)
 
 ## 2.2.3 Release (2024-05-08)
+
 - Update Studio, Explorer and Designer to latest versions
 
 ## 2.2.2 Release (2024-02-09)
