@@ -2,9 +2,9 @@
 
 This example builds on the [basic mode example](./README.md), adding support for access token passthrough mode, wherein Launchpad requests an identity token from Azure AD for the purpose of authenticating the user, but it also requests an access token that it passes through to the Stardog server.
 
-The access token from Azure AD, as opposed to the launchpad-generated token used in basic mode, is required for the virtual graph passthrough feature. The virtual graph passthrough feature allows Stardog to exchange its access token for a data source access token so that the data source can be accessed with the credentials of the logged-in user when querying a virtual graph. In this example, the data source is hosted in Databricks.
+The access token from Azure AD, as opposed to the launchpad-generated token used in basic mode, is required for the virtual graph passthrough feature. The virtual graph passthrough feature allows Stardog to exchange its access token for a data source access token so that the data source can be accessed with the credentials of the logged-in user when querying a virtual graph. In this example, the data source is hosted in Databricks. (So the term "passthrough" has two senses here; the Azure-generated access token is passed through from Launchpad to Stardog, and the user's identity is passed through from Stardog to the backing datasource via OAuth token exchange.)
 
-The Pass-Through Authentication mode for Stardog is documented [here](https://docs.stardog.com/virtual-graphs/data-sources/passthrough-authentication). Note that this feature was added in the [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) release of the Stardog Platform.
+The Pass-Through Authentication mode for Stardog virtual graphs is documented [here](https://docs.stardog.com/virtual-graphs/data-sources/passthrough-authentication). Note that this feature was added in the [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) release of the Stardog Platform.
 
 ## A Little More Detail
 
@@ -71,14 +71,6 @@ For reference, here is a Microsoft [quickstart guide](https://learn.microsoft.co
    > **Note**:
    > If you want to authenticate Launchpad to Azure using a client certificate (instead of a client secret), see [Using a Certificate](./client-certificate-config.md) for details.
 
-3. **Scopes:** Under **Expose an API**, use the default suggested Application ID URI (`api://<client-id>` where `<client-id>` is the **Application (client) ID** noted in Step 1) and add the following scopes. For each scope, set **Admins and users** in the **Who can consent?** option, enter the required display names and descriptions, and then click the **Add scope** button.
-
-   - `openid`
-   - `email`
-   - `profile`
-
-   After adding the scopes listed above, click the **Add a client application** button and specify the **Application (client) ID** (noted in Step 1). Select all of the scopes added above and click the **Add application** button.
-
 ### How to Register the Stardog Application
 
 Here are steps to create and register Stardog as a Microsoft Application. Instead of creating a **Web** app like we did for Launchpad, we will create the Stardog app in Azure as a **Mobile and desktop application**.
@@ -126,7 +118,7 @@ Here are steps to create and register Stardog as a Microsoft Application. Instea
    > **Note:**
    > This is one way of including a roles claim in the access token that Azure AD generates for an authenticated user. In an enterprise deployment, you would likely want users to present a groups claim, which you can add in the **Token configuration** section.
 
-6. **Token Version 2:** Under **Manifest**, change the value of `"accessTokenAcceptedVersion"` from `null` to `2`.
+6. **Token Version 2:** Under **Manifest**, find the `api` object. Change the value of `"requestedAccessTokenVersion"` from `null` to `2`. (This used to be a top-level `"accessTokenAcceptedVersion"` field). This is required for the access token's `iss` (issuer) claim to match the setting we will use in the Stardog server's jwt.conf file.
 
    > **Note**:
    > This is required for the access token's `"iss"` (issuer) field to match the setting we will use in the Stardog server's `jwt.conf` file.
