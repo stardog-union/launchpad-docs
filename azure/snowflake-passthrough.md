@@ -1,4 +1,4 @@
-# Configuring Snowflake with Azure OAuth
+# Configuring Snowflake with Azure AD Passthrough Authentication
 
 This example documents the configuration of Stardog and Snowflake so that a user that was authenticated by Microsoft Entra ID (formerly Azure AD) using OAuth can access Snowflake from Stardog using their credentials "passed through" (rather than using a shared "system" account).
 
@@ -279,12 +279,12 @@ In the app registration for the Snowflake client (**Example Stardog Resource**),
 
 In the Azure portal, go to **Enterprise Applications**, select the Snowflake Client application (`Example Stardog Resource`). Navigate to **Manage**, **Users and groups**, click **Add user/group**. All users that have given permission to the app will appear here with Default Access granted. Add additional permissions (`app_reader`, `app_writer`, etc.) for whatever users you want to have access, `test.account@mycompany.com` in this example.
 
-Create an application registration for the Stardog client (see: [here](access-token-passthrough-mode.md#how-to-register-the-launchpad-application). Provide a **Name** for the application (e.g. `Example Launchpad Stardog Client`). Select the supported account types, for example, **Accounts in this organizational directory only**. Create a **Web redirect URI** of `<BASE_URL>/oauth/azure/redirect` (e.g. `http://localhost:8080/oauth/azure/redirect`). Note this value of **<BASE_URL>** must match the value set in the Docker Compose `.env` file, which is the URL you will use to access Launchpad.
+Create an application registration for the Stardog client (see: [here](access-token-passthrough-mode.md#how-to-register-the-launchpad-application)). Provide a **Name** for the application (e.g. `Example Launchpad Stardog Client`). Select the supported account types, for example, **Accounts in this organizational directory only**. Create a **Web redirect URI** of `<BASE_URL>/oauth/azure/redirect` (e.g. `http://localhost:8080/oauth/azure/redirect`). Note this value of **<BASE_URL>** must match the value set in the Docker Compose `.env` file, which is the URL you will use to access Launchpad.
 
 After clicking the **Register** button:  
-Make note of the Application (client) ID (`05f84535-xxxx-1111-879b-90df20f7168a`).
+Make note of the **Application (client) ID**. We'll call this **<LAUNCHPAD_CLIENT_ID>** (e.g. `05f84535-xxxx-1111-879b-90df20f7168a`).
 
-Client Secret: Under Certificates & secrets, create a New client secret (`83f8Q~wxyz6789e4LlvQOZSYnoHbx50QlpqvGdCo`).
+Client Secret: Under Certificates & secrets, create a New client secret. We'll call this **<LAUNCHPAD_CLIENT_SECRET>** (e.g. `83f8Q~wxyz6789e4LlvQOZSYnoHbx50QlpqvGdCo`).
 
 ### Update Stardog Application to Accept Client Connections
 Go to the App Registration for the Snowflake Client Resource (e.g. `Example Stardog Resource`).
@@ -335,11 +335,11 @@ Restart the Stardog server.
 ### Launchpad Environment Settings
 Copy the contents of <https://github.com/stardog-union/launchpad-docs/tree/main/azure> to a folder from which you will launch the Launchpad docker container. Update the (hidden) `.env` file as follows:
 
-For the line `AZURE_CLIENT_ID=<client-id>`, replace `<client-id>` with the value noted in the instructions for registering the Launchpad Application.
+For the line `AZURE_CLIENT_ID=LAUNCHPAD_CLIENT_ID`, replace `<LAUNCHPAD_CLIENT_ID>` with the value noted in the instructions for registering the Launchpad Application.
 ```
 AZURE_CLIENT_ID=05f84535-xxxx-1111-879b-90df20f7168a
 ```
-For the line `AZURE_CLIENT_SECRET=<client-secret>`, replace `<client-secret>` with the value noted in the instructions for registering the Launchpad Application.
+For the line `AZURE_CLIENT_SECRET=<LAUNCHPAD_CLIENT_SECRET>`, replace `<LAUNCHPAD_CLIENT_SECRET>` with the value noted in the instructions for registering the Launchpad Application.
 ```
 AZURE_CLIENT_SECRET=83f8Q~wxyz6789e4LlvQOZSYnoHbx50QlpqvGdCo
 ```
@@ -392,7 +392,7 @@ and:
 > View users' basic profile  
 > Maintain access to data you have given it access to
 
-From there, you should see an app launcher page (rather than a diagnostics page).
+From there, you should see an app-launcher page (rather than a diagnostics page).
 
 Go to Studio.
 
@@ -431,7 +431,7 @@ select * from <virtual://snowflake_passthrough> {
 }
 ```
 
-Should get the same results, however, the `urn:asSeenBy` results should match the current user:
+Should get the same results, however, the `urn:asSeenBy` results should match the logged-in user:
 ```
 +------------------+--------------+--------------------------------+
 |        s         |      p       |               o                |   
