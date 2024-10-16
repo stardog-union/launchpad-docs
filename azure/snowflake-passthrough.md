@@ -38,7 +38,7 @@ Click on **App Registrations**, **Example Snowflake Resource**, **Endpoints** in
 
 ## Create a security integration in Snowflake (with audiences)
 
-In a Snowflake SQL Worksheet as the `ACCOUNTADMIN` role, create a securuty integration with the following command:
+In a Snowflake SQL Worksheet as the `ACCOUNTADMIN` role, create a security integration with the following command:
 ```
 create security integration external_oauth_azure_2
     type = external_oauth
@@ -102,7 +102,7 @@ DEFAULT_ROLE		SYSADMIN
 ...			...
 ```
 
-Next, we'll perform a manual call to the **<AZURE_AD_OAUTH_AUTHORIZE_ENDPOINT>** to allow the user to authorize the Stardog client to access the Snowflake resource. This step may not be necessary if the administrator performed this authorization at an ealier step.
+Next, we'll perform a manual call to the **<AZURE_AD_OAUTH_AUTHORIZE_ENDPOINT>** to allow the user to authorize the Stardog client to access the Snowflake resource. This step may not be necessary if the administrator performed this authorization at an earlier step.
 
 Take your Snowflake scope, which was `<SNOWFLAKE_APPLICATION_ID_URI>/session:scope:<snowflake_role>` (e.g. `api://08bcca47-1234-48ae-b92e-24f52263d55f/session:scope:sysadmin`). We'll call that **<FULLY_QUALIFIED_SCOPE>**. Now URL Encode the **<FULLY_QUALIFIED_SCOPE>** (you can use online resources like <https://www.urlencoder.org/> to do the encoding). We'll call this **<URL_ENCODED_QUALIFIED_SCOPE>**. For our example, the encoded URL is: `api%3A%2F%2F08bcca47-1234-48ae-b92e-24f52263d55f%2Fsession%3Ascope%3Asysadmin`
 
@@ -275,7 +275,7 @@ Query returned 4 results in 00:00:00.694
 ## Set up Stardog Client Application
 For this example we'll use [Launchpad](https://docs.stardog.com/launchpad/) as the Stardog Client Application. These instructions are adapted from <https://github.com/stardog-union/launchpad-docs/blob/main/README.md> and <https://github.com/stardog-union/launchpad-docs/blob/main/azure/access-token-passthrough-mode.md>.
 
-In the app registration for the Snowflake client (**Example Stardog Resource**), under **App roles**, create app roles for `app_reader` and `app_writer`, making them available to users and groups. These names should match the names of Stardog groups that you want to allow to athenticate to Stardog using OAuth. Users that are assigned to these app roles will be allowed to authenticate and will be granted membership to those Stardog roles.
+In the app registration for the Snowflake client (**Example Stardog Resource**), under **App roles**, create app roles for `app_reader` and `app_writer`, making them available to users and groups. These names should match the names of Stardog groups that you want to allow to authenticate to Stardog using OAuth. Users that are assigned to these app roles will be allowed to authenticate and will be granted membership to those Stardog roles.
 
 In the Azure portal, go to **Enterprise Applications**, select the Snowflake Client application (`Example Stardog Resource`). Navigate to **Manage**, **Users and groups**, click **Add user/group**. All users that have given permission to the app will appear here with Default Access granted. Add additional permissions (`app_reader`, `app_writer`, etc.) for whatever users you want to have access, `test.account@mycompany.com` in this example.
 
@@ -392,7 +392,7 @@ and:
 > View users' basic profile  
 > Maintain access to data you have given it access to
 
-From there, you should see an app launcher page (rather than a dianostics page).
+From there, you should see an app launcher page (rather than a diagnostics page).
 
 Go to Studio.
 
