@@ -4,7 +4,7 @@ This example builds on the [basic mode example](./README.md), adding support for
 
 The access token from Azure AD, as opposed to the launchpad-generated token used in basic mode, is required for the virtual graph passthrough feature. The virtual graph passthrough feature allows Stardog to exchange its access token for a data source access token so that the data source can be accessed with the credentials of the logged-in user when querying a virtual graph. In this example, the data source is hosted in Databricks. (So the term "passthrough" has two senses here; the Azure-generated access token is passed through from Launchpad to Stardog, and the user's identity is passed through from Stardog to the backing datasource via OAuth token exchange.)
 
-The Pass-Through Authentication mode for Stardog virtual graphs is documented [here](https://docs.stardog.com/virtual-graphs/data-sources/passthrough-authentication). Note that this feature was added in the [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) release of the Stardog Platform.
+The Pass-Through Authentication mode for Stardog virtual graphs is documented [here](https://docs.stardog.com/virtual-graphs/data-sources/passthrough-authentication). Note that this feature was added in the [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) release of the Stardog Platform. Finally, the configuration of a complete end-to-end example of passthrough authentication with Snowflake can be found [here](snowflake-passthrough.md).
 
 ## A Little More Detail
 
