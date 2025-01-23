@@ -1,8 +1,8 @@
-# launchpad-docs
+# Launchpad v2 Docs 
 
-This repository contains documentation and example configurations for Stardog Launchpad.
+> [!IMPORTANT]
+> This directory contains documentation and example configurations for Stardog Launchpad v2. See the [README](../README.md) in the root of this repository for Launchpad v3 documentation.
 
-Here are the [release notes](./release-notes.md).
 
 ## Overview
 
