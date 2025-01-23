@@ -1,6 +1,6 @@
 # Launchpad Release Notes
 
-Stardog Launchpad is distributed as a Docker image, which includes the Launchpad login web app together with the Stardog Applications (Studio, Explorer, and Designer). The Stardog Platform server is not included in the Launchpad Docker image.
+Stardog Launchpad is distributed as a Docker image, which includes the Launchpad login web app together with the Stardog Applications (Studio, Explorer, Designer, Knowledge Catalog). The Stardog Platform server is not included in the Launchpad Docker image.
 
 ## Getting the Current Version of Launchpad
 
@@ -18,25 +18,26 @@ docker login stardog-stardog-apps.jfrog.io
 docker pull stardog-stardog-apps.jfrog.io/launchpad:current
 ```
 
-## Version Scheme
-
-Stardog Launchpad releases are versioned as `vX.Y.Z` where:
-
-   - `X` represents the (minimum) version of the Stardog platform required to use all current Launchpad features; this value will increment when the minimum required version of Stardog changes
-   - `Y` represents the current version of Launchpad features; this value will increment when new features or bug fixes are added to the Launchpad login web app
-   - `Z` represents the versions of the Stardog Applications included in the Docker image (see the table below); this value will increment when one or more of the Stardog Applications are updated
-
 # Launchpad Releases
 
-| Release | Stardog Version | Designer Version | Explorer Version | Studio Version |
-| ------- | --------------- | ---------------- | ---------------- | -------------- |
-| 2.0.0   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.24.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2240-release) | [1.26.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1263-release) | [4.1.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v411-release) |
-| 2.1.1   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.28.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2280-release) | [1.28.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1280-release) | [4.3.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v433-release) |
-| 2.2.2   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.30.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2301-release) | [1.32.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1320-release) | [4.4.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v440-release) |
-| 2.2.3   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.32.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2321-release) | [2.3.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v230-release) | [5.2.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v520-release) |
-| 2.3.4   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.33.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2330-release) | [2.5.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v251-release) | [5.4.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v542-release) |
-| 2.4.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) |
-| 2.5.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) |
+| Release | Stardog Version | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
+| ------- | --------------- | ---------------- | ---------------- | -------------- | --------------------------- |
+| 2.0.0   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.24.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2240-release) | [1.26.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1263-release) | [4.1.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v411-release) | not included |
+| 2.1.1   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.28.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2280-release) | [1.28.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1280-release) | [4.3.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v433-release) | not included |
+| 2.2.2   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.30.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2301-release) | [1.32.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1320-release) | [4.4.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v440-release) | not included |
+| 2.2.3   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.32.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2321-release) | [2.3.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v230-release) | [5.2.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v520-release) | not included |
+| 2.3.4   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.33.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2330-release) | [2.5.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v251-release) | [5.4.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v542-release) | not included |
+| 2.4.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) | not included |
+| 2.5.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) | not included |
+| 3.0.0 | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v574-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) | 
+
+## 3.0.0 Release (2025-02-XX)
+
+- Launchpad: add persistent storage allowing users to manage connections
+- Launchpad: adds SSO connections separating how users authenticate to Launchpad and Stardog
+
+> [!NOTE]
+> See the [README](./README.md) for more information on the new features and configuration options. Launchpad v3 is not backwards compatible with v2 and works differently.
 
 ## 2.5.5 Release (2024-09-11)
 
