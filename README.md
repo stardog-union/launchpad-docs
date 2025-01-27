@@ -82,6 +82,36 @@ The following sections detail the configuration options available in Launchpad. 
 | [Login Provider Configuration](#login-provider-configuration) | Configuration options for the SSO provider used to log users into Launchpad |
 | [SSO Connection Configuration](#sso-connection-configuration) | Configuration options for SSO Connections, allowing users to use SSO to connect to Stardog endpoints that have also been configured to accept JWT tokens from the SSO provider. |
 
+### Example Configuration
+
+Here is an example of a configuration file for Launchpad. When using Docker/Docker Compose, you can pass this file to the container using the `--env-file` flag or equivalent in your Docker Compose file.
+
+```bash
+# General Configuration
+BASE_URL=http://localhost:8080
+COOKIE_SECRET=supersecret
+
+# Microsoft Entra Login Provider (to log users into Launchpad)
+AZURE_AUTH_ENABLED=true
+AZURE_CLIENT_ID=<client_id>
+AZURE_CLIENT_SECRET=<client_secret>
+AZURE_TENANT_ID=<tenant_id>
+
+# Development Stardog Server SSO Connection using Microsoft Entra (to authenticate users connecting to Stardog)
+SSO_CONNECTION_DEVELOPMENT_AZURE_CLIENT_ID=<client_id>
+SSO_CONNECTION_DEVELOPMENT_AZURE_CLIENT_SECRET=<client_secret>
+SSO_CONNECTION_DEVELOPMENT_AZURE_TENANT_ID=<tenant_id>
+SSO_CONNECTION_DEVELOPMENT_AZURE_STARDOG_ENDPOINT=http://localhost:5825
+SSO_CONNECTION_DEVELOPMENT_AZURE_DISPLAY_NAME=Development
+
+# Production Stardog Server SSO Connection using Microsoft Entra (to authenticate users connecting to Stardog)
+SSO_CONNECTION_PRODUCTION_AZURE_CLIENT_ID=<client_id>
+SSO_CONNECTION_PRODUCTION_AZURE_CLIENT_SECRET=<client_secret>
+SSO_CONNECTION_PRODUCTION_AZURE_TENANT_ID=<tenant_id>
+SSO_CONNECTION_PRODUCTION_AZURE_STARDOG_ENDPOINT=http://localhost:5826
+SSO_CONNECTION_PRODUCTION_AZURE_DISPLAY_NAME=Production
+```
+
 ### General Configuration
 
 This section details the general configuration options available in Launchpad. 
