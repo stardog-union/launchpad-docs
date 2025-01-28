@@ -95,19 +95,19 @@ COOKIE_SECRET=supersecret
 AZURE_AUTH_ENABLED=true
 AZURE_CLIENT_ID=<client_id>
 AZURE_CLIENT_SECRET=<client_secret>
-AZURE_TENANT_ID=<tenant_id>
+AZURE_TENANT=<tenant_id>
 
 # Development Stardog Server SSO Connection using Microsoft Entra (to authenticate users connecting to Stardog)
 SSO_CONNECTION_DEVELOPMENT_AZURE_CLIENT_ID=<client_id>
 SSO_CONNECTION_DEVELOPMENT_AZURE_CLIENT_SECRET=<client_secret>
-SSO_CONNECTION_DEVELOPMENT_AZURE_TENANT_ID=<tenant_id>
+SSO_CONNECTION_DEVELOPMENT_AZURE_TENANT=<tenant_id>
 SSO_CONNECTION_DEVELOPMENT_AZURE_STARDOG_ENDPOINT=http://localhost:5825
 SSO_CONNECTION_DEVELOPMENT_AZURE_DISPLAY_NAME=Development
 
 # Production Stardog Server SSO Connection using Microsoft Entra (to authenticate users connecting to Stardog)
 SSO_CONNECTION_PRODUCTION_AZURE_CLIENT_ID=<client_id>
 SSO_CONNECTION_PRODUCTION_AZURE_CLIENT_SECRET=<client_secret>
-SSO_CONNECTION_PRODUCTION_AZURE_TENANT_ID=<tenant_id>
+SSO_CONNECTION_PRODUCTION_AZURE_TENANT=<tenant_id>
 SSO_CONNECTION_PRODUCTION_AZURE_STARDOG_ENDPOINT=http://localhost:5826
 SSO_CONNECTION_PRODUCTION_AZURE_DISPLAY_NAME=Production
 ```
@@ -181,9 +181,9 @@ The `AZURE_CLIENT_SECRET` is the client secret of the Azure App Registration use
 - **Required:** Yes (if using Microsoft Entra)
 - **Default:** not set
 
-#### `AZURE_TENANT_ID`
+#### `AZURE_TENANT`
 
-The `AZURE_TENANT_ID` is the tenant id of the Azure App Registration used to sign users into Launchpad.
+The `AZURE_TENANT` is the tenant id of the Azure App Registration used to sign users into Launchpad.
 
 - **Required:** Yes (if using Microsoft Entra)
 - **Default:** `organizations`
@@ -269,7 +269,7 @@ The `AZURE_GOV_CLOUD` is used to set the Azure cloud environment. If set to `tru
    ```bash
    AZURE_AUTH_ENABLED=true
    AZURE_CLIENT_ID=<client_id>
-   AZURE_TENANT_ID=<tenant_id>
+   AZURE_TENANT=<tenant_id>
    AZURE_CLIENT_SECRET=<client_secret>
    ```
 
@@ -278,7 +278,7 @@ The `AZURE_GOV_CLOUD` is used to set the Azure cloud environment. If set to `tru
    ```bash
    AZURE_AUTH_ENABLED=true
    AZURE_CLIENT_ID=<client_id>
-   AZURE_TENANT_ID=<tenant_id>
+   AZURE_TENANT=<tenant_id>
    # Use AZURE_CLIENT_CERTIFICATE_FILE or AZURE_CLIENT_CERTIFICATE_THUMBPRINT. See note below.
    # AZURE_CLIENT_CERTIFICATE_FILE=<path_to_certificate_file-in-docker-image>
    AZURE_CLIENT_CERTIFICATE_THUMBPRINT=<certificate_thumbprint>
@@ -377,14 +377,14 @@ Here's an example of 1 SSO connnection declaration:
 ```bash
 SSO_CONNECTION_DEVELOPMENT_AZURE_CLIENT_ID=<client_id>
 SSO_CONNECTION_DEVELOPMENT_AZURE_CLIENT_SECRET=<client_secret>
-SSO_CONNECTION_DEVELOPMENT_AZURE_TENANT_ID=<tenant_id>
+SSO_CONNECTION_DEVELOPMENT_AZURE_TENANT=<tenant_id>
 SSO_CONNECTION_DEVELOPMENT_AZURE_STARDOG_ENDPOINT=<stardog_endpoint>
 SSO_CONNECTION_DEVELOPMENT_AZURE_DISPLAY_NAME=<user-facing-display-name>
 ```
 - All environment variables are prefixed with `SSO_CONNECTION` to indicate that this is an SSO Connection.
 - `DEVELOPMENT` is the unique identifier for this SSO Connection.
 - `AZURE` is the SSO provider identifier for this SSO Connection.
-- `CLIENT_ID`, `CLIENT_SECRET`, `TENANT_ID`, `STARDOG_ENDPOINT`, and `DISPLAY_NAME` are the configuration options for this SSO Connection.
+- `CLIENT_ID`, `CLIENT_SECRET`, `TENANT`, `STARDOG_ENDPOINT`, and `DISPLAY_NAME` are the configuration options for this SSO Connection.
 
 > [!NOTE]
 > See the [Microsoft Entra SSO Connection Provider Configuration](#microsoft-entra-sso-connection-provider) for more information on the configuration options for Microsoft Entra SSO Connections.
@@ -437,9 +437,9 @@ The `SSO_CONNECTION_<unique_identifier>_AZURE_CLIENT_SECRET` is the client secre
 - **Required:** Yes
 - **Default:** not set
 
-#### `SSO_CONNECTION_<unique_identifier>_AZURE_TENANT_ID`
+#### `SSO_CONNECTION_<unique_identifier>_AZURE_TENANT`
 
-The `SSO_CONNECTION_<unique_identifier>_AZURE_TENANT_ID` is the tenant id of the Azure App Registration used to authenticate and authorize users to connect to the Stardog endpoint.
+The `SSO_CONNECTION_<unique_identifier>_AZURE_TENANT` is the tenant id of the Azure App Registration used to authenticate and authorize users to connect to the Stardog endpoint.
 
 - **Required:** Yes
 - **Default:** not set
@@ -515,7 +515,7 @@ Setting up a Microsoft Entra SSO connection consists of 3 main steps:
 ```bash
 SSO_CONNECTION_<unique-identifier>_AZURE_CLIENT_ID=<client_id>
 SSO_CONNECTION_<unique-identifier>_AZURE_CLIENT_SECRET=<client>
-SSO_CONNECTION_<unique-identifier>_AZURE_TENANT_ID=<tenant_id>
+SSO_CONNECTION_<unique-identifier>_AZURE_TENANT=<tenant_id>
 SSO_CONNECTION_<unique-identifier>_AZURE_STARDOG_ENDPOINT=<stardog_endpoint> # optional
 SSO_CONNECTION_<unique-identifier>_AZURE_DISPLAY_NAME=<user-facing-display-name> # optional
 ```
@@ -537,17 +537,17 @@ SSO_CONNECTION_<unique-identifier>_AZURE_DISPLAY_NAME=<user-facing-display-name>
 
    ```yaml
    issuers:
-     https://login.microsoftonline.com/><AZURE_TENANT_ID>/v2.0:
+     https://login.microsoftonline.com/<SSO_CONNECTION_$uid_AZURE_TENANT>/v2.0:
        usernameField: preferred_username
        audience: <AZURE_CLIENT_ID>
        algorithms:
        RS256:
-         keyUrl: https://login.microsoftonline.com/<AZURE_TENANT_ID>/discovery/v2.0/keys
+         keyUrl: https://login.microsoftonline.com/<SSO_CONNECTION_$uid_AZURE_TENANT>/discovery/v2.0/keys
        autoCreateUsers: True
        rolesClaimPath: roles
    ```
 
-   - `https://login.microsoftonline.com/<AZURE_TENANT_ID>/v2.0` is the issuer URL for Microsoft Entra. Replace `<AZURE_TENANT_ID>` with the tenant id of the Azure App Registration.
+   - `https://login.microsoftonline.com/<SSO_CONNECTION_$uid_AZURE_TENANT>/v2.0` is the issuer URL for Microsoft Entra. Replace `<SSO_CONNECTION_$uid_AZURE_TENANT>` with the tenant id of the Azure App Registration for the SSO connection.
    - `usernameField` is the claim in the JWT token that contains the username of the user. This should be set to `preferred_username`.
    - `audience` is the client id of the Azure App Registration.
    - `algorithms` is the algorithm used to sign the JWT token. In this case, it is `RS256`. The `keyUrl` is the URL to the public key used to verify the JWT token.
@@ -555,7 +555,7 @@ SSO_CONNECTION_<unique-identifier>_AZURE_DISPLAY_NAME=<user-facing-display-name>
    - `rolesClaimPath` is the path to the claim in the JWT token that contains the app roles assigned to the user. 
 
 > [!NOTE]
-> If you are using Microsoft Entra in the Azure US Government Cloud, the issuer URL should be `https://login.microsoftonline.us/<AZURE_TENANT_ID>/v2.0` and the `keyUrl` should be `https://login.microsoftonline.us/<AZURE_TENANT_ID>/discovery/v2.0/keys`.
+> If you are using Microsoft Entra in the Azure US Government Cloud, the issuer URL should be `https://login.microsoftonline.us/<SSO_CONNECTION_$uid_AZURE_TENANT>/v2.0` and the `keyUrl` should be `https://login.microsoftonline.us/<SSO_CONNECTION_$uid_AZURE_TENANT>/discovery/v2.0/keys`.
 
 2. Make sure to restart the Stardog server after making these changes.
 
