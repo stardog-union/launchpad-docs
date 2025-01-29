@@ -67,6 +67,9 @@ This is the general guide to getting Launchpad up and running. For more detailed
 
 4. Access Launchpad in your browser at the [`BASE_URL`](#base_url) you configured.
 
+## Data Persistence
+
+As mentioned in the [Getting Started](#getting-started) section, Launchpad persists data to a local directory that should be mounted to a volume for persistence. This is done by mounting a volume to the `/data` directory in the Launchpad container.
 
 ## Getting Help
 
