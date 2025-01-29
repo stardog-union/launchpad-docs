@@ -219,12 +219,32 @@ Thumbprint of the certificate used as a credential with the Application Registra
 - **Required:** Yes (if using client certificate with Microsoft Entra and not using `AZURE_CLIENT_CERTIFICATE_FILE`)
 - **Default:** not set
 
-#### `AZURE_GOV_CLOUD`
+#### `AZURE_GOV_CLOUD_US`
 
-The `AZURE_GOV_CLOUD` is used to set the Azure cloud environment. If set to `true`, it's assumed that the Azure App Registration is in your tenant in the Azure US Government Cloud.
+The `AZURE_GOV_CLOUD_US` is used to set the Azure cloud environment to the Azure US Government Cloud.
 
 - **Required:** Yes (if using Azure US Government Cloud)
 - **Default:** `false`
+
+#### `AZURE_AUTH_BASE_URL`
+
+The `AZURE_AUTH_BASE_URL` is used to set the base URL for Microsoft Entra. This is the URL that users will use to authenticate with Microsoft Entra.
+
+> [!NOTE]
+> If `AZURE_GOV_CLOUD_US` is set to `true`, this will be automatically set to `https://login.microsoftonline.us`
+
+- **Required:** No
+- **Default:** `https://login.microsoftonline.com`
+
+#### `AZURE_GRAPH_BASE_URL`
+
+The `AZURE_GRAPH_BASE_URL` is used to set the base URL for the Microsoft Graph API. This is used to retrieve user information from Microsoft Entra.
+
+> [!NOTE]
+> If `AZURE_GOV_CLOUD_US` is set to `true`, this will be automatically set to `https://graph.microsoft.us`
+
+- **Required:** No
+- **Default:** `https://graph.microsoft.com`
 
 #### How To Create an Azure App Registration to login with Microsoft Entra in Launchpad
 
@@ -289,7 +309,7 @@ The `AZURE_GOV_CLOUD` is used to set the Azure cloud environment. If set to `tru
 There is no need to set both `AZURE_CLIENT_CERTIFICATE_FILE` and `AZURE_CLIENT_CERTIFICATE_THUMBPRINT`. Use one or the other. If both are set, `AZURE_CLIENT_CERTIFICATE_THUMBPRINT` will be used.
 
 > [!NOTE]
-> If your tenant is in the Azure US Government Cloud, set `AZURE_GOV_CLOUD=true`.
+> If your tenant is in the Azure US Government Cloud, set `AZURE_GOV_CLOUD_US=true`.
 
 
 ------------
@@ -465,6 +485,25 @@ The `SSO_CONNECTION_<unique_identifier>_AZURE_GOV_CLOUD_US` is used to set the A
 - **Required:** Yes (if using Azure US Government Cloud)
 - **Default:** `false`
 
+#### `SSO_CONNECTION_<unique_identifier>_AZURE_AUTH_BASE_URL`
+
+The `SSO_CONNECTION_<unique_identifier>_AZURE_AUTH_BASE_URL` is used to set the base URL for Microsoft Entra. This is the URL that users will use to authenticate with Microsoft Entra.
+
+> [!NOTE]
+> If `SSO_CONNECTION_<unique_identifier>_AZURE_GOV_CLOUD_US` is set to `true`, this will be automatically set to `https://login.microsoftonline.us`
+
+- **Required:** No
+- **Default:** `https://login.microsoftonline.com`
+
+#### `SSO_CONNECTION_<unique_identifier>_AZURE_GRAPH_BASE_URL`
+
+The `SSO_CONNECTION_<unique_identifier>_AZURE_GRAPH_BASE_URL` is used to set the base URL for the Microsoft Graph API. This is used to retrieve user information from Microsoft Entra.
+
+> [!NOTE]
+> If `SSO_CONNECTION_<unique_identifier>_AZURE_GOV_CLOUD_US` is set to `true`, this will be automatically set to `https://graph.microsoft.us`
+
+- **Required:** No
+- **Default:** `https://graph.microsoft.com`
 
 #### Setting up a Microsoft Entra SSO Connection
 
