@@ -152,6 +152,8 @@ Available Login SSO providers:
 - [Microsoft Entra (formerly known as Azure Active Directory)](#microsoft-entra-login-provider)
 - [Google](#google-login-provider)
 
+------------
+
 <a name="microsoft-entra-login-provider"></a>
 **Microsoft Entra**
 
@@ -181,6 +183,9 @@ The `AZURE_CLIENT_ID` is the client id of the Azure App Registration used to sig
 
 The `AZURE_CLIENT_SECRET` is the client secret of the Azure App Registration used to sign users into Launchpad.
 
+> [!NOTE]
+> This should be used if not using a client certificate (`AZURE_CLIENT_CERTIFICATE_FILE` or `AZURE_CLIENT_CERTIFICATE_THUMBPRINT`).
+
 - **Required:** Yes (if using Microsoft Entra)
 - **Default:** not set
 
@@ -207,7 +212,7 @@ The `AZURE_CLIENT_PRIVATE_KEY_FILE` is the path (in the Docker container) to the
 The `AZURE_CLIENT_CERTIFICATE_FILE` is the path (in the Docker container) to the certificate file used as a credential with the Application Registration. 
 
 > [!NOTE]
-> This should be set if `AZURE_CLIENT_CERTIFICATE_THUMBPRINT` not specified)
+> This should be set if `AZURE_CLIENT_CERTIFICATE_THUMBPRINT` not specified.
 
 - **Required:** Yes (if using client certificate with Microsoft Entra and not using `AZURE_CLIENT_CERTIFICATE_THUMBPRINT`)
 - **Default:** not set
@@ -412,7 +417,7 @@ SSO_CONNECTION_DEVELOPMENT_AZURE_DISPLAY_NAME=<user-facing-display-name>
 > [!NOTE]
 > See the [Microsoft Entra SSO Connection Provider Configuration](#microsoft-entra-sso-connection-provider) for more information on the configuration options for Microsoft Entra SSO Connections.
 
-With a similar configuration to above (of course with actual values populated), your users would then see a dropdown populated when clicking **"Add SSO endpoint"**. It's labeled **"SSO Connection Registration"** in the form. The `DISPLAY_NAME` is the name your users will see. In the demo just below, 3 SSO connections are configured. The display names are `Development`, `Staging`, and `Production` respectively. The `STARDOG_ENDPOINT` is also provided (`http://localhost:5825`) so that your users do not have to manually enter this field.
+With a similar configuration to above (of course with actual values populated), your users would then see a dropdown populated when clicking **"Add SSO endpoint"**. It's labeled **"SSO Connection Registration"** in the form. The `DISPLAY_NAME` is the name your Launchpad user will see. In the demo just below, 3 SSO connections are configured. The display names are `Development`, `Staging`, and `Production` respectively. The `STARDOG_ENDPOINT` is also provided (`http://localhost:5825`) so that your users do not have to manually enter this field.
 
 https://github.com/user-attachments/assets/e22a18d1-a9a3-4e50-93ed-6e29fc028e4b
 
