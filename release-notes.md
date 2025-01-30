@@ -1,6 +1,6 @@
 # Launchpad Release Notes
 
-Stardog Launchpad is distributed as a Docker image, which includes the Launchpad login web app together with the Stardog Applications (Studio, Explorer, Designer, Knowledge Catalog). The Stardog Platform server is not included in the Launchpad Docker image.
+Stardog Launchpad is distributed as a Docker image, which includes the Launchpad web app together with the Stardog Applications (Studio, Explorer, and Designer, Knowledge Catalog).
 
 ## Getting the Current Version of Launchpad
 
@@ -18,63 +18,20 @@ docker login stardog-stardog-apps.jfrog.io
 docker pull stardog-stardog-apps.jfrog.io/launchpad:current
 ```
 
-# Launchpad Releases
+## Version Scheme
 
-| Release | Stardog Version | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
-| ------- | --------------- | ---------------- | ---------------- | -------------- | --------------------------- |
-| 2.0.0   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.24.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2240-release) | [1.26.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1263-release) | [4.1.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v411-release) | not included |
-| 2.1.1   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.28.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2280-release) | [1.28.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1280-release) | [4.3.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v433-release) | not included |
-| 2.2.2   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.30.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2301-release) | [1.32.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v1320-release) | [4.4.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v440-release) | not included |
-| 2.2.3   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.32.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2321-release) | [2.3.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v230-release) | [5.2.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v520-release) | not included |
-| 2.3.4   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.33.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2330-release) | [2.5.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v251-release) | [5.4.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v542-release) | not included |
-| 2.4.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) | not included |
-| 2.5.5   | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.35.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2350-release) | [2.6.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v263-release) | [5.6.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v565-release) | not included |
-| 3.0.0 | [9.1.0](https://docs.stardog.com/release-notes/stardog-platform#910-release-2023-07-06) | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+Launchpad v3 uses semantic versioning.
 
-## 3.0.0 Release (2025-01-29)
+## Launchpad Releases
 
-- Launchpad: add persistent storage allowing users to manage connections
-- Launchpad: adds SSO connections separating how users authenticate to Launchpad and Stardog
+| Release | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
+| :-----: | :-------------: | :--------------: | :--------------: | :------------: | :-------------------------: |
+| 3.0.0 | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release)|
 
-> [!NOTE]
-> See the [README](./README.md) for more information on the new features and configuration options. Launchpad v3 is not backwards compatible with v2 and works differently.
+## 3.0.0 Release (2025-01-30)
 
-## 2.5.5 Release (2024-09-11)
+- Inital release of Launchpad v3. 
 
-- Launchpad: Added support for Azure US Government Cloud (#CLOUD-2520)
+> [!TIP]
+> See the [documentation](./README.md) for more information.
 
-## 2.4.5 Release (2024-08-08)
-
-- Apps: Fix for expired access tokens not being refreshed (#VET-4525)
-- Studio: Adjusted webpack chunk size to reduce GETs during load (#CLOUD-2403, #VET-4894)
-- Launchpad: Added support for Geoaxis IDP
-
-## 2.3.4 Release (2024-06-14)
-
-- Explorer: Show selected graphs first in list (#VET-4571)
-- Remove unneeded messages logged to the Launchpad console (#VET-4771)
-- Remove unused components to mitigate critical CVEs (#CLOUD-2322)
-
-## 2.2.3 Release (2024-05-08)
-
-- Update Studio, Explorer and Designer to latest versions
-
-## 2.2.2 Release (2024-02-09)
-
-- Fix for visualize disabled in Explorer for select queries (#VET-4291)
-- Upgrade to Python 3.11 (#CLOUD-1463)
-
-## 2.1.1 Release (2023-12-13)
-
-- Add option to show/hide password auth inputs (#CLOUD-1276); see [config doc](./?tab=readme-ov-file#configuration-options)
-- Ensure access token for AzureAD auth is refreshed (#CLOUD-1371)
-
-## 2.0.0 Release (2023-09-27)
-
-### Launchpad Updates
-- Support using a client certificate when authenticating to Azure (#CLOUD-1332); see [config doc](./azure/client-certificate-config.md)
-- Support access token passthrough mode with Azure (#CLOUD-1278); see [config doc](./azure/access-token-passthrough-mode.md)
-- Disable Django Admin (#CLOUD-1489)
-
-### Stardog Notes
-- Stardog Platform version 9.1.0 (or later) is required to use the access token passthrough feature. Other Launchpad features require at least version 9.0.0 of Stardog.
