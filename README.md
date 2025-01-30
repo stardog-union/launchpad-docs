@@ -604,6 +604,7 @@ SSO_CONNECTION_<unique-identifier>_AZURE_DISPLAY_NAME=<user-facing-display-name>
 > [!NOTE]
 > If you are using Microsoft Entra in the Azure US Government Cloud, the issuer URL should be `https://login.microsoftonline.us/<SSO_CONNECTION_$uid_AZURE_TENANT>/v2.0` and the `keyUrl` should be `https://login.microsoftonline.us/<SSO_CONNECTION_$uid_AZURE_TENANT>/discovery/v2.0/keys`.
 
-2. Make sure to restart the Stardog server after making these changes.
+2. **Make sure to restart the Stardog server after making these changes.**
 
-3. Create the roles in Stardog that match the app roles in the Azure App Registration. *This is required for Stardog to auto-create users and assign roles based on the claims in the JWT token.*
+3. **Create the roles in Stardog that match the app roles in the Azure App Registration.**
+   - *This is required for Stardog to auto-create users and assign roles based on the claims in the JWT token.*
