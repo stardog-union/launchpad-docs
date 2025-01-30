@@ -3,7 +3,7 @@
 Stardog Launchpad is distributed as a Docker image, which includes the Launchpad login web app together with the Stardog Applications (Studio, Explorer, and Designer). The Stardog Platform server is not included in the Launchpad Docker image.
 
 > [!IMPORTANT]
-> These are the release notes for Stardog Launchpad v2 which is deprecated. For the latest release notes, see the [Stardog Launchpad v3 release notes](../release-notes.md). Note the [versioning scheme](#version-scheme) has changed in v3.V3 uses semantic versioning.
+> These are the release notes for Stardog Launchpad v2 which is deprecated. For the latest release notes, see the [Stardog Launchpad v3 release notes](../release-notes.md). Note the [versioning scheme](#version-scheme) has changed in v3. V3 uses semantic versioning.
 
 ## Getting the Current Version of Launchpad
 
