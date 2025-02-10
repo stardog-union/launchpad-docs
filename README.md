@@ -546,12 +546,12 @@ Setting up a Microsoft Entra SSO connection consists of 3 main steps:
    - Set expiration     - **Copy secret value immediately** - this is only shown while creating a secret. It cannot be retrieved later.
 4. **Modify Manifest**
    - Go to **"Manifest"**
-   - Set `accessTokenAcceptedVersion` to `2`
+   - Set `requestedAccessTokenVersion` under `api` to `2`
 5. **Create and Assign App Roles**
    - Go to **"App roles"**
    - Click **"Create app role"**
    - Create roles that you want to assign to users connecting to the Stardog endpoint. **These roles should match the roles in Stardog.**
-   - Assign roles to users in the **"Enterprise applications"** section of the app registration
+   - Assign roles to users in the **"Enterprise applications"** service.
 6. **Collect Configuration Values**
    - **Client ID**: Found in "Overview"
    - **Tenant ID**: Found in "Overview"
