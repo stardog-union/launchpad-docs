@@ -18,6 +18,10 @@ docker login stardog-stardog-apps.jfrog.io
 docker pull stardog-stardog-apps.jfrog.io/launchpad:current
 ```
 
+> [!IMPORTANT]
+> The `current` tag always points to the latest release of Launchpad. You can also pull a specific version of Launchpad by using the version tag, for example, `v3.0.1`.
+
+
 ## Version Scheme
 
 Launchpad v3 uses semantic versioning.
