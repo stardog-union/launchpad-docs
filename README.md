@@ -47,7 +47,7 @@ This is the general guide to getting Launchpad up and running. For more detailed
 2. Configure Launchpad and optionally your Stardog servers.
    - Launchpad must be configured with an SSO provider to log users in with.
    - Launchpad can optionally be configured with "SSO Connections", allowing users to use SSO to connect to Stardog endpoints that have also been configured to accept JWT tokens from the SSO provider. Without SSO Connections, users will need to manually enter their Stardog credentials to connect to Stardog endpoints.
-      - The SSO provider for connections can be from the same provider as the main SSO provider or a different provider. They should however be different applications in the SSO provider. For example, Microsoft Entra can be used as Launchpad SSO provider and also as the SSO provider for connections, but they should be different "App Registrations" in Microsoft Entra.
+      - The SSO provider for connections can be from the same provider as the main SSO provider or a different provider. They should, however, be different applications in the SSO provider. For example, Microsoft Entra can be used as the Launchpad SSO (main) provider and also as the SSO provider for connections, but Launchpad and each of the SSO connections (the Stardog endpoints) should be different "App Registrations" in Microsoft Entra.
       - The SSO provider must be configured to issue JWT tokens that can be used to authenticate with Stardog.
       - See [SSO Connection Configuration](#sso-connection-configuration) for more information on configuring SSO Connections.
 
