@@ -151,6 +151,7 @@ This section details the configuration options available for the SSO provider us
 Available Login SSO providers:
 - [Microsoft Entra (formerly known as Azure Active Directory)](#microsoft-entra-login-provider)
 - [Google](#google-login-provider)
+- [Okta](#okta-login-provider)
 
 ------------
 
@@ -379,6 +380,149 @@ GOOGLE_AUTH_ENABLED=true
 GOOGLE_CLIENT_ID=<client_id>
 GOOGLE_CLIENT_SECRET=<client_secret>
 ```
+
+------------
+
+<a name="okta-login-provider"></a>
+**Okta**
+
+![Okta](./assets/okta-logo.jpg)
+
+The following configuration options are available for Okta SSO.
+
+> [!NOTE]
+> See [How to Create an Okta Application to login with Okta in Launchpad](#how-to-create-an-okta-application-to-login-with-okta-in-launchpad) for additional information.
+
+#### `OKTA_AUTH_ENABLED`
+
+The `OKTA_AUTH_ENABLED` setting is used to enable or disable Okta authentication to log users into Launchpad.
+
+- **Required:** Yes (if using Okta)
+- **Default:** `false`
+
+#### `OKTA_CLIENT_ID`
+
+The `OKTA_CLIENT_ID` is the client id of the Okta Application used to log users into Launchpad.
+
+- **Required:** Yes (if using Okta)
+- **Default:** not set
+
+#### `OKTA_DOMAIN`
+
+The `OKTA_DOMAIN` is the domain of the Okta Application used to log users into Launchpad.
+
+- **Required:** Yes (if using Okta)
+- **Default:** not set
+
+#### `OKTA_CLIENT_SECRET`
+
+The `OKTA_CLIENT_SECRET` is the client secret of the Okta Application used to log users into Launchpad.
+
+- **Required:** Yes (if using Okta and not using `OKTA_CLIENT_PRIVATE_KEY_FILE`)
+- **Default:** not set
+
+#### `OKTA_CLIENT_PRIVATE_KEY_FILE`
+
+The `OKTA_CLIENT_PRIVATE_KEY_FILE` is the path (in the Docker container) to the private key file corresponding to the certificate used as a credential with the Okta Application.
+
+> [!NOTE]
+> This should be used if not using a client secret (`OKTA_CLIENT_SECRET`).
+
+- **Required:** Yes (if using `private_key_jwt` auth with Okta)
+- **Default:** not set
+
+#### `OKTA_REQUIRE_PKCE`
+
+The `OKTA_REQUIRE_PKCE` is used to require Proof Key for Code Exchange (PKCE) for the Okta Application.
+
+- **Required:** Yes (if this setting is checked in the Okta Application)
+- **Default:** `false`
+
+#### `OKTA_POST_LOGOUT_REDIRECT_URI`
+
+The `OKTA_POST_LOGOUT_REDIRECT_URI` is the URL that users will be redirected to after logging out of Launchpad.
+
+> [!IMPORTANT]
+> The URL must be registered in the Okta Application or the user will not be redirected.
+
+- **Required:** No
+- **Default:** not set
+
+#### How to Create an Okta Application to login with Okta in Launchpad
+
+##### 1. Create a new application in Okta
+   - Sign into your Okta Admin Dashboard
+   - Navigate to **Applications** > **Applications**
+   - Click **"Create App Integration"**
+   - Choose **"OIDC - OpenID Connect"** as the Sign-in method
+   - Click **"Next"**
+
+##### 2. Configure the application
+   - **General Settings**
+     - **App Integration Name**: Name your application (e.g. "Stardog Launchpad")
+   - **Sign-in redirect URIs**: `{BASE_URL}/oauth/okta/redirect`
+      - See [`BASE_URL`](#base_url) for more information on what the value should.
+   - **Sign out redirect URIs**: This can be set to `{BASE_URL}` if you want users to be redirected to the Launchpad home page after logging out. You will need to set the `OKTA_POST_LOGOUT_REDIRECT_URI` environment variable to this value.
+      - See [`BASE_URL`](#base_url) for more information on what the value should.
+   - **Assignments**: Assign the application to users or groups
+   - Click **"Save"**
+
+##### 3. Configure Application Client Credentials
+
+After creating the application, you will need to decide between using a *client secret* or *public/private key pair* for authentication. These are for `client_secret_basic` and `private_key_jwt` authentication methods, respectively.
+
+> [!NOTE]
+> Aside from the client authentication method, there is an option to "Require Proof Key for Code Exchange (PKCE) as additional verification" in the Okta Application. If you enable this setting, you will need to set `OKTA_REQUIRE_PKCE=true` when configuring Launchpad.
+
+###### Client Secret
+
+This is the simpler method, however it is less secure than using private key JWT authentication. It is also the default method used for Okta when creating an application through their wizard.
+
+1. Navigate to the **"General"** tab of the application
+2. Under **Client Credentials**
+   - Make note of your **Client ID** - you will need this later when configuring Launchpad
+   - Click **"Show Client Secret"** and copy the value to somewhere safe. You will need this later when configuring Launchpad.
+
+###### Public/Private Key (Private Key JWT)
+
+1. Navigate to the **"General"** tab of the application
+2. Under **Client Credentials**, click **"Edit"** to change the **Client Authentication** method to **Public/Private Key**
+3. A new section will appear within the **Client Credentials** section called **Public/Private Key**
+   - You can choose to upload a public key or generate a new key pair in Okta. If you choose to generate a new key pair, you will need to copy the private key **in PEM format** to a safe location. You will need this later when configuring Launchpad.
+4. Make note of your **Client ID** - you will need this later when configuring Launchpad.
+
+##### 4. Configure Launchpad
+
+```
+OKTA_AUTH_ENABLED=true
+OKTA_CLIENT_ID=<client_id>
+OKTA_DOMAIN=<okta_domain>
+
+# optional
+OKTA_POST_LOGOUT_REDIRECT_URI=<post_logout_uri>
+
+# required if setting checked in Okta Application
+OKTA_REQUIRE_PKCE=true
+```
+
+Depending on the authentication method you chose, you will need to set either `OKTA_CLIENT_SECRET` or `OKTA_CLIENT_PRIVATE_KEY_FILE`.
+
+```
+# Using client secret
+OKTA_CLIENT_SECRET=<client_secret>
+
+# Using private key JWT
+OKTA_CLIENT_PRIVATE_KEY_FILE=/path/to/private-key/in/container.pem
+```
+
+> [!NOTE]
+> The Okta domain can be found in the right side of the upper navigation bar after clicking on your username.
+>
+> ![Okta Domain](./assets/okta-domain.png)
+
+
+> [!IMPORTANT]
+> If using `OKTA_CLIENT_PRIVATE_KEY_FILE`, the private key must be accessible in the Docker container. This can be done by mounting a volume to the path specified in the environment variable.
 
 ### SSO Connection Configuration
 
