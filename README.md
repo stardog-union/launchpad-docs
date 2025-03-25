@@ -462,7 +462,7 @@ The `OKTA_POST_LOGOUT_REDIRECT_URI` is the URL that users will be redirected to 
      - **App Integration Name**: Name your application (e.g. "Stardog Launchpad")
    - **Sign-in redirect URIs**: `{BASE_URL}/oauth/okta/redirect`
       - See [`BASE_URL`](#base_url) for more information on what the value should.
-   - **Sign out redirect URIs**: This can be set to `BASE_URL` if you want users to be redirected to the Launchpad home page after logging out. You will need to set the `OKTA_POST_LOGOUT_REDIRECT_URI` environment variable to this value.
+   - **Sign out redirect URIs**: This can be set to `{BASE_URL}` if you want users to be redirected to the Launchpad home page after logging out. You will need to set the `OKTA_POST_LOGOUT_REDIRECT_URI` environment variable to this value.
       - See [`BASE_URL`](#base_url) for more information on what the value should.
    - **Assignments**: Assign the application to users or groups
    - Click **"Save"**
