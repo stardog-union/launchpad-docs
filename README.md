@@ -832,8 +832,8 @@ These steps walk through how to configure Okta and Stardog to allow users to cre
    - Additionally, select **Refresh Token** to enable token refresh capability
 
 3. **Sign-in redirect URIs**:
-   - Add your redirect URI: `$BASE_URL/auth/sso-connection`
-   - Replace `$BASE_URL` with your Launchpad base URL
+   - Add your redirect URI: `{BASE_URL}/auth/sso-connection`
+      - See [`BASE_URL`](#base_url) for more information on what the value should.
 
 4. **Assignments**:
    - Choose who can access this integration
