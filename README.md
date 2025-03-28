@@ -758,7 +758,10 @@ The `SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT` is the URL of the 
 #### Setting up a PingOne SSO Connection
 
 > [!IMPORTANT]
-> The following example uses a custom attribute on a user in PingOne to store the Stardog roles assigned to the user. This is just one way to store roles in PingOne. You can use any method that works for your organization. The important thing is that the roles are available in the access token that is issued by PingOne. The `SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE` should be set to the scope to pull in the claim representing Stardog roles in the access token.
+> The following example uses a custom attribute on a user in PingOne to store the Stardog roles assigned to the user. This is just one way to store roles in PingOne that represent a user's Stardog roles. You can use any method that works for your organization. The important thing is that the roles are available in the access token that is issued by PingOne. The `SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE` should be set to the scope to pull in the claim representing Stardog roles in the access token.
+>
+> ![PingOne Custom Attribute](./assets/pingone-custom-attribute.png)
+>
 
 1. Add a new custom user attribute to the Ping user profile. This attribute will be used to store the Stardog roles for a user. If you have multiple Stardog servers, you can create multiple attributes, one for each server.
    - Under **Directory** > **User Attributes**, add a **Declared** user attribute.
@@ -779,7 +782,7 @@ The `SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT` is the URL of the 
       - **Attributes**: Add the `stardogDevelopmentRoles` attribute
    - Section 2: Resource Access
       - Configure the Stardog **Roles** and **Username** attributes for the resource.
-         - Click the **++Add** button.
+         - Click the **+Add** button.
             - For the Stardog roles attribute name, choose a name (e.g., `sd-roles`) and for the PingOne mappings selector, use `Stardog Development Roles`. This will map the `stardogDevelopmentRoles` attribute to the `sd-roles` claim in the access token. The `sd-roles` claim will be used in the JWT configuration for Stardog and will be used to assign roles to the user in Stardog.
             - For the username attribute name, choose a name (e.g., `sd-username`) and for the PingOne mappings selector, use `Email Address` or some other unique attribute. This will map the username of the user to the `sd-username` claim in the access token. The `username` claim will be used to create the user in Stardog.
    - Section 3: Scopes
@@ -801,10 +804,13 @@ The `SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT` is the URL of the 
 Most of the settings needed can be found in the application's overview page, for the exception of the `SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE` which is the scope used to retrieve the Stardog roles assigned to the user from PingOne.
 
 ```bash
+# required
 SSOCONNECTION_<unique_identifier>_PING_CLIENT_ID=<client_id>
 SSOCONNECTION_<unique_identifier>_PING_CLIENT_SECRET=<client_secret>
 SSOCONNECTION_<unique_identifier>_PING_ENVIRONMENT_ID=<environment_id>
-SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE=<scope>
+# This is the scope used to retrieve the roles assigned to the user from PingOne. 
+# This should match the scope you used in the custom resource in PingOne.
+SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE=stardogDevelopmentServerAccess
 
 # optional but helpful for Launchpad users
 SSOCONNECTION_<unique_identifier>_PING_DISPLAY_NAME=<user-facing-display-name>
@@ -834,10 +840,10 @@ issuers:
       keyUrl: https://auth.pingone.com/<SSOCONNECTION_$uid_PING_ENVIRONMENT_ID>/as/jwks
 ```
 
-- the top-level key is the issuer URL for PingOne. This should match the issuer URL in the PingOne OIDC configuration. This should be in your PingOne OIDC application's connection settings under the `Issuer ID` field. For non enterprise, this is `https://auth.pingone.com/<SSOCONNECTION_$uid_PING_ENVIRONMENT_ID>/as`. Replace this as needed for your environment.
+- the top-level key under `issuers`, is the issuer URL for PingOne. This should match the issuer URL in the PingOne OIDC configuration. This should be in your PingOne OIDC application's connection settings under the `Issuer ID` field. For non enterprise, this is `https://auth.pingone.com/<SSOCONNECTION_$uid_PING_ENVIRONMENT_ID>/as`. Replace this as needed for your environment.
 - the `rolesClaimPath` should be set to the claim in the JWT token that contains the roles assigned to the user in PingOne. This should match the `sd-roles` (or whatever you named it) attribute in the custom resource in PingOne.
 - the `usernameField` should be set to the claim in the JWT token that contains the username of the user in PingOne. This should match the `sd-username` (or whatever you named it) attribute in the custom resource in PingOne.
-- the `audience` should be set to the client id of the PingOne OIDC client.
+- the `audience` should be set to the audience defined in the custom resource in PingOne. This should match the `Resource Name` in the custom resource in PingOne if you did not set the `Audience` field.
 - similar to the issuer URL, the `keyUrl` should be set to the URL of the public key used to verify the JWT token. This should match the `JWKS URI` in the PingOne OIDC configuration. This may not follow the template below for an enterprise PingOne environment - replace as needed.
 
 
