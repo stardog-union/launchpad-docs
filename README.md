@@ -901,6 +901,9 @@ The following configuration options are available for Okta SSO Connections.
 
 The `SSOCONNECTION_<unique_identifier>_OKTA_CLIENT_ID` is the client id of the Okta application used to authenticate and authorize users to connect to the Stardog endpoint.
 
+- **Required:** Yes
+- **Default:** not set
+
 #### `SSOCONNECTION_<unique_identifier>_OKTA_DOMAIN`
 
 The `SSOCONNECTION_<unique_identifier>_OKTA_DOMAIN` is the domain of the Okta application used to authenticate and authorize users to connect to the Stardog endpoint.
@@ -953,6 +956,9 @@ The `SSOCONNECTION_<unique_identifier>_OKTA_STARDOG_ENDPOINT` is the URL of the 
 #### `SSOCONNECTION_<unique_identifier>_OKTA_DISPLAY_NAME`
 
 The `SSOCONNECTION_<unique_identifier>_OKTA_DISPLAY_NAME` is the user-facing display name for this SSO Connection. This is the name that will be displayed to users when they are selecting an SSO Connection to connect to a Stardog endpoint. If not set, the unique identifier will be used as the display name.
+
+- **Required:** No
+- **Default:** <unique_identifier>
 
 #### Setting up an Okta SSO Connection
 
