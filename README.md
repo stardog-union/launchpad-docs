@@ -65,11 +65,51 @@ This is the general guide to getting Launchpad up and running. For more detailed
     - The container exposes port `8080`, which can be mapped to any port on the host machine.
     - `/data` is the directory where Launchpad will persist data. **This should be mounted to a volume for persistence**.
 
+> [!IMPORTANT]
+> By default, the Launchpad container will run as `root` user (uid `0`). This user. This is not recommended for production use. If you want to run the container as a different user, you can use the `--user` flag in the `docker run` command. See [Run Launchpad with a Given User](#run-launchpad-with-a-given-user) for more information.
+
 4. Access Launchpad in your browser at the [`BASE_URL`](#base_url) you configured.
 
 ## Data Persistence
 
-As mentioned in the [Getting Started](#getting-started) section, Launchpad persists data to a local directory that should be mounted to a volume for persistence. This is done by mounting a volume to the `/data` directory in the Launchpad container.
+As mentioned in the [Getting Started](#getting-started) section, Launchpad persists data to a local directory that should be mounted to a volume for persistence. This is done by mounting a volume to the `/data` directory in the Launchpad container. 
+
+> [!IMPORTANT]
+>The volume mounted should be owned and writable by the user that is running the Launchpad container. See [Run Launchpad with a Given User](#run-launchpad-with-a-given-user) for more information.
+
+## Run Launchpad with a Given User
+
+You can run Launchpad with a given user by using the `--user` flag in the `docker run` command. This is useful if you want to run Launchpad as a specific user instead of the default `root` user.
+
+```bash
+docker run \
+  --user <user_id>:<group_id> \
+  --env-file /path/to/launchpad/.env.launchpad \
+  -p 8080:8080 \
+  -v /path/to/launchpad/data:/data \
+  stardog-stardog-apps.jfrog.io/launchpad:current
+```
+
+> [!IMPORTANT]
+> When using the `--user` flag, the user id and group id must have the appropriate permissions to the directory mounted to `/data`. This is the directory where Launchpad will persist data. If the user id and group id do not have the appropriate permissions, you may encounter permission errors when trying to access the data in Launchpad. 
+>
+>```bash
+>sudo chown <user_id>:<group_id> /path/to/launchpad/data
+>```
+
+> [!NOTE]
+> Similarly in Kubernetes, you can set the `securityContext` for the Launchpad pod to run as a specific user.
+>
+> ```yaml
+>securityContext:
+>  seccompProfile:
+>    type: RuntimeDefault
+>  runAsNonRoot: true
+>  runAsUser: 100001
+>  runAsGroup: 100001
+>  fsGroup: 100001
+>```
+
 
 ## Getting Help
 
