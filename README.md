@@ -91,7 +91,13 @@ docker run \
 ```
 
 > [!IMPORTANT]
-> When using the `--user` flag, the user id and group id must have the appropriate permissions to the directory mounted to `/data`. This is the directory where Launchpad will persist data. If the user id and group id do not have the appropriate permissions, you may encounter permission errors when trying to access the data in Launchpad. 
+> When using the `--user` flag, the user id and group id must have the appropriate permissions to the directory mounted to `/data`. This is the directory where Launchpad will persist data. If the user id and group id do not have the appropriate permissions, you may encounter permission errors when trying to access the data in Launchpad. This is especially important if you are running Launchpad on Linux, as Linux handles file permissions differently than macOS for Docker containers.
+>
+> The following error may occur if the user does not have the appropriate permissions to the `/data` directory:
+>```
+>django.db.utils.OperationalError: unable to open database file
+>```
+>
 >
 >```bash
 >sudo chown <user_id>:<group_id> /path/to/launchpad/data

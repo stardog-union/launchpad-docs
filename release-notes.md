@@ -62,7 +62,7 @@ Launchpad v3 uses semantic versioning.
 >      stardog-stardog-apps.jfrog.io/launchpad:current
 >```
 >
-> You will want to ensure that the user id you specify has the appropriate permissions to access the files and directories used by Launchpad.
+> On Linux, you will want to ensure that the user id you specify has the appropriate permissions to access the files and directories used by Launchpad. macOS handles file permissions differently, so you may not need to change the ownership of the files and directories. However, if you are running Launchpad on Linux and using a numeric user id, you may need to change the ownership of the files and directories used by Launchpad to match the user id you specified. For example, if you are using a user id of `1001`, you can use the following command to change the ownership of the files and directories:
 >
 >```bash
 >sudo chown -R 1001:1001 /path/to/launchpad/data
