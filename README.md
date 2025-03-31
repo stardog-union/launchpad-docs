@@ -1026,11 +1026,6 @@ SSOCONNECTION_STAGING_OKTA_STARDOG_ENDPOINT=http://localhost:5825
 
 # if using private_key_jwt_auth, set the path to the private key file
 # make sure to remove the client secret if using private_key_jwt_auth
-SSOCONNECTION_STAGING_OKTA_DISPLAY_NAME=Stardog Staging
-SSOCONNECTION_STAGING_OKTA_STARDOG_ENDPOINT=http://localhost:5825
-
-# if using private_key_jwt_auth, set the path to the private key file
-# make sure to remove the client secret if using private_key_jwt_auth
 # SSOCONNECTION_STAGING_OKTA_CLIENT_PRIVATE_KEY_FILE=/path/to/key.pem
 
 # if requiring PKCE
