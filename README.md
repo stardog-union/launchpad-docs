@@ -102,12 +102,9 @@ docker run \
 >
 > ```yaml
 >securityContext:
->  seccompProfile:
->    type: RuntimeDefault
 >  runAsNonRoot: true
 >  runAsUser: 100001
 >  runAsGroup: 100001
->  fsGroup: 100001
 >```
 
 
@@ -180,6 +177,13 @@ The `SESSION_EXPIRATION` is used to set the expiration time in **seconds** for u
 
 - Required: No
 - Default: `43200` (12 hours)
+
+#### `GUNICORN_WORKERS`
+
+The `GUNICORN_WORKERS` is used to set the number of Gunicorn workers to use for Launchpad. By default, this is set to `2 * CPU cores + 1`. This should work for most use cases, but can be overridden to increase or decrease the number of workers. This is useful for environments with limited resources like memory.
+
+- **Required:** No
+- **Default:** `2 * CPU cores + 1`
 
 ### Login Provider Configuration
 
