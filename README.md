@@ -940,11 +940,14 @@ SSOCONNECTION_STAGING_OKTA_CLIENT_ID=your-client-id-from-okta
 SSOCONNECTION_STAGING_OKTA_CLIENT_SECRET=your-client-secret-from-okta
 SSOCONNECTION_STAGING_OKTA_DOMAIN=your-okta-domain.okta.com
 SSOCONNECTION_STAGING_OKTA_AUTHORIZATION_SERVER_ID=default
-SSOCONNECTION_STAGING_OKTA_DISPLAY_NAME=Stardog Staging
-SSOCONNECTION_STAGING_OKTA_STARDOG_ENDPOINT=http://localhost:5825
 SSOCONNECTION_STAGING_OKTA_ROLES_SCOPE=sd-dev-roles
 
-# if using private_key_jwt_auth
+# optional but recommended
+SSOCONNECTION_STAGING_OKTA_DISPLAY_NAME=Stardog Staging
+SSOCONNECTION_STAGING_OKTA_STARDOG_ENDPOINT=http://localhost:5825
+
+# if using private_key_jwt_auth, set the path to the private key file
+# make sure to remove the client secret if using private_key_jwt_auth
 # SSOCONNECTION_STAGING_OKTA_CLIENT_PRIVATE_KEY_FILE=/path/to/key.pem
 
 # if requiring PKCE
