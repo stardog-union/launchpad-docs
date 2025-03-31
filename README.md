@@ -809,6 +809,23 @@ The `SSOCONNECTION_<unique_identifier>_OKTA_AUTHORIZATION_SERVER_ID` is the ID o
 
 The `SSOCONNECTION_<unique_identifier>_OKTA_ROLES_SCOPE` is the scope used to retrieve the roles assigned to the user from the Okta application.
 
+- **Required:** Yes
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_STARDOG_ENDPOINT`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_STARDOG_ENDPOINT` is the URL of the Stardog endpoint that users will connect to using this SSO Connection. This is not required. If not set, users will need to manually enter the Stardog endpoint URL when creating an SSO connection. If provided, it will be pre-filled in the SSO Connection form.
+
+- **Required:** No
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_DISPLAY_NAME`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_DISPLAY_NAME` is the user-facing display name for this SSO Connection. This is the name that will be displayed to users when they are selecting an SSO Connection to connect to a Stardog endpoint. If not set, the unique identifier will be used as the display name.
+
+- **Required:** No
+- **Default:** <unique_identifier>
+
 #### Setting up an Okta SSO Connection
 
 These steps walk through how to configure Okta and Stardog to allow users to create SSO Connections in Launchpad to use Okta access tokens to authenticate and authorize against Stardog.
