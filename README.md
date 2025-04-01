@@ -1219,12 +1219,12 @@ The `SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT` is the URL of the 
    - Under **Directory** > **Users**, select a user and assign a value to the `stardogDevelopmentRoles` attribute. You need to click the **+Add** button in the **Custom Attributes** section at the bottom of the user's profile. The values should match **exactly** the roles in Stardog. For example, if you have a role in Stardog called `admin`, you should have a value in the `stardogDevelopmentRoles` attribute called `admin`. Case sensitivity matters.
 
 3. Under **Applications** > **Resources**, create a new custom resource to access the custom attribute representing the Stardog roles in the user's profile. This resource will be used to access the custom attribute in the access token. The new resource dialog has 3 parts:
-   - Section 1: Resource Details
+   - Section 1: Create Resource Profile
       - **Resource Name**: `stardogDevelopmentServer`
       - **Audience** (Optional): Can be left blank in which case it will default to the resource name (`stardogDevelopmentServer`). This can be changed to something else if you want to use a different audience in the access token. We will use this audience in the JWT configuration for Stardog.
       - **Description**: "Access to the development Stardog server roles"
       - **Attributes**: Add the `stardogDevelopmentRoles` attribute
-   - Section 2: Resource Access
+   - Section 2: Attributes
       - Configure the Stardog **Roles** and **Username** attributes for the resource.
          - Click the **+Add** button.
             - For the Stardog roles attribute name, choose a name (e.g., `sd-roles`) and for the PingOne mappings selector, use `Stardog Development Roles`. This will map the `stardogDevelopmentRoles` attribute to the `sd-roles` claim in the access token. The `sd-roles` claim will be used in the JWT configuration for Stardog and will be used to assign roles to the user in Stardog.
@@ -1238,6 +1238,7 @@ The `SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT` is the URL of the 
    - select **OIDC Web App** as the application type
    - under **Resources**, add additional scopes to the application:
       - `email`
+      - `profile`
       - `offline_access` (used to get a refresh token)
       - `stardogDevelopmentServerAccess` (or the scope name you used in step 3 to access the custom resource representing the Stardog roles)
    - under **Configuration**, add a redirect URI of `{BASE_URL}/auth/sso-connection`
