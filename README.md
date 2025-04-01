@@ -66,7 +66,7 @@ This is the general guide to getting Launchpad up and running. For more detailed
     - `/data` is the directory where Launchpad will persist data. **This should be mounted to a volume for persistence**.
 
 > [!IMPORTANT]
-> By default, the Launchpad container will run as `root` user (uid `0`). This user. This is not recommended for production use. If you want to run the container as a different user, you can use the `--user` flag in the `docker run` command. See [Run Launchpad with a Given User](#run-launchpad-with-a-given-user) for more information.
+> By default, the Launchpad container will run as `root` user (uid `0`). This is not recommended for production use. If you want to run the container as a different user, you can use the `--user` flag in the `docker run` command. See [Run Launchpad with a Given User](#run-launchpad-with-a-given-user) for more information.
 
 4. Access Launchpad in your browser at the [`BASE_URL`](#base_url) you configured.
 
@@ -93,12 +93,12 @@ docker run \
 > [!IMPORTANT]
 > When using the `--user` flag, the user id and group id must have the appropriate permissions to the directory mounted to `/data`. This is the directory where Launchpad will persist data. If the user id and group id do not have the appropriate permissions, you may encounter permission errors when trying to access the data in Launchpad. This is especially important if you are running Launchpad on Linux, as Linux handles file permissions differently than macOS for Docker containers.
 >
-> The following error may occur if the user does not have the appropriate permissions to the `/data` directory:
+> The following error may be seen in the logs if the user does not have the appropriate permissions to the `/data` directory:
 >```
 >django.db.utils.OperationalError: unable to open database file
 >```
 >
->
+> To fix this, you can change the ownership of the directory on the host machine mounted to `/data` to the user id and group id that you are using to run the Launchpad container. You can do this by running the following command on the host machine:
 >```bash
 >sudo chown <user_id>:<group_id> /path/to/launchpad/data
 >```
@@ -186,7 +186,7 @@ The `SESSION_EXPIRATION` is used to set the expiration time in **seconds** for u
 
 #### `GUNICORN_WORKERS`
 
-The `GUNICORN_WORKERS` is used to set the number of Gunicorn workers to use for Launchpad. By default, this is set to `2 * CPU cores + 1`. This should work for most use cases, but can be overridden to increase or decrease the number of workers. This is useful for environments with limited resources like memory.
+The `GUNICORN_WORKERS` is used to set the number of Gunicorn workers to use for Launchpad. By default, this is set to `2 * CPU cores + 1`. This should work for most use cases, but can be overridden to increase or decrease the number of workers. This is useful for environments with limited resources like memory. This setting should be provided as a positive integer.
 
 - **Required:** No
 - **Default:** `2 * CPU cores + 1`
