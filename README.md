@@ -65,11 +65,54 @@ This is the general guide to getting Launchpad up and running. For more detailed
     - The container exposes port `8080`, which can be mapped to any port on the host machine.
     - `/data` is the directory where Launchpad will persist data. **This should be mounted to a volume for persistence**.
 
+> [!IMPORTANT]
+> By default, the Launchpad container will run as `root` user (uid `0`). This is not recommended for production use. If you want to run the container as a different user, you can use the `--user` flag in the `docker run` command. See [Run Launchpad with a Given User](#run-launchpad-with-a-given-user) for more information.
+
 4. Access Launchpad in your browser at the [`BASE_URL`](#base_url) you configured.
 
 ## Data Persistence
 
-As mentioned in the [Getting Started](#getting-started) section, Launchpad persists data to a local directory that should be mounted to a volume for persistence. This is done by mounting a volume to the `/data` directory in the Launchpad container.
+As mentioned in the [Getting Started](#getting-started) section, Launchpad persists data to a local directory that should be mounted to a volume for persistence. This is done by mounting a volume to the `/data` directory in the Launchpad container. 
+
+> [!IMPORTANT]
+>The volume mounted should be owned and writable by the user that is running the Launchpad container. See [Run Launchpad with a Given User](#run-launchpad-with-a-given-user) for more information.
+
+## Run Launchpad with a Given User
+
+You can run Launchpad with a given user by using the `--user` flag in the `docker run` command. This is useful if you want to run Launchpad as a specific user instead of the default `root` user.
+
+```bash
+docker run \
+  --user <user_id>:<group_id> \
+  --env-file /path/to/launchpad/.env.launchpad \
+  -p 8080:8080 \
+  -v /path/to/launchpad/data:/data \
+  stardog-stardog-apps.jfrog.io/launchpad:current
+```
+
+> [!IMPORTANT]
+> When using the `--user` flag, the user id and group id must have the appropriate permissions to the directory mounted to `/data`. This is the directory where Launchpad will persist data. If the user id and group id do not have the appropriate permissions, you may encounter permission errors when trying to access the data in Launchpad. This is especially important if you are running Launchpad on Linux, as Linux handles file permissions differently than macOS for Docker containers.
+>
+> The following error may be seen in the logs if the user does not have the appropriate permissions to the `/data` directory:
+>```
+>django.db.utils.OperationalError: unable to open database file
+>```
+>
+> To fix this, you can change the ownership of the directory on the host machine mounted to `/data` to the user id and group id that you are using to run the Launchpad container. You can do this by running the following command on the host machine:
+>```bash
+>sudo chown <user_id>:<group_id> /path/to/launchpad/data
+>```
+
+> [!NOTE]
+> Similarly in Kubernetes, you can set the `securityContext` for the Launchpad pod to run as a specific user.
+>
+> ```yaml
+>securityContext:
+>  runAsNonRoot: true
+>  runAsUser: 100001
+>  runAsGroup: 100001
+>```
+
 
 ## Getting Help
 
@@ -141,6 +184,13 @@ The `SESSION_EXPIRATION` is used to set the expiration time in **seconds** for u
 - Required: No
 - Default: `43200` (12 hours)
 
+#### `GUNICORN_WORKERS`
+
+The `GUNICORN_WORKERS` is used to set the number of Gunicorn workers to use for Launchpad. By default, this is set to `2 * CPU cores + 1`. This should work for most use cases, but can be overridden to increase or decrease the number of workers. This is useful for environments with limited resources like memory. This setting should be provided as a positive integer.
+
+- **Required:** No
+- **Default:** `2 * CPU cores + 1`
+
 ### Login Provider Configuration
 
 This section details the configuration options available for the SSO provider used to log users into Launchpad. 
@@ -151,6 +201,8 @@ This section details the configuration options available for the SSO provider us
 Available Login SSO providers:
 - [Microsoft Entra (formerly known as Azure Active Directory)](#microsoft-entra-login-provider)
 - [Google](#google-login-provider)
+- [Okta](#okta-login-provider)
+- [PingOne](#pingone-login-provider)
 
 ------------
 
@@ -380,6 +432,231 @@ GOOGLE_CLIENT_ID=<client_id>
 GOOGLE_CLIENT_SECRET=<client_secret>
 ```
 
+------------
+
+<a name="okta-login-provider"></a>
+**Okta**
+
+![Okta](./assets/okta-logo.jpg)
+
+The following configuration options are available for Okta SSO.
+
+> [!NOTE]
+> See [How to Create an Okta Application to login with Okta in Launchpad](#how-to-create-an-okta-application-to-login-with-okta-in-launchpad) for additional information.
+
+#### `OKTA_AUTH_ENABLED`
+
+The `OKTA_AUTH_ENABLED` setting is used to enable or disable Okta authentication to log users into Launchpad.
+
+- **Required:** Yes (if using Okta)
+- **Default:** `false`
+
+#### `OKTA_CLIENT_ID`
+
+The `OKTA_CLIENT_ID` is the client id of the Okta Application used to log users into Launchpad.
+
+- **Required:** Yes (if using Okta)
+- **Default:** not set
+
+#### `OKTA_DOMAIN`
+
+The `OKTA_DOMAIN` is the domain of the Okta Application used to log users into Launchpad.
+
+- **Required:** Yes (if using Okta)
+- **Default:** not set
+
+#### `OKTA_CLIENT_SECRET`
+
+The `OKTA_CLIENT_SECRET` is the client secret of the Okta Application used to log users into Launchpad.
+
+- **Required:** Yes (if using Okta and not using `OKTA_CLIENT_PRIVATE_KEY_FILE`)
+- **Default:** not set
+
+#### `OKTA_CLIENT_PRIVATE_KEY_FILE`
+
+The `OKTA_CLIENT_PRIVATE_KEY_FILE` is the path (in the Docker container) to the private key file corresponding to the certificate used as a credential with the Okta Application.
+
+> [!NOTE]
+> This should be used if not using a client secret (`OKTA_CLIENT_SECRET`).
+
+- **Required:** Yes (if using `private_key_jwt` auth with Okta)
+- **Default:** not set
+
+#### `OKTA_REQUIRE_PKCE`
+
+The `OKTA_REQUIRE_PKCE` is used to require Proof Key for Code Exchange (PKCE) for the Okta Application.
+
+- **Required:** Yes (if this setting is checked in the Okta Application)
+- **Default:** `false`
+
+#### `OKTA_POST_LOGOUT_REDIRECT_URI`
+
+The `OKTA_POST_LOGOUT_REDIRECT_URI` is the URL that users will be redirected to after logging out of Launchpad.
+
+> [!IMPORTANT]
+> The URL must be registered in the Okta Application or the user will not be redirected.
+
+- **Required:** No
+- **Default:** not set
+
+#### How to Create an Okta Application to login with Okta in Launchpad
+
+##### 1. Create a new application in Okta
+   - Sign into your Okta Admin Dashboard
+   - Navigate to **Applications** > **Applications**
+   - Click **"Create App Integration"**
+   - Choose **"OIDC - OpenID Connect"** as the Sign-in method
+   - Click **"Next"**
+
+##### 2. Configure the application
+   - **General Settings**
+     - **App Integration Name**: Name your application (e.g. "Stardog Launchpad")
+   - **Sign-in redirect URIs**: `{BASE_URL}/oauth/okta/redirect`
+      - See [`BASE_URL`](#base_url) for more information on what the value should.
+   - **Sign out redirect URIs**: This can be set to `BASE_URL` if you want users to be redirected to the Launchpad home page after logging out. You will need to set the `OKTA_POST_LOGOUT_REDIRECT_URI` environment variable to this value.
+      - See [`BASE_URL`](#base_url) for more information on what the value should.
+   - **Assignments**: Assign the application to users or groups
+   - Click **"Save"**
+
+##### 3. Configure Application Client Credentials
+
+After creating the application, you will need to decide between using a *client secret* or *public/private key pair* for authentication. These are for `client_secret_basic` and `private_key_jwt` authentication methods, respectively.
+
+> [!NOTE]
+> Aside from the client authentication method, there is an option to "Require Proof Key for Code Exchange (PKCE) as additional verification" in the Okta Application. If you enable this setting, you will need to set `OKTA_REQUIRE_PKCE=true` when configuring Launchpad.
+
+###### Client Secret
+
+This is the simpler method, however it is less secure than using private key JWT authentication. It is also the default method used for Okta when creating an application through their wizard.
+
+1. Navigate to the **"General"** tab of the application
+2. Under **Client Credentials**
+   - Make note of your **Client ID** - you will need this later when configuring Launchpad
+   - Click **"Show Client Secret"** and copy the value to somewhere safe. You will need this later when configuring Launchpad.
+
+###### Public/Private Key (Private Key JWT)
+
+1. Navigate to the **"General"** tab of the application
+2. Under **Client Credentials**, click **"Edit"** to change the **Client Authentication** method to **Public/Private Key**
+3. A new section will appear within the **Client Credentials** section called **Public/Private Key**
+   - You can choose to upload a public key or generate a new key pair in Okta. If you choose to generate a new key pair, you will need to copy the private key **in PEM format** to a safe location. You will need this later when configuring Launchpad.
+4. Make note of your **Client ID** - you will need this later when configuring Launchpad.
+
+##### 4. Configure Launchpad
+
+```
+OKTA_AUTH_ENABLED=true
+OKTA_CLIENT_ID=<client_id>
+OKTA_DOMAIN=<okta_domain>
+
+# optional
+OKTA_POST_LOGOUT_REDIRECT_URI=<post_logout_uri>
+
+# required if setting checked in Okta Application
+OKTA_REQUIRE_PKCE=true
+```
+
+Depending on the authentication method you chose, you will need to set either `OKTA_CLIENT_SECRET` or `OKTA_CLIENT_PRIVATE_KEY_FILE`.
+
+```
+# Using client secret
+OKTA_CLIENT_SECRET=<client_secret>
+
+# Using private key JWT
+OKTA_CLIENT_PRIVATE_KEY_FILE=/path/to/private-key/in/container.pem
+```
+
+> [!NOTE]
+> The Okta domain can be found in the right side of the upper navigation bar after clicking on your username.
+>
+> ![Okta Domain](./assets/okta-domain.png)
+
+
+> [!IMPORTANT]
+> If using `OKTA_CLIENT_PRIVATE_KEY_FILE`, the private key must be accessible in the Docker container. This can be done by mounting a volume to the path specified in the environment variable.
+
+------------
+
+<a name="pingone-login-provider"></a>
+**PingOne**
+
+![PingOne](./assets/pingone-logo.png)
+
+The following configuration options are available for PingOne SSO.
+
+> [!NOTE]
+> See [How to Create a PingOne OIDC Client to login with PingOne in Launchpad](#how-to-create-a-pingone-oidc-client-to-login-with-pingone-in-launchpad) for additional information.
+
+#### `PING_AUTH_ENABLED`
+
+`PING_AUTH_ENABLED` is used to enable or disable PingOne authentication to log users into Launchpad.
+
+- **Required:** Yes (if using PingOne)
+- **Default:** `false`
+
+#### `PING_CLIENT_ID`
+
+`PING_CLIENT_ID` is the client id of the PingOne OIDC client used to log users into Launchpad.
+
+- **Required:** Yes (if using PingOne)
+- **Default:** not set
+
+#### `PING_CLIENT_SECRET`
+
+`PING_CLIENT_SECRET` is the client secret of the PingOne OIDC client used to log users into Launchpad.
+
+- **Required:** Yes (if using PingOne)
+- **Default:** not set
+
+#### `PING_ENVIRONMENT_ID`
+
+`PING_ENVIRONMENT_ID` is the environment id of the PingOne environment used to log users into Launchpad.
+
+- **Required:** Yes (if using PingOne)
+- **Default:** not set
+
+#### `PING_TOKEN_AUTH_METHOD`
+
+`PING_TOKEN_AUTH_METHOD` is the authentication method used to authenticate with PingOne. `client_secret_post` are `client_secret_basic` the only supported values. The default when creating an OIDC client in PingOne is `client_secret_basic`.
+
+- **Required:** No (Yes if the authentication method set in PingOne is not `client_secret_basic`) 
+- **Default:** `client_secret_basic`
+
+#### `PING_OIDC_DISCOVERY_URL`
+
+`PING_OIDC_DISCOVERY_URL` is the URL of the OIDC discovery document for the PingOne environment. This is used to retrieve the OIDC configuration for the PingOne environment. The default if not set is `https://auth.pingone.com/{PING_ENVIRONMENT_ID}/as/.well-known/openid-configuration`. This can be overridden if needed to support custom PingOne for Enterprise environments.
+
+- **Required:** No
+- **Default:** `https://auth.pingone.com/{PING_ENVIRONMENT_ID}/as/.well-known/openid-configuration`
+
+#### How To Create a PingOne OIDC Client to login with PingOne in Launchpad
+
+1. **Create an OIDC Application**. [See the Ping docs for more information on creating an OIDC app.](https://docs.pingidentity.com/pingoneforenterprise/pingone_sso_for_saas_apps/p14saas_add_update_oidc_app.html)
+   - select **OIDC Web App** as the application type 
+   - set the **Redirect URI** to `{BASE_URL}/oauth/ping/redirect`
+      - See [`BASE_URL`](#base_url) for more information on what the value should.
+   - under **Resources**, add additional scopes to the application: `email`, `profile`. `openid` should already be added by default but is also required.
+   - under **Configuration**, add a redirect URI of `{BASE_URL}/oauth/ping/redirect`
+   - **optionally**, under **Configuration** > **Token Endpoint Auth Method**, set the token endpoint auth method to either `Client Secret Basic` (default) *or* `Client Secret Post`. If you set this to `Client Secret Post`, you will need to set `PING_TOKEN_AUTH_METHOD=client_secret_post` in the Launchpad configuration.
+
+2. Configure Launchpad
+
+All of the following settings can be found in the application's overview page, including the client secret.
+
+```
+PING_AUTH_ENABLED=true
+PING_CLIENT_ID=<client_id>
+PING_CLIENT_SECRET=<client_secret>
+PING_ENVIRONMENT_ID=<environment_id>
+
+# only required if you selected "Client Secret Post" for the "Token Endpoint Auth Method" in the Ping Application Configuration.
+# This will default to `client_secret_basic` if not provided or an invalid value is provided.
+# PING_TOKEN_AUTH_METHOD=client_secret_post
+
+# only required if the OIDC discovery URL is different from the default of `https://auth.pingone.com/{PING_ENVIRONMENT_ID}/as/.well-known/openid-configuration`
+# PING_OIDC_DISCOVERY_URL=<custom_discovery_url>
+```
+
 ### SSO Connection Configuration
 
 As mentioned earlier, SSO Connections allow logged in users to use SSO to connect to Stardog endpoints that have also been configured to accept JWT tokens from the SSO provider. Launchpad administrators need to configure SSO Connections to allow their Launchpad users to connect to Stardog endpoints using SSO. This should be done before deploying Launchpad.
@@ -424,6 +701,8 @@ https://github.com/user-attachments/assets/e22a18d1-a9a3-4e50-93ed-6e29fc028e4b
 | Supported SSO Connection providers | Provider Identifier in Environment Variable |
 | :--------------------------------- | :------------------ |
 | [Microsoft Entra (formerly known as Azure Active Directory)](#microsoft-entra-sso-connection-provider) | `AZURE` |
+| [Okta](#okta-sso-connection-provider) | `OKTA` |
+| [PingOne](#pingone-sso-connection-provider) | `PING` |
 
 > [!NOTE]
 > You can have multiple SSO Connections for the same provider. Just make sure the unique identifier is different for each connection.
@@ -608,3 +887,406 @@ SSOCONNECTION_<unique-identifier>_AZURE_DISPLAY_NAME=<user-facing-display-name> 
 
 3. **Create the roles in Stardog that match the app roles in the Azure App Registration.**
    - *This is required for Stardog to auto-create users and assign roles based on the claims in the JWT token.*
+
+------------
+
+<a name="okta-sso-connection-provider"></a>
+**Okta**
+
+![Okta](./assets/okta-logo.jpg)
+
+The following configuration options are available for Okta SSO Connections.
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_CLIENT_ID`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_CLIENT_ID` is the client id of the Okta application used to authenticate and authorize users to connect to the Stardog endpoint.
+
+- **Required:** Yes
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_DOMAIN`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_DOMAIN` is the domain of the Okta application used to authenticate and authorize users to connect to the Stardog endpoint.
+
+- **Required:** Yes
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_CLIENT_SECRET`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_CLIENT_SECRET` is the client secret of the Okta application used to authenticate and authorize users to connect to the Stardog endpoint.
+
+- **Required:** Yes (if not using `SSOCONNECTION_<unique_identifier>_OKTA_CLIENT_PRIVATE_KEY_FILE`)
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_CLIENT_PRIVATE_KEY_FILE`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_CLIENT_PRIVATE_KEY_FILE` is the path (in the Docker container) to the private key file corresponding to the certificate used as a credential with the Okta application.
+
+- **Required:** Yes (if using Public/Private Key authentication with Okta)
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_REQUIRE_PKCE`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_REQUIRE_PKCE` is used to require Proof Key for Code Exchange (PKCE) for the Okta application.
+
+- **Required:** Yes (if this setting is checked in the Okta application)
+- **Default:** `false`
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_AUTHORIZATION_SERVER_ID`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_AUTHORIZATION_SERVER_ID` is the ID of the custom authorization server in Okta. The [custom authorization server](https://developer.okta.com/docs/guides/customize-tokens-returned-from-okta/main/#add-a-custom-claim-to-a-token) is used to issue access tokens with custom claims for the Stardog endpoint. A custom claim is used to specify the Stardog roles assigned to the user in the Stardog endpoint. If not set, the default authorization server (with ID of `default`) will be used.
+
+- **Required:** Yes
+- **Default:** `default`
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_ROLES_SCOPE`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_ROLES_SCOPE` is the scope used to retrieve the roles assigned to the user from the Okta application.
+
+- **Required:** Yes
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_STARDOG_ENDPOINT`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_STARDOG_ENDPOINT` is the URL of the Stardog endpoint that users will connect to using this SSO Connection. This is not required. If not set, users will need to manually enter the Stardog endpoint URL when creating an SSO connection. If provided, it will be pre-filled in the SSO Connection form.
+
+- **Required:** No
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_OKTA_DISPLAY_NAME`
+
+The `SSOCONNECTION_<unique_identifier>_OKTA_DISPLAY_NAME` is the user-facing display name for this SSO Connection. This is the name that will be displayed to users when they are selecting an SSO Connection to connect to a Stardog endpoint. If not set, the unique identifier will be used as the display name.
+
+- **Required:** No
+- **Default:** <unique_identifier>
+
+#### Setting up an Okta SSO Connection
+
+These steps walk through how to configure Okta and Stardog to allow users to create SSO Connections in Launchpad to use Okta access tokens to authenticate and authorize against Stardog.
+
+##### Step 1: Create a New OIDC Application in Okta
+
+1. Sign in to your Okta Admin Dashboard
+2. Navigate to **Applications** > **Applications**
+3. Click **Create App Integration**
+4. Select **OIDC - OpenID Connect** as the Sign-in method
+5. Choose **Web Application** as the Application type
+6. Click **Next**
+
+##### Step 2: Configure Application Settings for Stardog SSO connection
+
+1. **General Settings**:
+   - **App integration name**: Enter a name for your SSO connection (e.g., "Stardog Developer Server SSO")
+
+2. **Grant types**:
+   - Ensure **Authorization Code** is selected
+   - Additionally, select **Refresh Token** to enable token refresh capability
+
+3. **Sign-in redirect URIs**:
+   - Add your redirect URI: `{BASE_URL}/auth/sso-connection`
+      - See [`BASE_URL`](#base_url) for more information on what the value should.
+
+4. **Assignments**:
+   - Choose who can access this integration
+
+5. Click **Save**
+
+6. Configure **_client credentials_**. After creating the application, you'll need to decide between using client secret or public key/private key JWT authentication.
+
+##### Client Secret
+
+This is the simpler approach and default but less secure than private key JWT authentication.
+
+1. Navigate to the **General** tab of your application.
+2. Under **Client Credentials**:
+    - **Client secret** should be checked for **Client authentication**
+    - Note your **Client ID**
+    - Note your **Client Secret** by clicking on the "Eye" icon to unhide the **Client Secret** or copy it to your clipboard.
+
+##### Private Key JWT Authentication
+
+1. Navigate to the **General** tab of your application.
+2. Under **Client Credentials**, click **Edit** to change the **Client authentication** mode to **Public Key / Private Key**
+3. A new section should appear within **Client Credentials**, named **Public Keys**. You can choose how you want to configure your keys but for simplicity here, you can click **Add Key** which should open a modal asking you to paste your own public key or automatically generate a new key pair. Click **Generate new key**, and copy the _**PEM**_ format of your private key to a file. This will be used later and is only shown once by Okta for security.
+4. Note your **Client ID** for later use.
+
+##### Step 3: Configure Custom Authorization Server and Scopes
+
+In order to auto-create users in Stardog and authorize them based on claims representing Stardog roles in access tokens issued from Okta, you need to utilize a **custom authorization server** in Okta to add custom claims into an access token.
+
+> [!NOTE]
+> Per Okta, an authorization server defines your security boundary, and is used to mint access and identity tokens for use with OIDC clients and OAuth 2.0 service accounts when accessing your resources via API. Within each authorization server you can define your own OAuth scopes, claims, and access policies. Read more [in the Okta docs](https://developer.okta.com/authentication-guide/implementing-authentication/set-up-authz-server.html)
+
+1. Navigate to **Security** > **API** > **Authorization Servers**
+2. You can either:
+   - Use the default server (should be named "default")
+   - Create a new authorization server by clicking **Add Authorization Server**
+
+3. If creating a new server:
+   - Provide a **Name** and **Description**
+   - Set the **Audience** (this will be the `aud` claim for access tokens minted by this server). This audience should match the `audience` field in the [JWT configuration for Stardog](#7-configure-stardog-to-accept-jwt-tokens-from-okta).
+   - Click **Save**
+
+4. Select your authorization server (new or `default`)
+5. Go to the **Scopes** tab
+6. Click **Add Scope**
+7. Complete the form:
+   - **Name**: `sd-dev-roles` (or your preferred scope name)
+   - **Description**: "Stardog Roles for Authorization"
+   - Enable **Include in public metadata**
+   - Click **Create**
+
+##### Step 4: Create a Claim for Stardog Roles
+
+1. Still in your authorization server, go to the **Claims** tab
+2. Click **Add Claim**
+3. Complete the form:
+   - **Name**: `stardog-roles` (or your preferred claim name)
+   - **Include in token type**: Select Access Token
+   - **Value type**: Choose appropriate type (**Groups** or **Expression**)
+   - **Value/Filter**: Enter an expression that maps some information about the user to Stardog roles
+   - **Include in**: Select specific scopes including the `sd-dev-roles` scope (or whatever you named your custom scope) you created.
+   - Click **Create**
+
+> [!TIP]
+> The **Value/Filter** field should be an expression that maps some information about the user to Stardog role names that exist in your Stardog instance. For example, if you have a groups in Okta that represent roles in Stardog that are prepended with `stardogDevelopment`, you can add a filter to make it such that only users in groups that start with `stardogDevelopment` are assigned the roles in Stardog. This is up to you how you want to map the roles in Okta to roles in Stardog.
+>
+> ![Okta Claim](./assets/okta-claim.png)
+>
+
+##### Step 5: Configure Custom Authorization Server's Access Policies
+
+1. Still in your authorization server, go to the **Access Policies** tab
+2. Click **Add Policy**
+3. Complete the policy configuration:
+    - **Name:** Enter a name for your policy (e.g. "Stardog SSO Connection Policy")
+    - **Assign to:** Choose which clients this policy applies to. You'll want to select the client you created in Step 1.
+4. Click **Create Policy**
+5. Click **Add Rule**
+6. Configure the new rule:
+    - **Scopes**: Select which scopes can be requested, including: `openid`, `profile`, `email`, `offline_access` and `sd-dev-roles` (or whatever you named your custom scope)
+7. Click **Create Rule**
+
+##### Step 6: Configure Launchpad Settings
+
+```
+SSOCONNECTION_STAGING_OKTA_CLIENT_ID=your-client-id-from-okta
+SSOCONNECTION_STAGING_OKTA_CLIENT_SECRET=your-client-secret-from-okta
+SSOCONNECTION_STAGING_OKTA_DOMAIN=your-okta-domain.okta.com
+SSOCONNECTION_STAGING_OKTA_AUTHORIZATION_SERVER_ID=default
+SSOCONNECTION_STAGING_OKTA_ROLES_SCOPE=sd-dev-roles
+
+# optional but recommended
+SSOCONNECTION_STAGING_OKTA_DISPLAY_NAME=Stardog Staging
+SSOCONNECTION_STAGING_OKTA_STARDOG_ENDPOINT=http://localhost:5825
+
+# if using private_key_jwt_auth, set the path to the private key file
+# make sure to remove the client secret if using private_key_jwt_auth
+# SSOCONNECTION_STAGING_OKTA_CLIENT_PRIVATE_KEY_FILE=/path/to/key.pem
+
+# if requiring PKCE
+# SSOCONNECTION_STAGING_OKTA_REQUIRE_PKCE=true
+```
+
+- `STAGING` is the unique identifier for this SSO Connection. `OKTA` is the provider identifier for this SSO Connection.
+- The `SSOCONNECTION_STAGING_OKTA_CLIENT_ID` and `SSOCONNECTION_DEVOKTA_OKTA_CLIENT_SECRET` are the client id and client secret of the Okta application you created.
+- The `SSOCONNECTION_STAGING_OKTA_DOMAIN` is the domain of your Okta application.
+- The `SSOCONNECTION_STAGING_OKTA_AUTHORIZATION_SERVER_ID` is the ID of the custom authorization server in Okta. If not set, the `default` authorization server will be used.
+- The `SSOCONNECTION_STAGING_OKTA_DISPLAY_NAME` is the user-facing display name for this SSO Connection.
+- The `SSOCONNECTION_STAGING_OKTA_STARDOG_ENDPOINT` is the URL of the Stardog endpoint that users will connect to using this SSO Connection. This is not required. If not set, users will need to manually enter the Stardog endpoint URL when creating an SSO connection.
+- The `SSOCONNECTION_STAGING_OKTA_ROLES_SCOPE` is the additional scope used to retrieve the roles assigned to the user from the Okta application.
+
+> [!NOTE]
+> If you are using private key JWT authentication, set `SSOCONNECTION_STAGING_OKTA_CLIENT_PRIVATE_KEY_FILE` to the path of the private key file in the Docker container. You will need to mount a volume to the path specified in the environment variable.
+
+> [!TIP]
+> The custom authorization server ID can be found by navigating to **Security** > **API** > **Authorization Servers** in the Okta Admin Dashboard and selecting the custom authorization server you created or the default server. There should be a **Metadata URI** that contains the authorization server ID that follows the pattern:
+>
+>```
+>https://{$DOMAIN}/oauth2/{$AUTHORIZATION_SERVER_ID}/.well-known/oauth-authorization-server
+>```
+>
+> The authorization server ID is generally an alphanumeric string that is unique to the authorization server.
+
+#### Step 7: Configure Stardog to accept Okta Access Tokens
+
+Add the following entry to Stardog's `jwt.yml`, replacing all templated values.
+
+```yaml
+issuers:
+  https://<domain>/oauth2/<custom-auth-server-id>:
+    usernameField: sub
+    autoCreateUsers: True
+    audience: <custom-auth-server-audience>
+    rolesClaimPath: <custom-claim>
+    algorithms:
+      RS256:
+        keyUrl: https://<domain>/oauth2/<custom-auth-server-id>/v1/keys
+```
+
+- `https://<domain>/oauth2/<custom-auth-server-id>` is the issuer URL for Okta. Replace `<domain>` with your Okta domain and `<custom-auth-server-id>` with the ID of the custom authorization server in Okta.
+- `sub` is the claim in the JWT token that contains the username of the user. You can change this if you have a different claim that contains the username.
+- `autoCreateUsers` is set to `True` to allow Stardog to auto-create users based on the `roles` claim in the JWT token.
+- `audience` is the audience configured for the custom authorization server in Okta.
+- `rolesClaimPath` is the path to the claim in the JWT token that contains the app roles assigned to the user. This should match the claim you created in Okta.
+- `keyUrl` is the URL to the public key used to verify the JWT token.
+
+> [!TIP]
+> Using the **Token Preview** tab under your custom authorization server, you can see the decoded token claims for a token you would be issued, which can help troubleshoot this integration. You'll want to make sure you request the `sd-dev-roles` scope (or whatever you named your custom scope) when you authenticate to get a token with the `stardog-roles` claim.
+
+------------
+
+<a name="pingone-sso-connection-provider"></a>
+**PingOne SSO**
+
+![PingOne SSO](./assets/pingone-logo.png)
+
+The following configuration options are available for PingOne SSO Connections.
+
+#### `SSOCONNECTION_<unique_identifier>_PING_CLIENT_ID`
+
+The `SSOCONNECTION_<unique_identifier>_PING_CLIENT_ID` is the client id of the PingOne OIDC client used to authenticate and authorize users to connect to the Stardog endpoint.
+
+- **Required:** Yes
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_PING_CLIENT_SECRET`
+
+The `SSOCONNECTION_<unique_identifier>_PING_CLIENT_SECRET` is the client secret of the PingOne OIDC client used to authenticate and authorize users to connect to the Stardog endpoint.
+
+- **Required:** Yes
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_PING_ENVIRONMENT_ID`
+
+The `SSOCONNECTION_<unique_identifier>_PING_ENVIRONMENT_ID` is the environment id of the PingOne environment used to authenticate and authorize users to connect to the Stardog endpoint.
+
+- **Required:** Yes
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE`
+
+The `SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE` is the scope used to retrieve the roles assigned to the user from PingOne. This is used to retrieve the roles assigned to the user from PingOne and assign them to the user in Stardog.
+
+- **Required:** Yes
+- **Default:** not set
+
+#### `SSOCONNECTION_<unique_identifier>_PING_TOKEN_AUTH_METHOD`
+
+The `SSOCONNECTION_<unique_identifier>_PING_TOKEN_AUTH_METHOD` is the authentication method used to authenticate with PingOne. `client_secret_post` are `client_secret_basic` the only supported values. The default when creating an OIDC client in PingOne is `client_secret_basic`.
+
+- **Required:** No (Yes if the authentication method set in PingOne is not `client_secret_basic`)
+- **Default:** `client_secret_basic`
+
+#### `SSOCONNECTION_<unique_identifier>_PING_OIDC_DISCOVERY_URL`
+
+The `SSOCONNECTION_<unique_identifier>_PING_OIDC_DISCOVERY_URL` is the URL of the OIDC discovery document for the PingOne environment. This is used to retrieve the OIDC configuration for the PingOne environment. The default if not set is `https://auth.pingone.com/{PING_ENVIRONMENT_ID}/as/.well-known/openid-configuration`. This can be overridden if needed to support custom PingOne for Enterprise environments.
+
+- **Required:** No
+- **Default:** `https://auth.pingone.com/{PING_ENVIRONMENT_ID}/as/.well-known/openid-configuration`
+
+#### `SSOCONNECTION_<unique_identifier>_PING_DISPLAY_NAME`
+
+The `SSOCONNECTION_<unique_identifier>_PING_DISPLAY_NAME` is the user-facing display name for this SSO Connection. This is the name that will be displayed to users when they are selecting an SSO Connection to connect to a Stardog endpoint. If not set, the unique identifier will be used as the display name.
+
+- **Required:** No
+- **Default:** <unique_identifier>
+
+#### `SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT`
+
+The `SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT` is the URL of the Stardog endpoint that users will connect to using this SSO Connection. This is not required. If not set, users will need to manually enter the Stardog endpoint URL when creating an SSO connection. If provided, it will be pre-filled in the SSO Connection form.
+
+- **Required:** No
+- **Default:** not set
+
+#### Setting up a PingOne SSO Connection
+
+> [!IMPORTANT]
+> The following example uses a custom attribute on a user in PingOne to store the Stardog roles assigned to the user. This is just one way to store roles in PingOne that represent a user's Stardog roles. You can use any method that works for your organization. The important thing is that the roles are available in the access token that is issued by PingOne. The `SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE` should be set to the scope to pull in the claim representing Stardog roles in the access token.
+>
+> ![PingOne Custom Attribute](./assets/pingone-custom-attribute.png)
+>
+
+1. Add a new custom user attribute to the Ping user profile. This attribute will be used to store the Stardog roles for a user. If you have multiple Stardog servers, you can create multiple attributes, one for each server.
+   - Under **Directory** > **User Attributes**, add a **Declared** user attribute.
+      - **Name**: `stardogDevelopmentRoles`
+      - **Description** (Optional): "Roles assigned to the user on the development Stardog server"
+      - **Display Name:** "Development Stardog Roles"
+      - **Allow multiple values**: Yes
+
+2. Assign a value to the user attribute for a user.
+
+   - Under **Directory** > **Users**, select a user and assign a value to the `stardogDevelopmentRoles` attribute. You need to click the **+Add** button in the **Custom Attributes** section at the bottom of the user's profile. The values should match **exactly** the roles in Stardog. For example, if you have a role in Stardog called `admin`, you should have a value in the `stardogDevelopmentRoles` attribute called `admin`. Case sensitivity matters.
+
+3. Under **Applications** > **Resources**, create a new custom resource to access the custom attribute representing the Stardog roles in the user's profile. This resource will be used to access the custom attribute in the access token. The new resource dialog has 3 parts:
+   - Section 1: Create Resource Profile
+      - **Resource Name**: `stardogDevelopmentServer`
+      - **Audience** (Optional): Can be left blank in which case it will default to the resource name (`stardogDevelopmentServer`). This can be changed to something else if you want to use a different audience in the access token. We will use this audience in the JWT configuration for Stardog.
+      - **Description**: "Access to the development Stardog server roles"
+      - **Attributes**: Add the `stardogDevelopmentRoles` attribute
+   - Section 2: Attributes
+      - Configure the Stardog **Roles** and **Username** attributes for the resource.
+         - Click the **+Add** button.
+            - For the Stardog roles attribute name, choose a name (e.g., `sd-roles`) and for the PingOne mappings selector, use `Stardog Development Roles`. This will map the `stardogDevelopmentRoles` attribute to the `sd-roles` claim in the access token. The `sd-roles` claim will be used in the JWT configuration for Stardog and will be used to assign roles to the user in Stardog.
+            - For the username attribute name, choose a name (e.g., `sd-username`) and for the PingOne mappings selector, use `Email Address` or some other unique attribute. This will map the username of the user to the `sd-username` claim in the access token. The `username` claim will be used to create the user in Stardog.
+   - Section 3: Scopes
+      - Configure scopes for the resource. This will be used by Launchpad to request the roles claim in the access token.
+         - Scope Name: `stardogDevelopmentServerAccess` (or some other name)
+         - Description: "Access to the development Stardog server roles"
+
+4. Create an OIDC application for the Stardog server in PingOne. [See the Ping docs for more information on creating an OIDC app.](https://docs.pingidentity.com/pingoneforenterprise/pingone_sso_for_saas_apps/p14saas_add_update_oidc_app.html)
+   - select **OIDC Web App** as the application type
+   - under **Resources**, add additional scopes to the application:
+      - `email`
+      - `profile`
+      - `offline_access` (used to get a refresh token)
+      - `stardogDevelopmentServerAccess` (or the scope name you used in step 3 to access the custom resource representing the Stardog roles)
+   - under **Configuration**, add a redirect URI of `{BASE_URL}/auth/sso-connection`
+   - optionally, under **Configuration** > **Token Endpoint Auth Method**, select "Client Secret Basic" *or* "Client Secret Post". If you select "Client Secret Post", you will need to set `SSOCONNECTION_<unique_identifier>_PING_TOKEN_AUTH_METHOD=client_secret_post` in the Launchpad configuration.
+
+5. Configure Launchpad
+
+Most of the settings needed can be found in the application's overview page, for the exception of the `SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE` which is the scope used to retrieve the Stardog roles assigned to the user from PingOne.
+
+```bash
+# required
+SSOCONNECTION_<unique_identifier>_PING_CLIENT_ID=<client_id>
+SSOCONNECTION_<unique_identifier>_PING_CLIENT_SECRET=<client_secret>
+SSOCONNECTION_<unique_identifier>_PING_ENVIRONMENT_ID=<environment_id>
+# This is the scope used to retrieve the roles assigned to the user from PingOne. 
+# This should match the scope you used in the custom resource in PingOne.
+SSOCONNECTION_<unique_identifier>_PING_ROLES_SCOPE=stardogDevelopmentServerAccess
+
+# optional but helpful for Launchpad users
+SSOCONNECTION_<unique_identifier>_PING_DISPLAY_NAME=<user-facing-display-name>
+SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT=<stardog_endpoint>
+
+# only required if you selected "Client Secret Post" for the "Token Endpoint Auth Method" in the Ping Application Configuration.
+SSOCONNECTION_<unique_identifier>_PING_TOKEN_AUTH_METHOD=client_secret_post
+
+# only required if the OIDC discovery URL is different from the default of `https://auth.pingone.com/{PING_ENVIRONMENT_ID}/as/.well-known/openid-configuration`
+SSOCONNECTION_<unique_identifier>_PING_OIDC_DISCOVERY_URL=<custom_discovery_url>
+```
+
+6. Configure Stardog to accept JWT tokens from PingOne. [See the Stardog documentation for more information on configuring Stardog to accept JWT tokens.](https://docs.stardog.com/operating-stardog/security/oauth-integration)
+
+You will need to add the following entry to your Stardog server's jwt configuration. This will allow Stardog to accept JWT tokens from PingOne and auto-create users and assign roles based on the claims in the JWT token.
+
+```yaml
+issuers:
+  # issuer URL for PingOne (non enterprise)
+  https://auth.pingone.com/<SSOCONNECTION_$uid_PING_ENVIRONMENT_ID>/as:
+    usernameField: sd-username
+    rolesClaimPath: sd-roles
+    autoCreateUsers: True
+    audience: stardogDevelopmentServer
+    algorithms:
+    RS256:
+      keyUrl: https://auth.pingone.com/<SSOCONNECTION_$uid_PING_ENVIRONMENT_ID>/as/jwks
+```
+
+- the top-level key under `issuers`, is the issuer URL for PingOne. This should match the issuer URL in the PingOne OIDC configuration. This should be in your PingOne OIDC application's connection settings under the `Issuer ID` field. For non enterprise, this is `https://auth.pingone.com/<SSOCONNECTION_$uid_PING_ENVIRONMENT_ID>/as`. Replace this as needed for your environment.
+- the `rolesClaimPath` should be set to the claim in the JWT token that contains the roles assigned to the user in PingOne. This should match the `sd-roles` (or whatever you named it) attribute in the custom resource in PingOne.
+- the `usernameField` should be set to the claim in the JWT token that contains the username of the user in PingOne. This should match the `sd-username` (or whatever you named it) attribute in the custom resource in PingOne.
+- the `audience` should be set to the audience defined in the custom resource in PingOne. This should match the `Resource Name` in the custom resource in PingOne if you did not set the `Audience` field.
+- similar to the issuer URL, the `keyUrl` should be set to the URL of the public key used to verify the JWT token. This should match the `JWKS URI` in the PingOne OIDC configuration. This may not follow the template below for an enterprise PingOne environment - replace as needed.
