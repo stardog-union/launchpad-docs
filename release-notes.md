@@ -43,8 +43,8 @@ Launchpad v3 uses semantic versioning.
 
 ### New Features
 
-- Adds support for using shared user authentication to log users into to Launchpad, bypassing the requirement for using an SSO login provider. This is **not** intended for production use. See [Shared User Authentication](../README.md#shared-user-authentication) for more information.
-- Adds support for saving Designer projects to the Launchpad database instead of the user's browser's local storage. See [`DESIGNER_STORAGE_ENABLED`](../README.md#designer_storage_enabled) for more information.
+- Adds support for using shared user authentication to log users into to Launchpad, bypassing the requirement for using an SSO login provider. This is **not** intended for production use. See [Shared User Authentication](./README.md#shared-user-authentication) for more information.
+- Adds support for saving Designer projects to the Launchpad database instead of the user's browser's local storage. See [`DESIGNER_STORAGE_ENABLED`](./README.md#designer_storage_enabled) for more information.
 
 ## 3.1.0 Release (2025-04-03)
 

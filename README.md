@@ -701,9 +701,6 @@ The `SHARED_USER_PASSWORD` is the optional password of the shared user used to l
 - **Required:** No
 - **Default:** not set
 
-```bash
-
-
 ### SSO Connection Configuration
 
 As mentioned earlier, SSO Connections allow logged in users to use SSO to connect to Stardog endpoints that have also been configured to accept JWT tokens from the SSO provider. Launchpad administrators need to configure SSO Connections to allow their Launchpad users to connect to Stardog endpoints using SSO. This should be done before deploying Launchpad.
