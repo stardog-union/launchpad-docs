@@ -193,10 +193,13 @@ The `GUNICORN_WORKERS` is used to set the number of Gunicorn workers to use for 
 
 #### `DESIGNER_STORAGE_ENABLED`
 
-The `DESIGNER_STORAGE_ENABLED` is used to configure the storage location for projects in Stardog Designer.  By default, this should be set to `true`.  This will default to storing all Designer projects in the Launchpad database. If this is set to `false` then project storage in the Launchpad database will be disabled and all projects will be stored in a user browser's local storage.
+The `DESIGNER_STORAGE_ENABLED` option is used to configure the storage location for projects in Stardog Designer. By default, this should be set to `false`, resulting in projects being stored in a user browser's local storage. If set to `true`, projects will be stored in the Launchpad database under your Launchpad user account.
+
+> [!TIP]
+> It's recommended to set this to `true` to avoid accidental data loss of Designer projects if the user clears their browser's local storage.
 
 - **Required:** No
-- **Default:** `true`
+- **Default:** `false`
 
 
 ### Login Provider Configuration
