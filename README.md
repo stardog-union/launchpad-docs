@@ -191,12 +191,23 @@ The `GUNICORN_WORKERS` is used to set the number of Gunicorn workers to use for 
 - **Required:** No
 - **Default:** `2 * CPU cores + 1`
 
+#### `DESIGNER_STORAGE_ENABLED`
+
+The `DESIGNER_STORAGE_ENABLED` option is used to configure the storage location for projects in Stardog Designer. By default, this should be set to `false`, resulting in projects being stored in a user browser's local storage. If set to `true`, projects will be stored in the Launchpad database under your Launchpad user account.
+
+> [!TIP]
+> It's recommended to set this to `true` to avoid accidental data loss of Designer projects if the user clears their browser's local storage.
+
+- **Required:** No
+- **Default:** `false`
+
+
 ### Login Provider Configuration
 
 This section details the configuration options available for the SSO provider used to log users into Launchpad. 
 
 > [!IMPORTANT]
-> Launchpad **must** be configured with at least 1 SSO provider to log users into the application.
+> Launchpad **should** be configured with at least 1 SSO provider to log users into the application. You may use shared user authentication to bypass the need to have a SSO login provider, but this is **not** recommended for production use. See [Shared User Authentication](#shared-user-authentication) for more information.
 
 Available Login SSO providers:
 - [Microsoft Entra (formerly known as Azure Active Directory)](#microsoft-entra-login-provider)
@@ -656,6 +667,42 @@ PING_ENVIRONMENT_ID=<environment_id>
 # only required if the OIDC discovery URL is different from the default of `https://auth.pingone.com/{PING_ENVIRONMENT_ID}/as/.well-known/openid-configuration`
 # PING_OIDC_DISCOVERY_URL=<custom_discovery_url>
 ```
+
+<a name="shared-user-authentication"></a>
+**Shared User Authentication**
+
+If you prefer not to use SSO for logging into Launchpad, you can enable shared user authentication. 
+
+> [!WARNING] 
+> This method is not recommended for production and should only be used for testing.
+
+Shared user authentication works by defining a single username and password in the Launchpad configuration. Anyone who enters these credentials will be granted access. Note that this method is not secure: only one shared user can be configured at a time, and all data (e.g. saved connections) be attributed to that shared user. 
+
+> [!NOTE]
+> This method can be used in conjunction with an SSO login provider.
+
+![Shared User Authentication](./assets/shared-user-auth-login.png)
+
+#### `SHARED_USER_AUTH_ENABLED`
+
+The `SHARED_USER_AUTH_ENABLED` is used to enable or disable shared user authentication to log users into Launchpad. When enabled, users will see a username and password inputs in the login form. 
+
+- **Required:** Yes (if using shared user authentication)
+- **Default:** `false`
+
+#### `SHARED_USER_USERNAME`
+
+The `SHARED_USER_USERNAME` is the username of the shared user used to log users into Launchpad. This username should be between 1 and 150 characters long. Can contain letters/digits/./+/-/_ only. No '@' character is permitted.
+
+- **Required:** Yes (if using shared user authentication)
+- **Default:** not set
+
+#### `SHARED_USER_PASSWORD`
+
+The `SHARED_USER_PASSWORD` is the optional password of the shared user used to log users into Launchpad.
+
+- **Required:** No
+- **Default:** not set
 
 ### SSO Connection Configuration
 
