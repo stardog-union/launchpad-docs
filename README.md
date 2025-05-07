@@ -201,6 +201,12 @@ The `DESIGNER_STORAGE_ENABLED` option is used to configure the storage location 
 - **Required:** No
 - **Default:** `false`
 
+#### `VOICEBOX_SERVICE_ENDPOINT`
+
+The `VOICEBOX_SERVICE_ENDPOINT` is used to specify the endpoint for the [Voicebox Service](./voicebox.md#voicebox-service). This is used to enable the Voicebox in Launchpad.
+
+- **Required:** No
+- **Default:** not set
 
 ### Login Provider Configuration
 
