@@ -6,7 +6,7 @@ Launchpad can operate with or without the Voicebox. To enable Voicebox, you’ll
 
 ## Voicebox Service
 
-The Voicebox Service is distributed as a Docker image. The Voicebox Service is a stateless HTTP server that packages up Stardog Voicebox functionality. It is intended to be run in conjunction with Stardog Launchpad. The Voicebox Service will communicate directly with whichever Stardog server’s you are interacting with in Launchpad, so they should be accessible to this image when run as a container.
+The Voicebox Service is distributed as a Docker image. The Voicebox Service is a stateless HTTP server that packages up Stardog Voicebox functionality. It is intended to be run in conjunction with Stardog Launchpad. The Voicebox Service will communicate directly with whichever Stardog servers you are interacting with in Launchpad, so they should be accessible to this image when run as a container.
 
 ![Voicebox Service with Launchpad Architecuture](./assets/voicebox-service-architecture.png)
 
@@ -57,7 +57,7 @@ The following options should be provided as environment variables to the Voicebo
 
 ### Voicebox Configuration File
 
-n addition to the environment variables provided to the Voicebox Service, the Voicebox Service also requires you to give it a configuration file in JSON.
+In addition to the environment variables provided to the Voicebox Service, the Voicebox Service also requires you to give it a configuration file in JSON.
 
 Here's an example configuration file for using Voicebox with AWS Bedrock:
 
@@ -103,7 +103,7 @@ The following LLM providers are supported:
 
 Voicebox can use an Azure AI endpoint deployed within [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry). 
 
-The following configuration options are used with Azure LLM in the Voicebox configuration file.
+The following configuration options are used with Azure LLM in the Voicebox configuration file. Update the `AZURE_AI_ENDPOINT` in the server URL to point to your endpoint.
 
 | **Configuration Option** | **Available Options** |
 | --- | --- |
@@ -141,7 +141,7 @@ The following environment variables are used with Bedrock.
 
 Voicebox can use an LLM endpoint deployed within a [Databricks workspace](https://www.databricks.com/product/model-serving).
 
-The following configuration options are used with Databricks LLM in the Voicebox configuration file.
+The following configuration options are used with Databricks LLM in the Voicebox configuration file. Update the `DATABRICKS_WORKSPACE` in the server URL to point to your workspace.
 
 | **Configuration Option** | **Available Options** |
 | --- | --- |
@@ -157,7 +157,7 @@ The following environment variables are used with Databricks.
 
 #### Fireworks Configuration
 
-Voicebox can use a [Fireworks.ai](http://Fireworks.ai) as an LLM endpoint.
+Voicebox can use [Fireworks.ai](http://Fireworks.ai) as an LLM endpoint.
 
 The following configuration options are used with Fireworks in the Voicebox configuration file.
 
