@@ -43,7 +43,7 @@ The Voicebox Service is distributed as a Docker image. The Voicebox Service is a
 
 4. Assuming you have restarted Launchpad with the Voicebox Service endpoint configured, you should be able to access Voicebox from the Launchpad UI.
 
-   ![Voicebox UI](./assets/launchpad-voicebox-demo.mov)
+https://github.com/user-attachments/assets/d49f3ddd-a62b-448d-9d03-733d32d9a2eb
 
 ### Configuration
 
