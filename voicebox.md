@@ -98,6 +98,7 @@ The following LLM providers are supported:
 - [AWS Bedrock](#aws-bedrock-configuration)
 - [Databricks](#databricks-configuration)
 - [Fireworks](#fireworks-configuration)
+- [OpenAI](#openai-configuration)
 
 #### Azure AI Configuration
 
@@ -171,6 +172,24 @@ The following environment variables are used with Fireworks.
 | Environment Variable | **Required** | **Description** |
 | --- | --- | --- |
 | `FIREWORKS_API_KEY` | `Y` | Fireworks API key |
+
+#### OpenAI Configuration
+
+Voicebox can use an OpenAI API compatible LLM endpoint. Some examples are [Meta's Llama API](https://llama.developer.meta.com/) or [vLLM](https://docs.vllm.ai/en/latest/) server deployed locally. The model being served by the API should be compatible with Voicebox.
+
+The following configuration options are used with OpenAI API endpoints in the Voicebox configuration file.
+
+| **Configuration Option** | **Available Options** |
+| --- | --- |
+| `llm_provider` | `openai` |
+| `llm_name` | Check with your LLM provider |
+| `server_url` | Check with your LLM provider |
+
+The following environment variables are used with OpenAI-compatible endpoints.
+
+| Environment Variable | **Required** | **Description** |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | `Y` | API key |
 
 ## Release Notes
 
