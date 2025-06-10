@@ -750,6 +750,7 @@ This step is browser-specific and involves adding the Launchpad URL to the list 
    - Restart Firefox for changes to take effect
 
    **Chrome**
+
    This varies between operating systems. On macOS, run the following commands in a terminal to add the Launchpad URL to the list of trusted sites for Kerberos authentication:
    ```bash
    defaults write com.google.Chrome AuthServerAllowlist "your-launchpad-url.com"
