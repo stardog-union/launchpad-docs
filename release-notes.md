@@ -34,10 +34,26 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| 3.3.0 | `v3.3.0` | [2.46.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2462-release) | [2.11.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2112-release) | [5.7.12](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5712-release) | [1.4.17](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1417-release) |
 | 3.2.0 | `v3.2.0` | [2.45.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2451-release) | [2.10.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2104-release) | [5.7.9](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v579-release) | [1.4.15](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1415-release) |
 | 3.1.0 | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | 3.0.1 | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | 3.0.0 | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.3.0 Release (2025-06-12)
+
+### New Features
+
+- Adds support for using Kerberos to log users into Launchpad. See [Kerberos Login Provider](./README.md#kerberos-login-provider) for more information.
+- Adds a "public" REST API to Launchpad to programatically interact with Voicebox. See [Using Voicebox Programmatically](./voicebox.md#using-voicebox-programmatically) for more information.
+
+### Modifications
+
+- Reduce noise in Launchpad logs by not logging expected unauthorized errors when user visits the login page before logging in.
+
+### Security
+
+- Update internal packages and dependencies to eliminate all fixable CVEs (CVEs that do not have an upstream fix or patch).
 
 ## 3.2.0 Release (2025-05-06)
 
