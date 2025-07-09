@@ -192,6 +192,7 @@ The following LLM providers are supported:
 - [AWS Bedrock](#aws-bedrock-configuration)
 - [Databricks](#databricks-configuration)
 - [Fireworks](#fireworks-configuration)
+- [OpenAI](#openai-configuration)
 
 #### Azure AI Configuration
 
@@ -220,7 +221,7 @@ The following configuration options are used with Bedrock LLM in the Voicebox co
 | **Configuration Option** | **Available Options** |
 | --- | --- |
 | `llm_provider` | `bedrock` |
-| `llm_name` | `meta.llama3-1-70b-instruct-v1:0` , `us.meta.llama3-1-70b-instruct-v1:0` |
+| `llm_name` | `meta.llama3-1-70b-instruct-v1:0` , `us.meta.llama3-1-70b-instruct-v1:0`, `meta.llama4-maverick-17b-instruct-v1:0`, `us.meta.llama4-maverick-17b-instruct-v1:0` |
 
 The following environment variables are used with Bedrock.
 
@@ -240,7 +241,7 @@ The following configuration options are used with Databricks LLM in the Voicebox
 | **Configuration Option** | **Available Options** |
 | --- | --- |
 | `llm_provider` | `databricks` |
-| `llm_name` | `databricks-meta-llama-3-1-70b-instruct`, `databricks-meta-llama-3-3-70b-instruct`  |
+| `llm_name` | `databricks-meta-llama-3-1-70b-instruct`, `databricks-meta-llama-3-3-70b-instruct`, `databricks-llama-4-maverick`  |
 | `server_url` | `https://DATABRICKS_WORKSPACE.cloud.databricks.com/serving-endpoints` |
 
 The following environment variables are used with Databricks.
@@ -258,13 +259,49 @@ The following configuration options are used with Fireworks in the Voicebox conf
 | **Configuration Option** | **Available Options** |
 | --- | --- |
 | `llm_provider` | `fireworks` |
-| `llm_name` | `accounts/fireworks/models/llama-v3p1-70b-instruct`, `accounts/fireworks/models/llama-v3p3-70b-instruct` |
+| `llm_name` | `accounts/fireworks/models/llama-v3p1-70b-instruct`, `accounts/fireworks/models/llama-v3p3-70b-instruct`, `accounts/fireworks/models/llama4-maverick-instruct-basic` |
 
 The following environment variables are used with Fireworks.
 
 | Environment Variable | **Required** | **Description** |
 | --- | --- | --- |
 | `FIREWORKS_API_KEY` | `Y` | Fireworks API key |
+
+#### OpenAI Configuration
+
+Voicebox can use [OpenAI](https://openai.com/api/) as an LLM endpoint.
+
+The following configuration options are used with OpenAI in the Voicebox configuration file.
+
+| **Configuration Option** | **Available Options** |
+| --- | --- |
+| `llm_provider` | `openai` |
+| `llm_name` | `gpt-4o`, `gpt-4o-mini` |
+| `server_url` | (Optional - can be set if OpenAI endpoint is access via proxy)  |
+
+It is also possible to provide optional custom HTTP headers included in the OpenAI requests. Here is an example configuration file showing how these custom headers can be configured:
+
+```
+{
+    "llm_provider": "openai",
+    "llm_name": "gpt-4o-mini",
+    "server_url": "https://api.openai.com/v1/",
+    "provider_args": {
+      "headers" : {
+        "OpenAI-Organization": "org-gnSjNrpIz0bb7V1modfLrNof",
+        "OpenAI-Project": "$PROJECT_ID"
+      }
+    }
+}
+```
+The values for custom headers should be valid [Python string templates](https://docs.python.org/3/library/string.html#template-strings). The variables mentioned in template string should be defined as environment variables, e.g. in the above example there should be an environment variable named `PROJECT_ID`. Environment variables is a better choice for including sensitive values in the configuration file whereas non-sensitive values can be directly included in the configuration file, e.g. organization value in the above example.
+
+
+The following environment variables are used with OpenAI.
+
+| Environment Variable | **Required** | **Description** |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | `Y` | OpenAI API key |
 
 ## Release Notes
 
