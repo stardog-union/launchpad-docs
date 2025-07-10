@@ -272,7 +272,7 @@ The following environment variables are used with Fireworks.
 
 Voicebox can use Llama models hosted at [Google Vertex Model Garden](https://cloud.google.com/model-garden) as an LLM endpoint.
 
-The following configuration options are used with Google Vertex in the Voicebox configuration file. Update the `Google_Vertex_AI_Project_Name` value in the config with your .
+The following configuration options are used with Google Vertex in the Voicebox configuration file. Replace the `Google_Vertex_AI_Project_Name` value in the example with your project name.
 
 | **Configuration Option** | **Available Options** |
 | --- | --- |
@@ -280,7 +280,7 @@ The following configuration options are used with Google Vertex in the Voicebox 
 | `llm_name` | `meta/llama-3.1-70b-instruct-maas`, `meta/llama-3.3-70b-instruct-maas` |
 | `provider_args` | { "project": "Google_Vertex_AI_Project_Name" } |
 
-Note that, `provider_args` is a Json Object itself. See the following example showing the LLM configuration for Google Vertex:
+Note that, `provider_args` is a JSON object itself. An example LLM configuration for Google Vertex looks like this:
 ```json
 {  
     "default_llm_config": {    
