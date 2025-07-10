@@ -192,6 +192,7 @@ The following LLM providers are supported:
 - [AWS Bedrock](#aws-bedrock-configuration)
 - [Databricks](#databricks-configuration)
 - [Fireworks](#fireworks-configuration)
+- [Google Vertex](#google-vertex-configuration)
 - [OpenAI](#openai-configuration)
 
 #### Azure AI Configuration
@@ -254,7 +255,7 @@ The following environment variables are used with Databricks.
 
 Voicebox can use [Fireworks.ai](http://Fireworks.ai) as an LLM endpoint.
 
-The following configuration options are used with Fireworks in the Voicebox configuration file.
+The following configuration options are used with Fireworks in the Voicebox configuration file. 
 
 | **Configuration Option** | **Available Options** |
 | --- | --- |
@@ -266,6 +267,39 @@ The following environment variables are used with Fireworks.
 | Environment Variable | **Required** | **Description** |
 | --- | --- | --- |
 | `FIREWORKS_API_KEY` | `Y` | Fireworks API key |
+
+#### Google Vertex Configuration
+
+Voicebox can use Llama models hosted at [Google Vertex Model Garden](https://cloud.google.com/model-garden) as an LLM endpoint.
+
+The following configuration options are used with Google Vertex in the Voicebox configuration file. Update the `Google_Vertex_AI_Project_Name` value in the config with your .
+
+| **Configuration Option** | **Available Options** |
+| --- | --- |
+| `llm_provider` | `vertex` |
+| `llm_name` | `meta/llama-3.1-70b-instruct-maas`, `meta/llama-3.3-70b-instruct-maas` |
+| `provider_args` | { "project": "Google_Vertex_AI_Project_Name" } |
+
+Note that, `provider_args` is a Json Object itself. See the following example showing the LLM configuration for Google Vertex:
+```json
+{  
+    "default_llm_config": {    
+        "llm_provider": "vertex",
+        "llm_name": "meta/llama-3.3-70b-instruct-maas",
+        "provider_args": {
+          "project" : "My Project Name"
+        } 
+    }
+}
+```
+
+The following environment variables are used with Google Vertex.
+
+| Environment Variable | **Required** | **Description** |
+| --- | --- | --- |
+| `GOOGLE_APPLICATION_CREDENTIALS` | `Y` |  The location of a credential JSON file |
+
+See [Google documentation](https://cloud.google.com/docs/authentication/application-default-credentials) for the details of creating credential files.
 
 #### OpenAI Configuration
 
@@ -281,21 +315,23 @@ The following configuration options are used with OpenAI in the Voicebox configu
 
 It is also possible to provide optional custom HTTP headers included in the OpenAI requests. Here is an example configuration file showing how these custom headers can be configured:
 
-```
-{
-    "llm_provider": "openai",
-    "llm_name": "gpt-4o-mini",
-    "server_url": "https://api.openai.com/v1/",
-    "provider_args": {
-      "headers" : {
+```json
+{  
+    "default_llm_config": {    
+        "llm_provider": "openai",
+        "llm_name": "gpt-4o-mini",
+        "server_url": "https://api.openai.com/v1/",
+        "provider_args": {
+          "headers" : {
         "OpenAI-Organization": "org-gnSjNrpIz0bb7V1modfLrNof",
         "OpenAI-Project": "$PROJECT_ID"
-      }
+          }
+        } 
     }
 }
 ```
-The values for custom headers should be valid [Python string templates](https://docs.python.org/3/library/string.html#template-strings). The variables mentioned in template string should be defined as environment variables, e.g. in the above example there should be an environment variable named `PROJECT_ID`. Environment variables is a better choice for including sensitive values in the configuration file whereas non-sensitive values can be directly included in the configuration file, e.g. organization value in the above example.
 
+The values for custom headers should be valid [Python string templates](https://docs.python.org/3/library/string.html#template-strings). The variables mentioned in template string should be defined as environment variables, e.g. in the above example there should be an environment variable named `PROJECT_ID`. Environment variables is a better choice for including sensitive values in the configuration file whereas non-sensitive values can be directly included in the configuration file, e.g. organization value in the above example.
 
 The following environment variables are used with OpenAI.
 
