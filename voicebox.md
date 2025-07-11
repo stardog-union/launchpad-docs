@@ -186,6 +186,7 @@ The LLM configuration is specified as a JSON object in the Voicebox configuratio
 | `llm_provider` | `Y` | Name of the LLM provider | String |
 | `llm_name` | `Y` | Name of the LLM | String |
 | `server_url` | `N` | Optional server URL for the LLM provider. May be required based on the provider configured. | URL |
+| `max_tokens` | `N` | Maximum number of tokens for LLM requests. This limit can be used to control LLM costs to prevent LLM from returning very long responses. | Integer |
 
 The following LLM providers are supported:
 - [Azure AI](#azure-ai-configuration)
