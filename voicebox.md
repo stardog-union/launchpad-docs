@@ -205,7 +205,7 @@ The following configuration options are used with Azure LLM in the Voicebox conf
 | **Configuration Option** | **Available Options** |
 | --- | --- |
 | `llm_provider` | `azure` |
-| `llm_name` | `Meta-Llama-3.1-70B-Instruct` , `Meta-Llama-3.3-70B-Instruct` |
+| `llm_name` | `Meta-Llama-3.1-70B-Instruct` , `Meta-Llama-3.3-70B-Instruct`, `Llama-4-Maverick-17B-128E-Instruct-FP8` |
 | `server_url` | `https://AZURE_AI_ENDPOINT.services.ai.azure.com/models` |
 
 The following environment variables are used with Azure.
