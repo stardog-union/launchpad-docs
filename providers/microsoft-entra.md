@@ -179,7 +179,7 @@ To configure secondary authentication with Microsoft Entra:
 
 2. **Configure Secondary OIDC Provider**
    - Configure your secondary provider using the same setup process as you would for a primary login provider
-   - For example, if using Duo as a secondary provider, follow the standard Duo provider configuration steps
+   - For example, if using Duo as a secondary provider, follow the [Duo provider configuration](./duo.md) steps
    - The configuration variables and setup process are identical to primary provider setup
 
 3. **Update Launchpad Configuration**
