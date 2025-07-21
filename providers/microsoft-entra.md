@@ -137,6 +137,21 @@ For example, if set to `stardog-admin,security-team`, users assigned either the 
 
 The secondary authentication flow works as follows:
 
+```mermaid
+flowchart TD
+    A[User attempts to login] --> B[Authenticate with Microsoft Entra]
+    B --> C{Authentication successful?}
+    C -->|No| D[Login failed]
+    C -->|Yes| E[Check user's app roles in Entra]
+    E --> F{User has secondary auth roles?<br/>e.g., stardog-admin}
+    F -->|No| G[Login complete - Single auth flow]
+    F -->|Yes| H[Redirect to secondary provider<br/>e.g., Duo]
+    H --> I[User authenticates with secondary provider]
+    I --> J{Secondary authentication successful?}
+    J -->|No| K[Login failed - Secondary auth required]
+    J -->|Yes| L[Login complete - Secondary auth flow]
+```
+
 1. User attempts to log into Launchpad
 2. User authenticates with Microsoft Entra (primary provider)
 3. Launchpad checks if the user has any of the configured `AZURE_SECONDARY_AUTH_ROLES`
