@@ -220,8 +220,8 @@ Launchpad supports various authentication providers for both logging users into 
 | [Google](./providers/google.md) | ✅ | ❌ |
 | [Okta](./providers/okta.md) | ✅ | ✅ |
 | [PingOne](./providers/pingone.md) | ✅ | ✅ |
-| [Kerberos](./providers/kerberos.md) | ✅ | ✅ |
 | [Duo](./providers/duo.md) | ✅ | ❌ |
+| [Kerberos](./providers/kerberos.md) | ✅ | ✅ |
 | [Shared User](./providers/shared-user.md) | ✅ | ❌ |
 
 #### SSO Connection Configuration

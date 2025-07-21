@@ -2,7 +2,7 @@
 
 ![Duo](../assets/duo-logo.jpg)
 
-Duo can be used as a login provider to authenticate users into Launchpad using OpenID Connect (OIDC).
+[Duo](https://duo.com) can be used as a login provider to authenticate users into Launchpad using OpenID Connect (OIDC).
 
 ## Login Provider Configuration
 
@@ -42,7 +42,6 @@ The `DUO_DISCOVERY_URL` is the OpenID Connect discovery URL for your Duo applica
 ### Example Configuration
 
 ```bash
-##########
 DUO_AUTH_ENABLED=true
 DUO_CLIENT_ID=<your_client_id>
 DUO_CLIENT_SECRET=<your_client_secret>
