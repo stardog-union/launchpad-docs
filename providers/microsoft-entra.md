@@ -101,6 +101,114 @@ The `AZURE_GRAPH_BASE_URL` is used to set the base URL for the Microsoft Graph A
 - **Required:** No
 - **Default:** `https://graph.microsoft.com`
 
+### Secondary Authentication Provider
+
+Microsoft Entra supports using a secondary authentication provider for users with specific app roles. This feature allows you to require certain users to authenticate with an additional provider (such as Duo) after successfully authenticating with Microsoft Entra, providing an extra layer of security.
+
+#### `AZURE_SECONDARY_AUTH_PROVIDER`
+
+The `AZURE_SECONDARY_AUTH_PROVIDER` specifies which secondary authentication provider to use. When a user with the required app roles logs in with Microsoft Entra, they will be redirected to authenticate with this secondary provider.
+
+> [!IMPORTANT]
+> Only OIDC (OpenID Connect) providers can be used as secondary authentication providers.
+
+Supported secondary OIDC providers:
+- `duo`
+- `okta` 
+- `ping`
+- `google`
+
+> [!NOTE]
+> When a provider is configured as a secondary auth provider for Azure, it can no longer be used as a primary login provider.
+
+- **Required:** No
+- **Default:** not set
+
+#### `AZURE_SECONDARY_AUTH_ROLES`
+
+The `AZURE_SECONDARY_AUTH_ROLES` is a comma-separated list of app roles assigned to users in the Microsoft Entra app registration. Users with these roles will be required to authenticate with the secondary provider after successful Microsoft Entra authentication.
+
+For example, if set to `stardog-admin,security-team`, users assigned either the `stardog-admin` or `security-team` app roles in Microsoft Entra will need to complete secondary authentication.
+
+- **Required:** Yes (if using secondary auth provider)
+- **Default:** not set
+
+#### Secondary Authentication Flow
+
+The secondary authentication flow works as follows:
+
+```mermaid
+flowchart TD
+    A[User attempts to login] --> B[Authenticate with Microsoft Entra]
+    B --> C{Authentication successful?}
+    C -->|No| D[Login failed]
+    C -->|Yes| E[Check user's app roles in Entra]
+    E --> F{User has secondary auth roles?<br/>e.g., stardog-admin}
+    F -->|No| G[Login complete - Single auth flow]
+    F -->|Yes| H[Redirect to secondary provider<br/>e.g., Duo]
+    H --> I[User authenticates with secondary provider]
+    I --> J{Secondary authentication successful?}
+    J -->|No| K[Login failed - Secondary auth required]
+    J -->|Yes| L[Login complete - Secondary auth flow]
+```
+
+1. User attempts to log into Launchpad
+2. User authenticates with Microsoft Entra (primary provider)
+3. Launchpad checks if the user has any of the configured `AZURE_SECONDARY_AUTH_ROLES`
+4. If the user has required roles:
+   - User is redirected to the secondary authentication provider
+   - User must successfully authenticate with the secondary provider
+   - Login is completed only after both authentications succeed
+5. If the user does not have required roles:
+   - Login is completed after Microsoft Entra authentication
+
+#### Demo
+
+Demo of the secondary authentication flow with Microsoft Entra and Duo:
+
+https://github.com/user-attachments/assets/b70170c9-d76d-49fa-99af-8d082b8485ac
+
+#### Example Configuration
+
+Here's an example configuration using Duo as a secondary authentication provider:
+
+```bash
+# Microsoft Entra Login Provider (Primary)
+AZURE_AUTH_ENABLED=true
+AZURE_CLIENT_ID=<azure_client_id>
+AZURE_CLIENT_SECRET=<azure_client_secret>
+AZURE_TENANT=<tenant_id>
+AZURE_SECONDARY_AUTH_PROVIDER=duo
+AZURE_SECONDARY_AUTH_ROLES=stardog-admin,security-team
+
+# Duo Secondary Authentication Provider (OIDC)
+DUO_AUTH_ENABLED=true
+DUO_CLIENT_ID=<duo_client_id>
+DUO_CLIENT_SECRET=<duo_client_secret>
+DUO_DISCOVERY_URL=https://sso-<your-account>.sso.duosecurity.com/oidc/<client_id>/.well-known/openid-configuration
+```
+
+#### Setting Up Secondary Authentication
+
+To configure secondary authentication with Microsoft Entra:
+
+1. **Create App Roles in Microsoft Entra**
+   - Navigate to your Launchpad app registration in Azure Portal
+   - Go to **"App roles"** 
+   - Create roles that indicate users requiring secondary authentication (e.g., `stardog-admin`)
+   - Assign these roles to appropriate users in **"Enterprise applications"**
+
+2. **Configure Secondary OIDC Provider**
+   - Configure your secondary provider using the same setup process as you would for a primary login provider
+   - For example, if using Duo as a secondary provider, follow the [Duo provider configuration](./duo.md) steps
+   - The configuration variables and setup process are identical to primary provider setup
+
+3. **Update Launchpad Configuration**
+   - Enable the secondary provider using the same configuration variables as you would for a primary login provider
+   - Set `AZURE_SECONDARY_AUTH_PROVIDER` to the provider name (e.g. `duo`)
+   - Configure `AZURE_SECONDARY_AUTH_ROLES` with the comma separated list of app roles requiring secondary auth
+   - Once you specify a provider as secondary for Azure, it can no longer be used as a primary login provider
+
 ### How To Create an Azure App Registration to login with Microsoft Entra in Launchpad
 
 1. **Create App Registration**
