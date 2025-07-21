@@ -101,6 +101,32 @@ The `AZURE_GRAPH_BASE_URL` is used to set the base URL for the Microsoft Graph A
 - **Required:** No
 - **Default:** `https://graph.microsoft.com`
 
+### `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED`
+
+The `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED` option enables the Azure OAuth 2.0 On-Behalf-Of (OBO) flow for all Azure SSO connections. When enabled, users authenticate once via Azure and gain seamless access to all connected Stardog instances without interactive sign-in prompts for individual connections.
+
+> [!IMPORTANT]
+> Before enabling this flag, ensure you have completed the Microsoft Entra setup required for the OBO flow, as it depends on properly configured API permissions and exposed scopes between your Launchpad and Stardog app registrations. See [Azure On-Behalf-Of (OBO) Flow Setup](#azure-on-behalf-of-obo-flow-setup) for detailed configuration instructions.
+
+**When enabled (`true`):**
+- All Azure SSO connections automatically use the OBO flow
+- Users authenticate once via Azure and gain seamless access to all connected Stardog instances
+- Interactive sign-in prompts for individual connections are eliminated
+- Client secrets are not required for SSO connections
+- Tokens obtained via OBO are stored in the user's session for reuse across requests
+- Requires corresponding Entra app registration changes (see [Azure OBO Flow Setup](#azure-on-behalf-of-obo-flow-setup))
+
+**When disabled (`false`, default):**
+- Maintains existing behavior where users interactively sign into each Azure SSO connection
+- Client secrets are required for each SSO connection
+- No additional Entra configuration required
+- Provides backward compatibility for existing deployments
+
+This configuration applies globally to all Azure SSO connections within the Launchpad instance.
+
+- **Required:** No
+- **Default:** `false`
+
 ### Secondary Authentication Provider
 
 Microsoft Entra supports using a secondary authentication provider for users with specific app roles. This feature allows you to require certain users to authenticate with an additional provider (such as Duo) after successfully authenticating with Microsoft Entra, providing an extra layer of security.
@@ -289,7 +315,10 @@ The `SSOCONNECTION_<unique_identifier>_AZURE_CLIENT_ID` is the client id of the 
 
 The `SSOCONNECTION_<unique_identifier>_AZURE_CLIENT_SECRET` is the client secret of the Azure App Registration used to authenticate and authorize users to connect to the Stardog endpoint.
 
-- **Required:** Yes
+> [!NOTE]
+> Client secrets are not required when using the Azure On-Behalf-Of (OBO) flow (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`).
+
+- **Required:** Yes (when OBO flow is disabled)
 - **Default:** not set
 
 ### `SSOCONNECTION_<unique_identifier>_AZURE_TENANT`
@@ -312,6 +341,29 @@ The `SSOCONNECTION_<unique_identifier>_AZURE_DISPLAY_NAME` is the user-facing di
 
 - **Required:** No
 - **Default:** <unique_identifier>
+
+### `SSOCONNECTION_<unique_identifier>_AZURE_OBO_SCOPE`
+
+The `SSOCONNECTION_<unique_identifier>_AZURE_OBO_SCOPE` allows you to customize the OAuth 2.0 scope used for the On-Behalf-Of (OBO) flow for this specific SSO connection. By default, the OBO flow uses the scope format `api://{client_id}/user_login` for Stardog servers.
+
+This allows you to:
+- Use different scope formats for different Stardog servers
+- Customize the scope to match your specific Microsoft Entra app registration setup
+
+> [!NOTE]
+> This setting only applies when the Azure OBO flow is enabled (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`). Microsoft Entra uses your "Application ID URI" as the base of the exposed scope, which by default is `api://<client-id>`, but this is configurable in your Azure app registration.
+
+Example usage:
+```bash
+SSOCONNECTION_CUSTOM_AZURE_CLIENT_ID="e067faf1-f720-4459-94ba-796ef91225a2"
+SSOCONNECTION_CUSTOM_AZURE_TENANT="ff24ca66-bbaa-4def-8acf-43f2635ada42"
+SSOCONNECTION_CUSTOM_AZURE_DISPLAY_NAME="Custom Stardog Server"
+SSOCONNECTION_CUSTOM_AZURE_STARDOG_ENDPOINT="http://localhost:5825"
+SSOCONNECTION_CUSTOM_AZURE_OBO_SCOPE="api://custom-stardog-server/advanced_access"
+```
+
+- **Required:** No
+- **Default:** `api://{client_id}/user_login`
 
 ### `SSOCONNECTION_<unique_identifier>_AZURE_GOV_CLOUD_US`
 
@@ -339,6 +391,88 @@ The `SSOCONNECTION_<unique_identifier>_AZURE_GRAPH_BASE_URL` is used to set the 
 
 - **Required:** No
 - **Default:** `https://graph.microsoft.com`
+
+## Azure On-Behalf-Of (OBO) Flow Setup
+
+The Azure OAuth 2.0 On-Behalf-Of (OBO) flow provides a streamlined authentication experience where users authenticate once via Azure and gain seamless access to all connected Stardog instances. This eliminates the need for users to interactively sign into each Stardog connection separately.
+
+### Benefits of the OBO Flow
+
+- **Single Sign-On Experience**: Users authenticate once and gain access to all connected Stardog instances
+- **Enhanced Security**: No need to store client secrets for each SSO connection
+- **Seamless Integration**: Eliminates interactive sign-in prompts for individual connections
+- **Simplified Configuration**: Reduces the complexity of managing multiple authentication flows
+
+### OBO Flow Configuration Requirements
+
+The OBO flow requires configuring two separate app registrations in Microsoft Entra ID:
+
+1. **Launchpad App Registration** - The main application that users authenticate with initially
+2. **Stardog App Registration** - Represents each downstream Stardog instance that Launchpad will access on behalf of users
+
+The key relationship is that the Launchpad app registration needs delegated permissions to access the API scopes exposed by each Stardog app registration.
+
+### Step-by-Step OBO Setup
+
+#### 1. Configure Launchpad App Registration
+
+This should follow the same setup as [documented above](#how-to-create-an-azure-app-registration-to-login-with-microsoft-entra-in-launchpad), however you'll need to adjust the **API Permissions** to give it delegated access to the API exposed by each Stardog app registration:
+
+1. In **"API Permissions"** in the left sidebar navigation, click **"Add a Permission"**
+2. When the modal opens, select the **"My APIs"** tab
+3. Select the app registration for your Stardog server
+4. Select the `user_login` permission (or custom scope) exposed by that app registration
+5. Repeat for each Stardog server you want to connect to
+
+#### 2. Configure Stardog App Registration
+
+For each Stardog server, create a separate app registration:
+
+1. **Create App Registration**
+   - [Register a new application](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app) for your Stardog server
+   - **Name**: "Stardog Development Server" (or appropriate name)
+   - **Supported account types**: "Accounts in this organizational directory only"
+   - **Redirect URI**: No redirect URI needed
+
+2. **Expose an API**
+   - In **"Expose an API"** in the left sidebar navigation, click **"Add a scope"** under the **"Scopes defined by this API"** section
+   - **Scope name**: `user_login`
+   - **Who can consent?**: "Admins and users"
+   - You can use whatever descriptions and display names you like
+
+3. **Configure App Roles**
+   - Add **"App Roles"** to the app registration that match roles that exist on the actual Stardog server
+   - This step is identical to the standard SSO connection setup
+   - The JWT configuration for Stardog should also look the same
+
+4. **Configure Launchpad Environment Variables**
+   - Add `SSOCONNECTION` environment variables for Launchpad so users can create connections to Stardog using OBO SSO
+   - **Note**: No client secret is required when using OBO flow
+
+```bash
+# Enable OBO flow globally
+AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true
+
+# Stardog server SSO connection configuration (no client secret needed)
+SSOCONNECTION_ENTRA1_AZURE_CLIENT_ID="e067faf1-f720-4459-94ba-796ef91225a2"
+SSOCONNECTION_ENTRA1_AZURE_TENANT="ff24ca66-bbaa-4def-8acf-43f2635ada42"
+SSOCONNECTION_ENTRA1_AZURE_DISPLAY_NAME="Entra Development"
+SSOCONNECTION_ENTRA1_AZURE_STARDOG_ENDPOINT="http://localhost:5825"
+# Optional: Custom OBO scope
+SSOCONNECTION_ENTRA1_AZURE_OBO_SCOPE="api://custom-stardog/user_login"
+```
+
+### Migrating from Standard SSO Connections to OBO Flow
+
+To migrate existing Azure SSO connections to use the OBO flow:
+
+1. **Enable the OBO flow**: Set `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`
+2. **Update app registrations**: Follow the OBO setup steps above for your existing app registrations
+3. **Remove client secrets**: Client secrets are no longer required for SSO connection environment variables
+4. **Test the migration**: Verify that users can authenticate and connect to Stardog instances without interactive prompts
+
+> [!NOTE]
+> Existing SSO connections will continue to work during the migration. Users will experience the new seamless authentication flow once the OBO setup is complete.
 
 ### Setting up a Microsoft Entra SSO Connection
 
