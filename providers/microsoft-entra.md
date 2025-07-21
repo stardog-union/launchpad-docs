@@ -166,7 +166,7 @@ flowchart TD
 
 Demo of the secondary authentication flow with Microsoft Entra and Duo:
 
-![Demo showing the secondary authentication flow with Microsoft Entra and Duo](../assets/azure-duo-secondary-auth.mov)
+https://github.com/user-attachments/assets/b70170c9-d76d-49fa-99af-8d082b8485ac
 
 #### Example Configuration
 
