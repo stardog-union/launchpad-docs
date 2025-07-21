@@ -162,6 +162,12 @@ flowchart TD
 5. If the user does not have required roles:
    - Login is completed after Microsoft Entra authentication
 
+#### Demo
+
+Demo of the secondary authentication flow with Microsoft Entra and Duo:
+
+![Demo showing the secondary authentication flow with Microsoft Entra and Duo](../assets/azure-duo-secondary-auth.mov)
+
 #### Example Configuration
 
 Here's an example configuration using Duo as a secondary authentication provider:
