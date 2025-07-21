@@ -4,6 +4,13 @@
 
 Microsoft Entra can be used both as a login provider to authenticate users into Launchpad and as an SSO connection provider to authenticate users against Stardog endpoints.
 
+## Table of Contents
+
+- [Login Provider Configuration](#login-provider-configuration)
+- [SSO Connection Configuration](#sso-connection-configuration) 
+- [Entra On-Behalf-Of (OBO) Flow Setup](#entra-on-behalf-of-obo-flow-setup) *(Available in Launchpad v3.4.0+)*
+- [Setting up a Microsoft Entra SSO Connection](#setting-up-a-microsoft-entra-sso-connection)
+
 ## Login Provider Configuration
 
 The following configuration options are available for Microsoft Entra login provider.
@@ -103,10 +110,10 @@ The `AZURE_GRAPH_BASE_URL` is used to set the base URL for the Microsoft Graph A
 
 ### `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED`
 
-The `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED` option enables the Azure OAuth 2.0 On-Behalf-Of (OBO) flow for all Azure SSO connections. When enabled, users authenticate once via Azure and gain seamless access to all connected Stardog instances without interactive sign-in prompts for individual connections.
+The `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED` option enables the Entra OAuth 2.0 On-Behalf-Of (OBO) flow for all Azure SSO connections. When enabled, users authenticate once via Azure and gain seamless access to all connected Stardog instances without interactive sign-in prompts for individual connections.
 
 > [!IMPORTANT]
-> Before enabling this flag, ensure you have completed the Microsoft Entra setup required for the OBO flow, as it depends on properly configured API permissions and exposed scopes between your Launchpad and Stardog app registrations. See [Azure On-Behalf-Of (OBO) Flow Setup](#azure-on-behalf-of-obo-flow-setup) for detailed configuration instructions.
+> Before enabling this flag, ensure you have completed the Microsoft Entra setup required for the OBO flow, as it depends on properly configured API permissions and exposed scopes between your Launchpad and Stardog app registrations. See [Entra On-Behalf-Of (OBO) Flow Setup](#entra-on-behalf-of-obo-flow-setup) for detailed configuration instructions.
 
 **When enabled (`true`):**
 - All Azure SSO connections automatically use the OBO flow
@@ -114,7 +121,7 @@ The `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED` option enables the Azure OAuth 2.0 On
 - Interactive sign-in prompts for individual connections are eliminated
 - Client secrets are not required for SSO connections
 - Tokens obtained via OBO are stored in the user's session for reuse across requests
-- Requires corresponding Entra app registration changes (see [Azure OBO Flow Setup](#azure-on-behalf-of-obo-flow-setup))
+- Requires corresponding Entra app registration changes (see [Entra OBO Flow Setup](#entra-on-behalf-of-obo-flow-setup))
 
 **When disabled (`false`, default):**
 - Maintains existing behavior where users interactively sign into each Azure SSO connection
@@ -316,7 +323,7 @@ The `SSOCONNECTION_<unique_identifier>_AZURE_CLIENT_ID` is the client id of the 
 The `SSOCONNECTION_<unique_identifier>_AZURE_CLIENT_SECRET` is the client secret of the Azure App Registration used to authenticate and authorize users to connect to the Stardog endpoint.
 
 > [!NOTE]
-> Client secrets are not required when using the Azure On-Behalf-Of (OBO) flow (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`).
+> Client secrets are not required when using the Entra On-Behalf-Of (OBO) flow (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`).
 
 - **Required:** Yes (when OBO flow is disabled)
 - **Default:** not set
@@ -351,7 +358,7 @@ This allows you to:
 - Customize the scope to match your specific Microsoft Entra app registration setup
 
 > [!NOTE]
-> This setting only applies when the Azure OBO flow is enabled (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`). Microsoft Entra uses your "Application ID URI" as the base of the exposed scope, which by default is `api://<client-id>`, but this is configurable in your Azure app registration.
+> This setting only applies when the Entra OBO flow is enabled (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`). Microsoft Entra uses your "Application ID URI" as the base of the exposed scope, which by default is `api://<client-id>`, but this is configurable in your Azure app registration.
 
 Example usage:
 ```bash
@@ -392,9 +399,12 @@ The `SSOCONNECTION_<unique_identifier>_AZURE_GRAPH_BASE_URL` is used to set the 
 - **Required:** No
 - **Default:** `https://graph.microsoft.com`
 
-## Azure On-Behalf-Of (OBO) Flow Setup
+## Entra On-Behalf-Of (OBO) Flow Setup
 
-The Azure OAuth 2.0 On-Behalf-Of (OBO) flow provides a streamlined authentication experience where users authenticate once via Azure and gain seamless access to all connected Stardog instances. This eliminates the need for users to interactively sign into each Stardog connection separately.
+> [!NOTE]
+> Entra On-Behalf-Of (OBO) flow support was added in **Launchpad v3.4.0**.
+
+The Entra OAuth 2.0 On-Behalf-Of (OBO) flow provides a streamlined authentication experience where users authenticate once via Azure and gain seamless access to all connected Stardog instances. This eliminates the need for users to interactively sign into each Stardog connection separately.
 
 ### Benefits of the OBO Flow
 
@@ -462,9 +472,9 @@ SSOCONNECTION_ENTRA1_AZURE_STARDOG_ENDPOINT="http://localhost:5825"
 SSOCONNECTION_ENTRA1_AZURE_OBO_SCOPE="api://custom-stardog/user_login"
 ```
 
-### Migrating from Standard SSO Connections to OBO Flow
+### Migrating from Standard SSO Connections to Entra OBO Flow
 
-To migrate existing Azure SSO connections to use the OBO flow:
+To migrate existing Azure SSO connections to use the Entra OBO flow:
 
 1. **Enable the OBO flow**: Set `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`
 2. **Update app registrations**: Follow the OBO setup steps above for your existing app registrations
