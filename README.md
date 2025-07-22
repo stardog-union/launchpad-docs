@@ -207,6 +207,15 @@ The `VOICEBOX_SERVICE_ENDPOINT` is used to specify the endpoint for the [Voicebo
 - **Required:** No
 - **Default:** not set
 
+#### `COPY_CONNECTION_TOKEN_BUTTON_ENABLED`
+
+The `COPY_CONNECTION_TOKEN_BUTTON_ENABLED` option controls whether the "Copy Token" button is displayed on Stardog connection pages, allowing users to copy the JWT authentication token to their clipboard. Administrators can disable this button if they prefer not to expose this functionality to users.
+
+![Copy Connection JWT Button](./assets/copy-connection-jwt-button.png)
+
+- **Required:** No
+- **Default:** `true`
+
 ### Provider Configuration
 
 Launchpad supports various authentication providers for both logging users into Launchpad and connecting to Stardog endpoints. Each provider has its own configuration requirements and capabilities.
