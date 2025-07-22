@@ -49,7 +49,7 @@ Launchpad v3 uses semantic versioning.
 - Adds support for using Duo as a login provider to authenticate users into Launchpad using OpenID Connect (OIDC). See [Duo Login Provider](./providers/duo.md) for more information.
 - Adds support for configuring a secondary authentication provider for Microsoft Entra users based on app roles. Users with specific app roles assigned in Microsoft Entra will be required to authenticate with an additional provider (such as Duo) after successful Microsoft Entra authentication, providing an extra layer of security. See [Microsoft Entra Secondary Authentication Provider](./providers/microsoft-entra.md#secondary-authentication-provider) for more information.
 - Adds support for Microsoft Entra On-Behalf-Of (OBO) flow for seamless authentication to SSO connections. When enabled, users authenticate once via Azure login and gain seamless access to all connected Stardog instances without interactive sign-in prompts for individual connections. See [On-Behalf-Of (OBO) Flow SSO Connections](./providers/microsoft-entra.md#on-behalf-of-obo-flow-sso-connections) for more information.
-- Adds [button to copy connection JWT token](./README.md#copy-connection-token-button-enabled) and button to copy the endpoint from the connection details in the Launchpad UI for improved user experience.
+- Adds [button to copy connection JWT token](./README.md#copy_connection_token_button_enabled) and button to copy the endpoint from the connection details in the Launchpad UI for improved user experience.
 
 ## 3.3.1 Release (2025-06-20)
 
