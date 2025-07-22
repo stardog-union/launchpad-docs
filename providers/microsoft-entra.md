@@ -523,6 +523,9 @@ This allows you to:
 
 > [!NOTE]
 > This setting only applies when the Entra OBO flow is enabled (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`). Microsoft Entra uses your "Application ID URI" as the base of the exposed scope, which by default is `api://<client-id>`, but this is configurable in your app registration.
+>
+>![Stardog OBO Scope](../assets/entra-obo-scope.png)
+
 
 Example usage:
 ```bash
