@@ -610,7 +610,7 @@ For each Stardog server, create a separate app registration:
 
 ##### Example On-Behalf-Of (OBO) Flow SSO Connection Configuration
 
-With the below configuration, users will authenticate once via the Launchpad Entra login provider and gain automatic access to the Stardog server without additional prompts. User's will click the "Add SSO Connection" button in Launchpad, and select the SSO connection registration named "Entra Development" to connect to the Stardog server.
+With the below configuration, users will authenticate once via the Launchpad Entra login provider and gain automatic access to the Stardog server without additional prompts. User's will click the "Add SSO Endpoint" button in Launchpad, and select the SSO connection "registration" named "Entra Development" to connect to the Stardog server. That's the name defined as the `DISPLAY_NAME` for the connection registration.
 
 ```bash
 AZURE_AUTH_ENABLED=true
@@ -629,6 +629,8 @@ SSOCONNECTION_ENTRA1_AZURE_STARDOG_ENDPOINT="http://localhost:5825"
 # Optional: Custom OBO scope. By default it will use `api://<stardog_client_id>/user_login`
 SSOCONNECTION_ENTRA1_AZURE_OBO_SCOPE="api://custom-stardog/user_login"
 ```
+
+https://github.com/user-attachments/assets/33b62c89-0101-4fa3-947d-ca2838f685cb
 
 #### 3. Configure Stardog Server JWT Authentication
 
