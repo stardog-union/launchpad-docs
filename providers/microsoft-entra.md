@@ -8,10 +8,10 @@ Microsoft Entra can be used both as a login provider to authenticate users into 
 
 - [Login Provider Configuration](#login-provider-configuration)
 - [SSO Connection Configuration](#sso-connection-configuration)
-  - [Traditional SSO Connections](#traditional-sso-connections)
+  - [Interactive (Traditional) SSO Connections](#interactive-traditional-sso-connections)
   - [On-Behalf-Of (OBO) Flow SSO Connections](#on-behalf-of-obo-flow-sso-connections)
 - [How To Create an Entra App Registration to login with Microsoft Entra in Launchpad](#how-to-create-an-entra-app-registration-to-login-with-microsoft-entra-in-launchpad)
-- [Setting up Traditional Microsoft Entra SSO Connections](#setting-up-traditional-microsoft-entra-sso-connections)
+- [Setting up Interactive (Traditional) Microsoft Entra SSO Connections](#setting-up-interactive-traditional-microsoft-entra-sso-connections)
 - [Setting up On-Behalf-Of (OBO) Flow SSO Connections](#setting-up-on-behalf-of-obo-flow-sso-connections) *(Available in Launchpad v3.4.0+)*
 
 ## Login Provider Configuration
@@ -113,17 +113,17 @@ The `AZURE_GRAPH_BASE_URL` is used to set the base URL for the Microsoft Graph A
 
 ### `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED`
 
-The `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED` option enables the [Entra OAuth 2.0 On-Behalf-Of (OBO) flow](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-on-behalf-of-flow) for all Azure SSO connections. The OBO flow means that once you log in to Launchpad with the Azure login provider, you can then authenticate to SSO connections automatically without additional login prompts. When enabled, users authenticate once via Azure and gain seamless access to all connected Stardog instances without interactive sign-in prompts for individual connections.
+The `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED` option enables the [Entra OAuth 2.0 On-Behalf-Of (OBO) flow](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-on-behalf-of-flow) for all Azure SSO connections. The OBO flow means that once you log in to Launchpad with the Azure login provider, you can then authenticate to SSO connections automatically without additional login prompts. When enabled, users authenticate once via Azure and gain non-interactive access to all connected Stardog instances without interactive sign-in prompts for individual connections.
 
 > [!IMPORTANT]
-> Before enabling this flag, ensure you have completed the Microsoft Entra setup required for the OBO flow, as it depends on properly configured API permissions and exposed scopes between your Launchpad and Stardog app registrations. See [Entra On-Behalf-Of (OBO) Flow Setup](#entra-on-behalf-of-obo-flow-setup) for detailed configuration instructions.
+> Before enabling this flag, ensure you have completed the Microsoft Entra setup required for the OBO flow, as it depends on properly configured API permissions and exposed scopes between your Launchpad and Stardog app registrations. See [Setting up On-Behalf-Of (OBO) Flow SSO Connections](#setting-up-on-behalf-of-obo-flow-sso-connections) for detailed configuration instructions.
 
 **When enabled (`true`):**
 - All Azure SSO connections automatically use the OBO flow
-- Users authenticate once via logging into Launchpad and gain seamless access to all connected Stardog instances
+- Users authenticate once via logging into Launchpad and gain non-interactive access to all connected Stardog instances
 - Interactive sign-in prompts for individual connections are eliminated
 - Client secrets are not required for SSO connections
-- Requires corresponding Entra app registration changes (see [Entra OBO Flow Setup](#entra-on-behalf-of-obo-flow-setup))
+- Requires corresponding Entra app registration changes (see [Setting up On-Behalf-Of (OBO) Flow SSO Connections](#setting-up-on-behalf-of-obo-flow-sso-connections))
 
 > [!NOTE]
 > SSO connection registrations and environment variables are still required - OBO eliminates interactive prompts, not the underlying SSO connection setup
@@ -316,25 +316,34 @@ There is no need to set both `AZURE_CLIENT_CERTIFICATE_FILE` and `AZURE_CLIENT_C
 
 Microsoft Entra supports two distinct methods for configuring SSO connections to authenticate users against Stardog endpoints:
 
-1. **Traditional SSO Connections** - Users interactively sign into each SSO connection individually
-2. **On-Behalf-Of (OBO) Flow SSO Connections** - Users authenticate once during login and gain seamless access to all connected Stardog instances without additional prompts
+1. **Interactive (Traditional) SSO Connections** - Users interactively sign into each SSO connection individually
+2. **On-Behalf-Of (OBO) Flow SSO Connections** - Users authenticate once during login and gain non-interactive access to all connected Stardog instances without additional prompts
 
-> [!NOTE]  
-> The choice between these methods affects the user experience and configuration requirements. Traditional connections require individual authentication per connection, while OBO flow provides seamless access after initial login but requires additional Microsoft Entra configuration.
+## SSO Connection Methods Comparison
 
-| Feature | Traditional SSO | OBO Flow SSO |
-|---------|----------------|--------------|
-| **User Experience** | Interactive login for each connection | Single login, seamless access to all connections |
-| **Client Secret** | Required for each connection | Not required |
-| **Microsoft Entra Setup** | Standard app registration | Additional API permissions and scope configuration |
-| **Authentication Prompts** | Per-connection interactive prompts | No additional prompts after initial login |
-| **Global Setting** | Works with `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=false` | Requires `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true` |
+### Interactive (Traditional) SSO Connections
+- **Architecture**: Each Stardog app registration configured for interactive OAuth flows
+- **Stardog Setup**: App registrations with redirect URIs (`{BASE_URL}/auth/sso-connection`)
+- **Launchpad Setup**: Standard login provider configuration
+- **User Experience**: Users authenticate separately for each Stardog connection
+- **Client Secrets**: Required for each Stardog connection
+- **Global Setting**: Works with `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=false` (default)
+- **When to Use**: Launchpad version <`3.4.0`, mixed authentication needs
 
-### Traditional SSO Connections
+### On-Behalf-Of (OBO) Flow SSO Connections  
+- **Architecture**: Launchpad acts as intermediary, requesting tokens on behalf of users
+- **Stardog Setup**: App registrations expose APIs (scopes) instead of redirect flows
+- **Launchpad Setup**: Requires delegated permissions to access each Stardog API
+- **User Experience**: Single login, automatic access to all configured connections
+- **Client Secrets**: Not required (uses delegated permissions)
+- **Global Setting**: Requires `AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`
+- **When to Use**: Streamlined user experience, Launchpad version >=`3.4.0`
 
-The following configuration options are available for traditional Microsoft Entra SSO Connections, where users authenticate interactively for each connection.
+### Interactive (Traditional) SSO Connections
 
-For step-by-step setup instructions, see [Setting up Traditional Microsoft Entra SSO Connections](#setting-up-traditional-microsoft-entra-sso-connections) below.
+The following configuration options are available for interactive (traditional) Microsoft Entra SSO Connections, where users authenticate interactively for each connection.
+
+For step-by-step setup instructions, see [Setting up Interactive (Traditional) Microsoft Entra SSO Connections](#setting-up-interactive-traditional-microsoft-entra-sso-connections) below.
 
 ### `SSOCONNECTION_<unique_identifier>_AZURE_CLIENT_ID`
 
@@ -401,9 +410,9 @@ The `SSOCONNECTION_<unique_identifier>_AZURE_GRAPH_BASE_URL` is used to set the 
 - **Required:** No
 - **Default:** `https://graph.microsoft.com`
 
-## Setting up Traditional Microsoft Entra SSO Connections
+## Setting up Interactive (Traditional) Microsoft Entra SSO Connections
 
-Setting up a traditional Microsoft Entra SSO connection consists of 3 main steps:
+Setting up an interactive (traditional) Microsoft Entra SSO connection consists of 3 main steps:
 
 1. [Creating the Microsoft Entra App Registration](#1-creating-the-microsoft-entra-app-registration)
 2. [Configuring the Launchpad environment variables using the App Registration details](#2-configuring-the-launchpad-environment-variables-using-the-app-registration-details)
@@ -499,7 +508,7 @@ SSOCONNECTION_<unique-identifier>_AZURE_DISPLAY_NAME=<user-facing-display-name> 
 
 ### On-Behalf-Of (OBO) Flow SSO Connections
 
-When the global OBO flow is enabled (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`), all Microsoft Entra SSO connections automatically use the seamless authentication flow. The following configuration options are available for OBO flow SSO connections:
+When the global OBO flow is enabled (`AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true`), all Microsoft Entra SSO connections automatically use the on behalf of authentication flow. The following configuration options are available for OBO flow SSO connections:
 
 For step-by-step setup instructions, see [Setting up On-Behalf-Of (OBO) Flow SSO Connections](#setting-up-on-behalf-of-obo-flow-sso-connections).
 
@@ -508,10 +517,10 @@ For step-by-step setup instructions, see [Setting up On-Behalf-Of (OBO) Flow SSO
 
 The same `SSOCONNECTION_<unique_identifier>_AZURE_*` environment variables are used as with traditional SSO connections, with these key differences:
 - **Client secrets are not required** (`SSOCONNECTION_<unique_identifier>_AZURE_CLIENT_SECRET` can be omitted)  
-- **Interactive authentication prompts are eliminated** - users authenticate seamlessly
+- **Interactive authentication prompts are eliminated** - users authenticate automatically
 - **Additional scope configuration** is available via `SSOCONNECTION_<unique_identifier>_AZURE_OBO_SCOPE`
 
-For complete environment variable documentation, see the [Traditional SSO Connections](#traditional-sso-connections) section above. The OBO-specific configuration option is:
+For complete environment variable documentation, see the [Interactive (Traditional) SSO Connections](#interactive-traditional-sso-connections) section above. The OBO-specific configuration option is:
 
 #### `SSOCONNECTION_<unique_identifier>_AZURE_OBO_SCOPE`
 
@@ -599,6 +608,10 @@ For each Stardog server, create a separate app registration:
    - Add `SSOCONNECTION` environment variables for Launchpad so users can create connections to Stardog using OBO SSO
    - **Note**: No client secret is required when using OBO flow
 
+##### Example On-Behalf-Of (OBO) Flow SSO Connection Configuration
+
+With the below configuration, users will authenticate once via the Launchpad Entra login provider and gain automatic access to the Stardog server without additional prompts. User's will click the "Add SSO Connection" button in Launchpad, and select the SSO connection registration named "Entra Development" to connect to the Stardog server.
+
 ```bash
 AZURE_AUTH_ENABLED=true
 AZURE_CLIENT_ID=<launchpad_client_id>
@@ -607,13 +620,13 @@ AZURE_CLIENT_SECRET=<launchpad_client_secret>
 # Enable OBO flow globally
 AZURE_ON_BEHALF_OF_USER_FLOW_ENABLED=true
 
-# Stardog server SSO connection configuration (no client secret needed)
-# Note: These SSO connection configurations are still required for OBO flow
-SSOCONNECTION_ENTRA1_AZURE_CLIENT_ID="e067faf1-f720-4459-94ba-796ef91225a2"
-SSOCONNECTION_ENTRA1_AZURE_TENANT="ff24ca66-bbaa-4def-8acf-43f2635ada42"
-SSOCONNECTION_ENTRA1_AZURE_DISPLAY_NAME="Entra Development"
+# You would have multiple SSO connection "registrations" for each Stardog server
+# so your users can select which Stardog server to connect to
+SSOCONNECTION_ENTRA1_AZURE_CLIENT_ID=<stardog_client_id>
+SSOCONNECTION_ENTRA1_AZURE_TENANT=<tenant_id>
+SSOCONNECTION_ENTRA1_AZURE_DISPLAY_NAME="Entra Staging"
 SSOCONNECTION_ENTRA1_AZURE_STARDOG_ENDPOINT="http://localhost:5825"
-# Optional: Custom OBO scope
+# Optional: Custom OBO scope. By default it will use `api://<stardog_client_id>/user_login`
 SSOCONNECTION_ENTRA1_AZURE_OBO_SCOPE="api://custom-stardog/user_login"
 ```
 
@@ -622,7 +635,7 @@ SSOCONNECTION_ENTRA1_AZURE_OBO_SCOPE="api://custom-stardog/user_login"
 Even with the OBO flow enabled, each Stardog server must still be configured to accept JWT tokens from Microsoft Entra. The JWT configuration process is identical for both traditional SSO connections and OBO flow connections.
 
 > [!IMPORTANT]
-> This step is required for OBO flow to work. The OBO flow changes how tokens are obtained (seamlessly vs. interactively), but Stardog still needs to be configured to validate and accept those JWT tokens.
+> This step is required for OBO flow to work. The OBO flow changes how tokens are obtained (automatically vs. interactively), but Stardog still needs to be configured to validate and accept those JWT tokens.
 
 For detailed instructions on configuring Stardog's JWT authentication, see:
 - [Configuring the Stardog endpoint to accept JWT tokens from Microsoft Entra App Registration](#3-configuring-the-stardog-endpoint-to-accept-jwt-tokens-from-the-microsoft-entra-app-registration)
@@ -640,4 +653,4 @@ To migrate existing Azure SSO connections to use the Entra OBO flow:
 5. **Test the migration**: Verify that users can authenticate and connect to Stardog instances without interactive prompts
 
 > [!WARNING]
-> Existing SSO connections that relied on interactive authentication will fail once OBO is enabled, since the interactive authentication flow is disabled. Complete the OBO app registration setup before enabling this feature to ensure seamless user experience.
+> Existing SSO connections that relied on interactive authentication will fail once OBO is enabled, since the interactive authentication flow is disabled. Complete the OBO app registration setup before enabling this feature to ensure a non-interactive user experience.
