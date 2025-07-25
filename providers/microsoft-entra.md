@@ -141,7 +141,7 @@ This configuration applies globally to all Azure SSO connections within the Laun
 
 ### Secondary Authentication Provider
 
-Microsoft Entra supports using a secondary authentication provider for users with specific app roles. This feature allows you to require certain users to authenticate with an additional provider (such as Duo) after successfully authenticating with Microsoft Entra, providing an extra layer of security.
+Launchpad's Entra login provider supports using a secondary authentication provider for users with specific app roles. This feature allows you to require certain users to authenticate with an additional provider (such as Duo) after successfully authenticating with Microsoft Entra, providing an extra layer of security.
 
 #### `AZURE_SECONDARY_AUTH_PROVIDER`
 
