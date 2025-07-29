@@ -34,12 +34,22 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| 3.4.0 | `v3.4.0` | [2.47.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2472-release) | [2.13.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2131-release) | [5.7.15](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5715-release) | [1.4.19](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1419-release) |
 | 3.3.1 | `v3.3.1` | [2.46.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2462-release) | [2.11.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2112-release) | [5.7.12](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5712-release) | [1.4.17](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1417-release) |
 | 3.3.0 | `v3.3.0` | [2.46.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2462-release) | [2.11.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2112-release) | [5.7.12](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5712-release) | [1.4.17](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1417-release) |
 | 3.2.0 | `v3.2.0` | [2.45.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2451-release) | [2.10.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2104-release) | [5.7.9](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v579-release) | [1.4.15](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1415-release) |
 | 3.1.0 | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | 3.0.1 | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | 3.0.0 | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.4.0 Release (2025-07-29)
+
+### New Features
+
+- Adds support for using Duo as a login provider to authenticate users into Launchpad using OpenID Connect (OIDC). See [Duo Login Provider](./providers/duo.md) for more information.
+- Adds support for configuring a secondary authentication provider for Microsoft Entra users based on app roles. Users with specific app roles assigned in Microsoft Entra will be required to authenticate with an additional provider (such as Duo) after successful Microsoft Entra authentication, providing an extra layer of security. See [Microsoft Entra Secondary Authentication Provider](./providers/microsoft-entra.md#secondary-authentication-provider) for more information.
+- Adds support for Microsoft Entra On-Behalf-Of (OBO) flow for seamless authentication to SSO connections. When enabled, users authenticate once via Azure login and gain seamless access to all connected Stardog instances without interactive sign-in prompts for individual connections. See [On-Behalf-Of (OBO) Flow SSO Connections](./providers/microsoft-entra.md#on-behalf-of-obo-flow-sso-connections) for more information.
+- Adds [button to copy connection JWT token](./README.md#copy_connection_token_button_enabled) and button to copy the endpoint from the connection details in the Launchpad UI for improved user experience.
 
 ## 3.3.1 Release (2025-06-20)
 
