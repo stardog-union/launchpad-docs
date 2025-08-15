@@ -346,6 +346,10 @@ The Voicebox Service is released independently of Launchpad.
 
 The following table lists all available releases of the Voicebox Service.
 
-| Release | Image Tag |
-| ----- | ----------- |
-| 0.18.9 | `v0.18.9` |
+| Release | Image Tag | Release Date |
+| ----- | ----------- | ----------- |
+| 0.20.1 | `v0.20.1` | Jul 21, 2025 |
+| 0.20.0 | `v0.20.0` | Jul 10, 2025 |
+| 0.19.0 | `v0.19.0` | Jun 20, 2025 |
+| 0.18.10 | `v0.18.10` | May 12, 2025 |
+| 0.18.9 | `v0.18.9` | Apr 17, 2025 |
