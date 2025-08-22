@@ -344,7 +344,7 @@ The following environment variables are used with OpenAI.
 
 The Voicebox Service is released independently of Launchpad. 
 
-All available releases of the Voicebox Service are listed below. The image tag for a release is simple the release name prepended with `v` as in `v0.1.1`.
+All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
 ## 0.20.2 Release (Aug 21, 2025)
 
@@ -352,8 +352,8 @@ All available releases of the Voicebox Service are listed below. The image tag f
 * Improve handling of binary data, date/time fields, and token limits when generating mappings for Designer
 * Return labels of instances from virtual graphs
 
-## 0.20.1 (Jul 21, 2025)
-## 0.20.0 (Jul 10, 2025)
-## 0.19.0 (Jun 20, 2025)
-## 0.18.10 (May 12, 2025)
-## 0.18.9 (Apr 17, 2025)
+## 0.20.1 Release (Jul 21, 2025)
+## 0.20.0 Release (Jul 10, 2025)
+## 0.19.0 Release (Jun 20, 2025)
+## 0.18.10 Release (May 12, 2025)
+## 0.18.9 Release (Apr 17, 2025)
