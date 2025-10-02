@@ -141,6 +141,16 @@ The `SSOCONNECTION_<unique_identifier>_PING_STARDOG_ENDPOINT` is the URL of the 
 - **Required:** No
 - **Default:** not set
 
+### `SSOCONNECTION_<unique_identifier>_PING_STARDOG_INTERNAL_ENDPOINT`
+
+The `SSOCONNECTION_<unique_identifier>_PING_STARDOG_INTERNAL_ENDPOINT` is an additional internal or private endpoint URL for the Stardog server. When configured, this endpoint is used by Launchpad for server-side operations, particularly for the Voicebox service container. This is useful in architectures where backend services cannot access Stardog on the public endpoint but can communicate using an internal endpoint.
+
+> [!NOTE]
+> When both endpoints are configured, Voicebox requests automatically use the internal endpoint while browser-based requests (Studio, Explorer, etc.) continue using the public endpoint. The internal endpoint can be overridden by users under "Advanced Options" in the SSO connection dialog.
+
+- **Required:** No
+- **Default:** not set
+
 ### Setting up a PingOne SSO Connection
 
 > [!IMPORTANT]
