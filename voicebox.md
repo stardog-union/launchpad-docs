@@ -359,13 +359,13 @@ The Voicebox Service is released independently of Launchpad.
 
 ## 0.21.0 Release (Oct 2, 2025)
 
-* Support for competency question evaluation functlinality in Designer
+* Support for competency question evaluation functionality in Designer
 * Use entity summarization from the KG with RAG
 * Add chunk IRIs to the RAG response
 * Handle incomplete tags in LLM output during query generation
 * Support for virtual graphs in Think mode
 * Extend support for local prefixes for plain query-generation
-* Upgrade to debian 13 and pull in OS patches in docker build
+* Upgrade Docker image to use Debian 13 and pull in OS patches
   
 ## 0.20.2 Release (Aug 21, 2025)
 
