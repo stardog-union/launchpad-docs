@@ -368,6 +368,16 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 0.21.0 Release (Oct 2, 2025)
+
+* Support for competency question evaluation functionality in Designer
+* Use entity summarization from the KG with RAG
+* Add chunk IRIs to the RAG response
+* Handle incomplete tags in LLM output during query generation
+* Support for virtual graphs in Think mode
+* Extend support for local prefixes for plain query-generation
+* Upgrade Docker image to use Debian 13 and pull in OS patches
+  
 ## 0.20.2 Release (Aug 21, 2025)
 
 * Fix compatibility issues with AMD processors
