@@ -34,6 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| 3.5.0 | `v3.5.0` | [2.50.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2503-release) | [2.15.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2151-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
 | 3.4.0 | `v3.4.0` | [2.48.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2480-release) | [2.13.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2131-release) | [5.7.15](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5715-release) | [1.4.19](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1419-release) |
 | 3.3.1 | `v3.3.1` | [2.46.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2462-release) | [2.11.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2112-release) | [5.7.12](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5712-release) | [1.4.17](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1417-release) |
 | 3.3.0 | `v3.3.0` | [2.46.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2462-release) | [2.11.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2112-release) | [5.7.12](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5712-release) | [1.4.17](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1417-release) |
@@ -41,6 +42,31 @@ Launchpad v3 uses semantic versioning.
 | 3.1.0 | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | 3.0.1 | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | 3.0.0 | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.5.0 Release (2025-10-02)
+
+- Adds the Launchpad version to header of dashboard
+
+<img width="600" height="524" alt="launchpad-version" src="https://github.com/user-attachments/assets/c27aeef2-d91d-4a52-b807-b24bffa21945" />
+
+- Adds support for saving an additional internal/private endpoint for Stardog connections. The internal endpoint enables Launchpad to use a separate endpoint for server-side operations. This is particularly beneficial for the Voicebox service container, which may not be able to access Stardog on the public endpoint but can communicate using the internal endpoint. This supports architectures where different network routes are required for backend services versus browser-based access (Studio, Explorer, etc).
+
+> [!NOTE]
+> When both endpoints are configured, Voicebox requests will automatically use the internal endpoint while browser-based requests continue using the public endpoint.
+
+  - **SSO Connections** - The internal endpoint can be pre-set similar to the Stardog endpoint or the display name for the SSO connection by using the following environment variable `SSOCONNECTION_<IDENTIFIER>_<PROVIDER>_STARDOG_INTERNAL_ENDPOINT`. It can always be overridden by the user creating the connection under "Advanced Options" in the SSO connection dialog.
+    
+  https://github.com/user-attachments/assets/85ea8c27-0222-4800-bc8c-19931b0317e6
+
+  - **Username/Password Connections** - The internal endpoint can be set under "Advanced Options" in the connection dialog. 
+    
+    <img width="403" height="637" alt="username-password-connection-internal-endpoint" src="https://github.com/user-attachments/assets/e124fc75-7b38-4d39-9429-f342bf36cd10" />
+
+- Adds support for sharing views within Explorer
+
+  https://github.com/user-attachments/assets/18846c17-7099-41cc-b568-720f5d147bf0
+
+
 
 ## 3.4.0 Release (2025-07-29)
 

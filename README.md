@@ -253,4 +253,18 @@ SSOCONNECTION_DEVELOPMENT_AZURE_DISPLAY_NAME=Development
 > [!NOTE]
 > Even if your login provider is the same as your connection provider (e.g. Microsoft Entra), they should be different applications in the SSO provider. This ensures proper security boundaries between Launchpad authentication and Stardog endpoint access.
 
+##### Internal Stardog Endpoint Configuration
+
+SSO connections support configuring an additional internal or private endpoint for server-side operations using the `SSOCONNECTION_<unique_identifier>_<provider_identifier>_STARDOG_INTERNAL_ENDPOINT` environment variable. This is particularly beneficial for the Voicebox service container, which may not be able to access Stardog on the public endpoint but can communicate using an internal endpoint.
+
+```bash
+SSOCONNECTION_DEVELOPMENT_AZURE_STARDOG_INTERNAL_ENDPOINT=http://stardog-internal:5820
+```
+
+When both public and internal endpoints are configured:
+- **Browser-based requests** (Studio, Explorer, Designer, Knowledge Catalog) use the public endpoint
+- **Server-side requests** (Voicebox) automatically use the internal endpoint
+
+This supports architectures where different network routes are required for backend services versus browser-based access. Users can override the internal endpoint in the "Advanced Options" section when creating SSO connections in the Launchpad UI.
+
 For detailed setup instructions for each provider, see the individual provider configuration guides linked in the table above.
