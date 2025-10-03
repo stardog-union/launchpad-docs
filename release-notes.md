@@ -54,7 +54,7 @@ Launchpad v3 uses semantic versioning.
 > [!NOTE]
 > When both endpoints are configured, Voicebox requests will automatically use the internal endpoint while browser-based requests continue using the public endpoint.
 
-  - **SSO Connections** - The internal endpoint can be pre-set similar Stardog endpoint or display name for the sso connection by using the following environment variable `SSOCONNECTION_<IDENTIFIER>_<PROVIDER>_STARDOG_INTERNAL_ENDPOINT`. It can always be overridden by the user creating the connection under "Advanced Options" in the SSO connection dialog.
+  - **SSO Connections** - The internal endpoint can be pre-set similar to the Stardog endpoint or the display name for the SSO connection by using the following environment variable `SSOCONNECTION_<IDENTIFIER>_<PROVIDER>_STARDOG_INTERNAL_ENDPOINT`. It can always be overridden by the user creating the connection under "Advanced Options" in the SSO connection dialog.
     
   https://github.com/user-attachments/assets/85ea8c27-0222-4800-bc8c-19931b0317e6
 
