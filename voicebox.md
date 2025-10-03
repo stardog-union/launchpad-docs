@@ -106,7 +106,7 @@ The Voicebox Service is distributed as a Docker image. The Voicebox Service is a
 
 ### Internal Stardog Endpoint Support
 
-When Voicebox makes requests to Stardog servers, it uses server-side connections that may require different network routing than browser-based requests. To support architectures where the Voicebox service container cannot access Stardog on public endpoints, Launchpad v3.5.0+ allows you to configure an additional internal endpoint for connections.
+When Voicebox makes requests to Stardog servers, it uses server-side connections that may require different network routing than browser-based requests. To support architectures where the Voicebox service container cannot access Stardog on the public endpoint, Launchpad v3.5.0+ allows you to configure an additional internal endpoint for connections.
 
 When an internal endpoint is configured for a connection, Voicebox automatically uses the internal endpoint while browser-based applications (Studio, Explorer, Designer, Knowledge Catalog) continue using the public endpoint. This is particularly useful in scenarios where:
 - Stardog is behind a firewall accessible only within a private network
