@@ -62,6 +62,11 @@ Launchpad v3 uses semantic versioning.
     
     <img width="403" height="637" alt="username-password-connection-internal-endpoint" src="https://github.com/user-attachments/assets/e124fc75-7b38-4d39-9429-f342bf36cd10" />
 
+- Adds support for sharing views within Explorer
+
+  https://github.com/user-attachments/assets/18846c17-7099-41cc-b568-720f5d147bf0
+
+
 
 ## 3.4.0 Release (2025-07-29)
 
