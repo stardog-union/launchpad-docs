@@ -58,7 +58,7 @@ Launchpad v3 uses semantic versioning.
     
   https://github.com/user-attachments/assets/85ea8c27-0222-4800-bc8c-19931b0317e6
 
-  - **Username/Password Connections** - The internal endpoint can be set under "Advanced Options" in the SSO connection dialog. 
+  - **Username/Password Connections** - The internal endpoint can be set under "Advanced Options" in the connection dialog. 
     
     <img width="403" height="637" alt="username-password-connection-internal-endpoint" src="https://github.com/user-attachments/assets/e124fc75-7b38-4d39-9429-f342bf36cd10" />
 
