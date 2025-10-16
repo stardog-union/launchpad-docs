@@ -368,6 +368,11 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 0.22.0 Release (Oct 16, 2025)
+
+* Support for generating SPARQL queries for competenecy questions in Designer
+* Include Voicebox core version in the diagnostics report
+
 ## 0.21.0 Release (Oct 2, 2025)
 
 * Support for competency question evaluation functionality in Designer
