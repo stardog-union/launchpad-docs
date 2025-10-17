@@ -34,6 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| 3.6.0 | `v3.6.0` | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v330-release) | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v300-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
 | 3.5.0 | `v3.5.0` | [2.50.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2503-release) | [2.15.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2151-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
 | 3.4.0 | `v3.4.0` | [2.48.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2480-release) | [2.13.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2131-release) | [5.7.15](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5715-release) | [1.4.19](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1419-release) |
 | 3.3.1 | `v3.3.1` | [2.46.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2462-release) | [2.11.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2112-release) | [5.7.12](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5712-release) | [1.4.17](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1417-release) |
@@ -43,7 +44,46 @@ Launchpad v3 uses semantic versioning.
 | 3.0.1 | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | 3.0.0 | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
 
+## 3.6.0 Release (2025-10-20)
+
+### New Features
+
+> [!IMPORTANT]
+> **Recommended Stardog Version:** [`v11.2.0+`](https://docs.stardog.com/release-notes/stardog-platform#1120-release-2025-10-01)
+> 
+> **Recommended Voicebox Service Version:** [`v0.22.0+`](./voicebox.md#0220-release-oct-16-2025)
+>
+> If you intend to use "Think Mode" or the "Voicebox Suggestions" feature in Designer, you **must** use `v0.22.0+` of the Voicebox Service.
+
+- Adds "Think Mode" option for Voicebox. Powered by a multi-agent architecture and the new and improved Voicebox 3, Think Mode enables chain-of-thought reasoning to handle complex, multi-step questions.
+
+> [!NOTE]
+> To enable this option for your users in your Launchpad deployment, you should add the following environment variable to your configuration:
+>
+>```bash
+>VOICEBOX_THREE_ENABLED=true
+>```
+>
+> After enabling this setting, users should see a "Think Mode" button in the input to ask Voicebox questions.
+>
+> <img width="1392" height="1149" alt="think-mode-screenshot" src="https://github.com/user-attachments/assets/1fcc15db-b711-44e7-9c3f-c0c53baa3aca" />
+
+-  Adds "Voicebox Suggestions" for Designer. This makes it possible to create a Voicebox enabled Knowledge Graph, complete with spotlight questions, from just a project description, input data, and a few clicks.
+
+> [!NOTE]
+> To enable this option for your users in your Launchpad deployment, you should add the following environment variable to your configuration:
+>
+>```bash
+>VOICEBOX_SUGGESTIONS_ENABLED=true
+>```
+
+### Bug Fixes
+
+- Do not show Voicebox in the Launchpad UI if the `VOICEBOX_SERVICE_ENDPOINT` is not set for Launchpad
+
 ## 3.5.0 Release (2025-10-02)
+
+### New Features
 
 - Adds the Launchpad version to header of dashboard
 
