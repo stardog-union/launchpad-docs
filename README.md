@@ -207,6 +207,26 @@ The `VOICEBOX_SERVICE_ENDPOINT` is used to specify the endpoint for the [Voicebo
 - **Required:** No
 - **Default:** not set
 
+#### `VOICEBOX_THREE_ENABLED`
+
+The `VOICEBOX_THREE_ENABLED` option enables the "Think Mode" feature in Voicebox, which uses a multi-agent architecture and Voicebox 3 to enable chain-of-thought reasoning for handling complex, multi-step questions. When enabled, users will see a "Think Mode" button in the Voicebox input interface.
+
+> [!IMPORTANT]
+> This feature requires Voicebox Service version `v0.22.0+`. See the [Voicebox Release Notes](./voicebox.md#0220-release-oct-16-2025) for more information.
+
+- **Required:** No
+- **Default:** `false`
+
+#### `VOICEBOX_SUGGESTIONS_ENABLED`
+
+The `VOICEBOX_SUGGESTIONS_ENABLED` option enables the "Voicebox Suggestions" feature in Designer. This makes it possible to create a Voicebox-enabled Knowledge Graph, complete with spotlight questions, from just a project description, input data, and a few clicks. When enabled, users will see the new Voicebox-assisted project creation flow when creating a new project in Designer.
+
+> [!IMPORTANT]
+> This feature requires Voicebox Service version `v0.22.0+`. See the [Voicebox Release Notes](./voicebox.md#0220-release-oct-16-2025) for more information.
+
+- **Required:** No
+- **Default:** `false`
+
 #### `COPY_CONNECTION_TOKEN_BUTTON_ENABLED`
 
 The `COPY_CONNECTION_TOKEN_BUTTON_ENABLED` option controls whether the "Copy Token" button is displayed on Stardog connection pages, allowing users to copy the JWT authentication token to their clipboard. Administrators can disable this button if they prefer not to expose this functionality to users.
