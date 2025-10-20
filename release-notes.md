@@ -76,6 +76,11 @@ Launchpad v3 uses semantic versioning.
 >```bash
 >VOICEBOX_SUGGESTIONS_ENABLED=true
 >```
+>
+> After enabling this setting, users should see the new Voicebox assisted new project flow when creating a new project in Designer.
+>
+> <img width="1465" height="722" alt="Screenshot 2025-10-20 at 9 26 09 AM" src="https://github.com/user-attachments/assets/6c3d78ac-8129-42ef-9dd5-4228501f3653" />
+
 
 ### Bug Fixes
 
