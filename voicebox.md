@@ -2,7 +2,39 @@
 
 [Stardog Voicebox](https://docs.stardog.com/voicebox/) is a conversational AI chat interface for your Enterprise Data. This document provides instructions for using Voicebox within Launchpad.
 
-Launchpad can operate with or without the Voicebox. To enable Voicebox, you’ll need to run an additional Docker image ([Voicebox Service](#voicebox-service)) and provide its address to Launchpad. The two services communicate over HTTP.
+Launchpad can operate with or without the Voicebox. To enable Voicebox, you'll need to run an additional Docker image ([Voicebox Service](#voicebox-service)) and provide its address to Launchpad. The two services communicate over HTTP.
+
+## Voicebox Features
+
+### Think Mode
+
+Think Mode is powered by a multi-agent architecture and Voicebox 3, enabling chain-of-thought reasoning to handle complex, multi-step questions. When enabled, users will see a "Think Mode" button in the Voicebox input interface.
+
+![Think Mode Screenshot](https://github.com/user-attachments/assets/1fcc15db-b711-44e7-9c3f-c0c53baa3aca)
+
+To enable Think Mode in your Launchpad deployment, add the following environment variable to your Launchpad configuration:
+
+```bash
+VOICEBOX_THREE_ENABLED=true
+```
+
+> [!IMPORTANT]
+> Think Mode requires Voicebox Service version `v0.22.0+` and Stardog version `v11.2.0+`. See the [Voicebox Release Notes](#0220-release-oct-16-2025) and [Stardog Release Notes](https://docs.stardog.com/release-notes/stardog-platform#1120-release-2025-10-01) for more information.
+
+### Voicebox Suggestions for Designer
+
+Voicebox Suggestions makes it possible to create a Voicebox-enabled Knowledge Graph, complete with spotlight questions, from just a project description, input data, and a few clicks. When enabled, users will see the new Voicebox-assisted project creation flow when creating a new project in Designer.
+
+![Voicebox Suggestions Screenshot](https://github.com/user-attachments/assets/6c3d78ac-8129-42ef-9dd5-4228501f3653)
+
+To enable Voicebox Suggestions in your Launchpad deployment, add the following environment variable to your Launchpad configuration:
+
+```bash
+VOICEBOX_SUGGESTIONS_ENABLED=true
+```
+
+> [!IMPORTANT]
+> Voicebox Suggestions requires Voicebox Service version `v0.22.0+` and Stardog version `v11.2.0+`. See the [Voicebox Release Notes](#0220-release-oct-16-2025) and [Stardog Release Notes](https://docs.stardog.com/release-notes/stardog-platform#1120-release-2025-10-01) for more information.
 
 ## Using Voicebox Programmatically
 
