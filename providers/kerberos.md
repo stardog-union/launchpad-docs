@@ -60,7 +60,7 @@ KERBEROS_KEYTAB=/kerberos-config/launchpad.keytab
 >  -p 8080:8080 \
 >  -v /path/to/launchpad/data:/data \
 >  -v /path/to/launchpad-mount/launchpad.keytab:/kerberos-config/launchpad.keytab \
->  stardog-stardog-apps.jfrog.io/launchpad:current
+>  stardog/launchpad:<tag>
 >```
 
 4. Configure your browser to negotiate Kerberos authentication with Launchpad. 
