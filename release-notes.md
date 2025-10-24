@@ -12,7 +12,7 @@ The latest release of Launchpad is available from Stardog's [Docker Hub reposito
 docker login
 ```
 
-2. Pull the latest image (replace `<tag>` with the Launchpad release you want to run, for example `v3.6.0`):
+2. Pull the image, replacing `<tag>` with the Launchpad release you want to run, for example `current` or `v3.6.0`:
 
 ```bash
 docker pull stardog/launchpad:<tag>

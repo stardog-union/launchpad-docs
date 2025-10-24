@@ -30,7 +30,7 @@ This is the general guide to getting Launchpad up and running. For more detailed
     - An SSO provider to log users in with (e.g. Microsoft Entra)
     - A Stardog endpoint to connect to 
 
-1. Pull the Docker Image
+1. Pull the image from Docker Hub
 
    - (Optional) Authenticate with Docker Hub if required in your environment.
 
@@ -38,11 +38,14 @@ This is the general guide to getting Launchpad up and running. For more detailed
     docker login
     ```
 
-   - Pull the Launchpad Docker image (replace `<tag>` with your desired Launchpad release, for example `v3.6.0`).
+   - Pull the Launchpad Docker image (replace `<tag>` with your desired Launchpad release, for example `current` or `v3.6.0`).
 
-    ```bash
-    docker pull stardog/launchpad:<tag>
-    ```
+   ```bash
+   docker pull stardog/launchpad:<tag>
+   ```
+
+> [!NOTE]
+> Existing customers with access to Stardog's private JFrog Artifactory can continue to pull Launchpad images from `stardog-stardog-apps.jfrog.io/launchpad:<tag>`. Authenticate with `docker login stardog-stardog-apps.jfrog.io` before pulling if your environment still relies on that registry.
 
 2. Configure Launchpad and optionally your Stardog servers.
    - Launchpad must be configured with an SSO provider to log users in with.
