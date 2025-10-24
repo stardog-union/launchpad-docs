@@ -4,25 +4,25 @@ Stardog Launchpad is distributed as a Docker image, which includes the Launchpad
 
 ## Getting the Current Version of Launchpad
 
-The latest release of Launchpad is available from Stardog's Docker registry:
+The latest release of Launchpad is available from Stardog's [Docker Hub repository](https://hub.docker.com/r/stardog/launchpad):
 
-1. Log in to the Docker registry:
+1. (Optional) Authenticate with Docker Hub:
 
 ```bash
-docker login stardog-stardog-apps.jfrog.io
+docker login
 ```
 
-2. Pull the latest image:
+2. Pull the image, replacing `<tag>` with the Launchpad release you want to run, for example `current` or `v3.6.0`:
 
 ```bash
-docker pull stardog-stardog-apps.jfrog.io/launchpad:current
+docker pull stardog/launchpad:<tag>
 ```
 
 > [!IMPORTANT]
-> The `current` tag always points to the latest release of Launchpad. You can also pull a specific version of Launchpad by using the version tag, for example, `v3.0.1`.
+> To pull a specific version of Launchpad, use the version tag shown on Docker Hub. For example:
 >
 >```bash
->docker pull stardog-stardog-apps.jfrog.io/launchpad:v3.0.1 
+>docker pull stardog/launchpad:v3.6.0
 >```
 
 
@@ -171,7 +171,7 @@ Launchpad v3 uses semantic versioning.
 >      --env-file /path/to/launchpad/.env.launchpad \
 >      -p 8080:8080 \
 >      -v /path/to/launchpad/data:/data \
->      stardog-stardog-apps.jfrog.io/launchpad:current
+>      stardog/launchpad:<tag>
 >```
 >
 > On Linux, you will want to ensure that the user id you specify has the appropriate permissions to access the files and directories used by Launchpad. macOS handles file permissions differently, so you may not need to change the ownership of the files and directories. However, if you are running Launchpad on Linux and using a numeric user id, you may need to change the ownership of the files and directories used by Launchpad to match the user id you specified. For example, if you are using a user id of `1001`, you can use the following command to change the ownership of the files and directories:

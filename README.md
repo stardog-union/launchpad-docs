@@ -30,19 +30,22 @@ This is the general guide to getting Launchpad up and running. For more detailed
     - An SSO provider to log users in with (e.g. Microsoft Entra)
     - A Stardog endpoint to connect to 
 
-1. Pull the Docker Image
+1. Pull the image from Docker Hub
 
-   - Log in to Stardog's Docker registry
-
-    ```bash
-    docker login stardog-stardog-apps.jfrog.io
-    ```
-
-   - Pull the Launchpad Docker image
+   - (Optional) Authenticate with Docker Hub if required in your environment.
 
     ```bash
-    docker pull stardog-stardog-apps.jfrog.io/launchpad:current
+    docker login
     ```
+
+   - Pull the Launchpad Docker image (replace `<tag>` with your desired Launchpad release, for example `current` or `v3.6.0`).
+
+   ```bash
+   docker pull stardog/launchpad:<tag>
+   ```
+
+> [!NOTE]
+> Existing customers with access to Stardog's private JFrog Artifactory can continue to pull Launchpad images from `stardog-stardog-apps.jfrog.io/launchpad:<tag>`. Authenticate with `docker login stardog-stardog-apps.jfrog.io` before pulling if your environment still relies on that registry.
 
 2. Configure Launchpad and optionally your Stardog servers.
    - Launchpad must be configured with an SSO provider to log users in with.
@@ -58,10 +61,11 @@ This is the general guide to getting Launchpad up and running. For more detailed
       --env-file /path/to/launchpad/.env.launchpad \
       -p 8080:8080 \
       -v /path/to/launchpad/data:/data \
-      stardog-stardog-apps.jfrog.io/launchpad:current
+      stardog/launchpad:<tag>
     ```
 
     - The `--env-file` flag should point to a file containing the environment variables for Launchpad. See the [Configuration](#configuration) section for more information.
+    - Use the same `<tag>` you pulled in the previous step to run the expected Launchpad version.
     - The container exposes port `8080`, which can be mapped to any port on the host machine.
     - `/data` is the directory where Launchpad will persist data. **This should be mounted to a volume for persistence**.
 
@@ -87,7 +91,7 @@ docker run \
   --env-file /path/to/launchpad/.env.launchpad \
   -p 8080:8080 \
   -v /path/to/launchpad/data:/data \
-  stardog-stardog-apps.jfrog.io/launchpad:current
+  stardog/launchpad:<tag>
 ```
 
 > [!IMPORTANT]
