@@ -34,7 +34,8 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
-| [3.6.0](#360-release-2025-10-20) | `v3.6.0` | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v330-release) | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v300-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
+| [3.6.1](#361-release-2025-10-30) | `v3.6.1` | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v300-release) | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v300-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
+| [3.6.0](#360-release-2025-10-20) | `v3.6.0` | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v300-release) | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v300-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
 | [3.5.0](#350-release-2025-10-02) | `v3.5.0` | [2.50.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2503-release) | [2.15.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2151-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
 | [3.4.0](#340-release-2025-07-29) | `v3.4.0` | [2.48.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2480-release) | [2.13.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2131-release) | [5.7.15](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5715-release) | [1.4.19](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1419-release) |
 | [3.3.1](#331-release-2025-06-20) | `v3.3.1` | [2.46.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2462-release) | [2.11.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2112-release) | [5.7.12](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5712-release) | [1.4.17](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1417-release) |
@@ -43,6 +44,12 @@ Launchpad v3 uses semantic versioning.
 | [3.1.0](#310-release-2025-04-03) | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | [3.0.1](#301-release-2025-02-21) | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | [3.0.0](#300-release-2025-01-30) | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.6.1 Release (2025-10-30)
+
+## Bug Fixes
+
+- Fixes an issue where Voicebox requests to generate charts and do analysis based on a Voicebox response were failing for SSO connections. 
 
 ## 3.6.0 Release (2025-10-20)
 
