@@ -401,7 +401,7 @@ The Voicebox Service is released independently of Launchpad.
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
 
-## 0.20.3 Release (Nov 19, 2025)
+## 0.23.0 Release (Nov 19, 2025)
 
 * Several improvements to Think Mode
   * Better handle large outputs
