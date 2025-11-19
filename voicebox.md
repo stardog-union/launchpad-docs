@@ -400,6 +400,22 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+
+## 0.20.3 Release (Nov 19, 2025)
+
+* Several improvements to Think Mode
+  * Better handle large outputs
+  * Improve responses when an answer is not found
+  * Support user-configured LLMs for powering Think Mode
+* Enhancements to model and mapping creation in Designer
+  * Create more detailed project summaries using markdown
+  * Improve evaluation of competency questions
+  * Generate synthetic data
+* Increase default max token configuration for query generation
+* Handle escaped characters that are included in generated queries
+* Consider inferences when computing query lineage
+* Update dependencies to address vulnerabilities
+
 ## 0.22.0 Release (Oct 16, 2025)
 
 * Support for generating SPARQL queries for competenecy questions in Designer
