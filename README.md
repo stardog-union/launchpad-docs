@@ -131,7 +131,7 @@ SSL_CERTIFICATE_FILE=<path_in_the_launchpad_container_to_launchpad-ssl.cert.pem>
 SSL_PRIVATE_KEY_FILE=<path_in_the_launchpad_container_to_launchpad-ssl.key.pem>
 ```
 
-You need to provide Launchpad with a certificate and the corresponding private key file, so that it can terminate SSL/TLS connections originating from a user's web browser. The certificate and private key files must be included in Launchpad's container; this can be done by mounting the directory containing the files as a volume in Launchpad's container.
+You need to provide Launchpad with a certificate and the corresponding private key file so that it can terminate SSL/TLS connections originating from a user's web browser. The certificate and private key files must be included in Launchpad's container; this can be done by mounting the directory containing the files as a volume in Launchpad's container.
 
 > [!NOTE]
 > Launchpad uses Nginx internally as the reverse proxy when `SSL_ENABLED=true`. The Nginx website provides additional information about its [certificate requirements](https://nginx.org/en/docs/http/configuring_https_servers.html).
