@@ -4,6 +4,9 @@
 
 Okta can be used both as a login provider to authenticate users into Launchpad and as an SSO connection provider to authenticate users against Stardog endpoints.
 
+> [!TIP]
+> For Voicebox JWT authentication with Okta (On-Behalf-Of token exchange flow), see [JWT Authentication & Token Exchange](../voicebox.md#jwt-authentication--token-exchange).
+
 ## Login Provider Configuration
 
 The following configuration options are available for Okta SSO.
@@ -64,6 +67,44 @@ The `OKTA_POST_LOGOUT_REDIRECT_URI` is the URL that users will be redirected to 
 > The URL must be registered in the Okta Application or the user will not be redirected.
 
 - **Required:** No
+- **Default:** not set
+
+### `OKTA_AUTHORIZATION_SERVER_ID`
+
+The `OKTA_AUTHORIZATION_SERVER_ID` is the ID of the custom authorization server in Okta. This is required when using JWT authentication for Voicebox service communication.
+
+- **Required:** No (only required for [JWT Authentication](../voicebox.md#jwt-authentication--token-exchange))
+- **Default:** not set
+
+### `OKTA_AUTHORIZATION_SERVER_AUDIENCE`
+
+The `OKTA_AUTHORIZATION_SERVER_AUDIENCE` is the audience value configured in the custom authorization server. This value is used for token validation and must match across Launchpad and Voicebox Service configurations.
+
+- **Required:** No (only required for [JWT Authentication](../voicebox.md#jwt-authentication--token-exchange))
+- **Default:** not set
+
+### `OKTA_BACKEND_CLIENT_ID`
+
+The `OKTA_BACKEND_CLIENT_ID` is the client ID of the Okta API Services application used by Launchpad to perform On-Behalf-Of (OBO) token exchange for the Voicebox service.
+
+- **Required:** No (only required for [JWT Authentication](../voicebox.md#jwt-authentication--token-exchange))
+- **Default:** not set
+
+### `OKTA_BACKEND_CLIENT_SECRET`
+
+The `OKTA_BACKEND_CLIENT_SECRET` is the client secret of the Okta API Services application used for OBO token exchange.
+
+- **Required:** No (only required for JWT Authentication if not using `OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE`)
+- **Default:** not set
+
+### `OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE`
+
+The `OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE` is the path (in the Docker container) to the private key file for the Okta API Services application used for OBO token exchange.
+
+> [!NOTE]
+> If both `OKTA_BACKEND_CLIENT_SECRET` and `OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE` are configured, private key authentication takes precedence.
+
+- **Required:** No (only required for JWT Authentication if not using `OKTA_BACKEND_CLIENT_SECRET`)
 - **Default:** not set
 
 ### How to Create an Okta Application to login with Okta in Launchpad

@@ -252,6 +252,15 @@ The `VOICEBOX_SERVICE_ENDPOINT` option is used to specify the endpoint for the [
 - **Required:** No
 - **Default:** not set
 
+#### `VOICEBOX_SERVICE_SCOPE`
+
+The `VOICEBOX_SERVICE_SCOPE` is used to specify the OAuth scope for Voicebox service authentication when using JWT-based authentication with Okta. This enables the On-Behalf-Of (OBO) token exchange flow between Launchpad and the Voicebox Service.
+
+See [JWT Authentication & Token Exchange](./voicebox.md#jwt-authentication--token-exchange) for complete setup instructions.
+
+- **Required:** No (only required when using JWT authentication)
+- **Default:** not set
+
 #### `VOICEBOX_THREE_ENABLED`
 
 The `VOICEBOX_THREE_ENABLED` option enables the "Think Mode" feature in Voicebox, which uses a multi-agent architecture and Voicebox 3 to enable chain-of-thought reasoning for handling complex, multi-step questions. When enabled, users will see a "Think Mode" button in the Voicebox input interface.
@@ -280,6 +289,69 @@ The `COPY_CONNECTION_TOKEN_BUTTON_ENABLED` option controls whether the "Copy Tok
 
 - **Required:** No
 - **Default:** `true`
+
+### Public API JWT Authentication Configuration
+
+The following environment variables configure JWT-based authentication for the Launchpad public API (`/api/v1/*`). This allows external applications to access the Voicebox API using access tokens from an identity provider.
+
+See [Public API Authentication (JWT)](./voicebox.md#public-api-authentication-jwt) for complete setup instructions.
+
+#### `API_AUTH_JWT_ENABLED`
+
+The `API_AUTH_JWT_ENABLED` option enables JWT-based authentication for the public API. When enabled, API clients must provide an access token in the `Authorization` header.
+
+- **Required:** No
+- **Default:** `false`
+
+#### `API_AUTH_JWKS_URI`
+
+The `API_AUTH_JWKS_URI` is the URL to fetch public keys (JWKS) for validating access tokens.
+
+- **Required:** Yes (if `API_AUTH_JWT_ENABLED=true`)
+- **Default:** not set
+
+#### `API_AUTH_ISSUER`
+
+The `API_AUTH_ISSUER` is the expected issuer (`iss`) claim in access tokens.
+
+- **Required:** Yes (if `API_AUTH_JWT_ENABLED=true`)
+- **Default:** not set
+
+#### `API_AUTH_AUDIENCE`
+
+The `API_AUTH_AUDIENCE` is the expected audience (`aud`) claim in access tokens.
+
+- **Required:** Yes (if `API_AUTH_JWT_ENABLED=true`)
+- **Default:** not set
+
+#### `API_AUTH_REQUIRED_SCOPES`
+
+The `API_AUTH_REQUIRED_SCOPES` is a comma-separated list of scopes that must be present in the access token.
+
+- **Required:** No
+- **Default:** not set
+
+#### `API_AUTH_SCOPE_CLAIM_NAME`
+
+The `API_AUTH_SCOPE_CLAIM_NAME` specifies the name of the claim containing scopes in the access token.
+
+- **Required:** No
+- **Default:** `scp` (falls back to `scope` if not found)
+
+#### `API_AUTH_JWT_ALGORITHMS`
+
+The `API_AUTH_JWT_ALGORITHMS` specifies the allowed signing algorithms for access tokens.
+
+- **Required:** No
+- **Default:** `RS256`
+
+#### `API_AUTH_ACCESS_TOKEN_IDP`
+
+The `API_AUTH_ACCESS_TOKEN_IDP` specifies which identity provider to use for OBO token exchange when public API clients provide access tokens. This is required when multiple login providers are enabled.
+
+- **Required:** Yes (if multiple login providers are enabled)
+- **Default:** not set
+- **Valid values:** `okta`
 
 ### Provider Configuration
 

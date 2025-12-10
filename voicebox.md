@@ -393,6 +393,372 @@ The following environment variables are used with OpenAI.
 | --- | --- | --- |
 | `OPENAI_API_KEY` | `Y` | OpenAI API key |
 
+## JWT Authentication & Token Exchange
+
+> [!IMPORTANT]
+> This JWT authentication flow is currently only supported with **Okta** as the identity provider.
+
+When deploying Voicebox in enterprise environments, you can enable JWT-based authentication to secure communication between services. This establishes a chain of trust from the user through to the LLM provider:
+
+```
+User → Launchpad → Voicebox Service → LLM Gateway (proxy to LLM provider)
+```
+
+**Authentication Flow Overview:**
+
+1. **User authenticates** with Launchpad via Okta
+2. **Launchpad exchanges** the user's token for a Voicebox service token using OAuth 2.0 On-Behalf-Of (OBO) flow
+3. **Voicebox Service validates** the incoming token and exchanges it for an LLM Gateway token
+4. **LLM Gateway** (a proxy that routes requests to your LLM provider like Azure OpenAI) **receives** a scoped token that can be traced back to the original user
+
+This architecture provides:
+- **Scoped Authorization**: Each service receives only the permissions it needs
+- **Audit Trail**: User identity flows through the entire chain for compliance
+- **Independent Control**: Access to each service can be managed separately
+
+> [!IMPORTANT]
+> This authentication flow requires using an **OpenAI-compatible LLM provider** (`llm_provider: openai` in your Voicebox configuration). Token exchange for the LLM Gateway is not supported with other providers (Bedrock, Databricks, etc.).
+
+### Okta Authorization Server Setup
+
+#### Authorization Server Architecture
+
+The authentication chain involves multiple components. Launchpad (login and backend) and Voicebox Service **must** use the same authorization server. Other components can optionally use different authorization servers.
+
+| Component | Can Use Different Auth Server? | Notes |
+| --- | --- | --- |
+| Launchpad Login App | Yes (base) | This is the primary authorization server |
+| Launchpad Backend App | **No** | Must use the same authorization server as the Login App |
+| Voicebox Service | **No** | Must use the same authorization server as Launchpad |
+| Public API Client | Yes | If using a different auth server for the Public API, add Launchpad's auth server as a trusted server |
+| LLM Gateway | Yes | If using a different auth server, add Voicebox's auth server as a trusted server |
+
+> [!IMPORTANT]
+> When using different authorization servers for external components (Public API Client or LLM Gateway), you must configure **trusted server** relationships in Okta. The authorization server that issues tokens for a downstream service must trust the authorization server that issued the incoming tokens.
+>
+> To add a trusted server: In your authorization server settings, navigate to the trusted servers configuration and add the issuer URL of the upstream authorization server.
+
+#### Step 1: Create or Configure a Custom Authorization Server
+
+1. In the Okta Admin Console, navigate to **Security** → **API** → **Authorization Servers**
+2. Click **Add Authorization Server** (or use an existing custom server)
+3. Configure the server:
+   - **Name**: e.g., "Stardog Services"
+   - **Audience**: e.g., `stardog-services` (note this value - it will be used in multiple places)
+4. After saving, note the **Authorization Server ID** from the Metadata URI:
+   ```
+   https://{domain}/oauth2/{AUTHORIZATION_SERVER_ID}/.well-known/oauth-authorization-server
+   ```
+
+#### Step 2: Create Required Scopes
+
+Create custom scopes for accessing the Voicebox service and LLM Gateway.
+
+1. In your authorization server, go to the **Scopes** tab
+2. Click **Add Scope** and create the following scopes:
+
+| Scope Name | Description |
+| --- | --- |
+| `voicebox` | Access to Voicebox service (used by Launchpad → Voicebox). You can name this whatever you prefer. |
+| `ai-gateway` | Access to LLM Gateway (used by Voicebox → LLM Gateway). This must match the scope your LLM Gateway/proxy expects for authentication. |
+
+> [!NOTE]
+> If your LLM Gateway uses a **different authorization server** than Launchpad/Voicebox, the `ai-gateway` scope must be created on (or already exist in) **that** authorization server, not the one documented here. The scope name must match what the LLM Gateway expects for authentication.
+
+#### Step 3: Create a Backend API Services Application for Launchpad
+
+Okta requires a separate API Services application to perform token exchange operations. This is different from the web application used for user login.
+
+1. Navigate to **Applications** → **Applications**
+2. Click **Create App Integration**
+3. Select **API Services** as the application type
+4. Configure:
+   - **App integration name**: e.g., "Launchpad Backend"
+5. After creation, under **General**:
+   - Note the **Client ID** (for `OKTA_BACKEND_CLIENT_ID`)
+   - Note the **Client Secret** (for `OKTA_BACKEND_CLIENT_SECRET`), or configure public/private key authentication
+   - Do NOT check "Require Demonstrating Proof of Possession (DPoP) header in token requests"
+6. Under **General** → **Advanced** → **Non-interactive grants**:
+   - Check **Token Exchange**
+
+#### Step 4: Create an API Services Application for Voicebox Service
+
+Create another API Services application for the Voicebox Service to exchange tokens for LLM Gateway access.
+
+1. Navigate to **Applications** → **Applications**
+2. Click **Create App Integration** → **API Services**
+3. Configure:
+   - **App integration name**: e.g., "Voicebox Service"
+4. Under **General**:
+   - Note the **Client ID** (for Voicebox's `OKTA_CLIENT_ID`)
+   - Configure client secret or private key authentication
+   - Do NOT check "Require Demonstrating Proof of Possession (DPoP) header in token requests"
+5. Under **General** → **Advanced** → **Non-interactive grants**:
+   - Check **Token Exchange**
+
+#### Step 5: Configure Access Policies
+
+Create access policies in your authorization server to control token issuance for each application.
+
+**Policy 1: Launchpad Login Policy**
+
+This policy allows users to log into Launchpad via the web application.
+
+1. In your authorization server, go to **Access Policies** tab
+2. Click **Add Policy**
+3. Configure:
+   - **Name**: "Launchpad Login Policy"
+   - **Assign to**: Select your Launchpad login web application
+4. Click **Create Policy**, then **Add Rule**
+5. Configure the rule:
+   - **Rule Name**: "Allow user login"
+   - **Scopes**: Add `openid`, `profile`, `email`, `address`, `phone`, `offline_access` (or click "OIDC default scopes")
+6. Click **Create Rule**
+
+**Policy 2: Launchpad Token Exchange Policy**
+
+This policy allows the Launchpad backend to exchange user tokens for Voicebox service tokens.
+
+1. Click **Add Policy**
+2. Configure:
+   - **Name**: "Launchpad Token Exchange Policy"
+   - **Description**: "Allows Launchpad to exchange user tokens for service-scoped tokens"
+   - **Assign to**: Select your Launchpad Backend API Services application (from Step 3)
+3. Click **Create Policy**, then **Add Rule**
+4. Configure the rule:
+   - **Rule Name**: "Allow Voicebox Token Exchange"
+   - Under **Advanced** → **Core grants**: Check **Token Exchange**
+   - **Scopes requested**: Add your Voicebox scope (e.g., `voicebox`)
+5. Click **Create Rule**
+
+**Policy 3: Voicebox to LLM Gateway Token Exchange Policy**
+
+This policy allows the Voicebox Service to exchange tokens for LLM Gateway access.
+
+1. Click **Add Policy**
+2. Configure:
+   - **Name**: "Voicebox to LLM Gateway Token Exchange"
+   - **Assign to**: Select the Voicebox Service application (from Step 4)
+3. Click **Create Policy**, then **Add Rule**
+4. Configure the rule:
+   - **Rule Name**: "Exchange for LLM Gateway"
+   - Under **Advanced** → **Core grants**: Check **Token Exchange**
+   - **Scopes requested**: Add your LLM Gateway scope (e.g., `ai-gateway`)
+5. Click **Create Rule**
+
+### Launchpad Configuration
+
+Add the following environment variables to your Launchpad configuration to enable OBO token exchange with the Voicebox Service:
+
+```bash
+# Custom Authorization Server
+OKTA_AUTHORIZATION_SERVER_ID=<your-authorization-server-id>
+OKTA_AUTHORIZATION_SERVER_AUDIENCE=<your-audience-value>
+
+# Backend API Services App (for token exchange)
+OKTA_BACKEND_CLIENT_ID=<your-api-services-client-id>
+OKTA_BACKEND_CLIENT_SECRET=<your-api-services-client-secret>
+# OR use private key authentication:
+# OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE=/path/to/private-key.pem
+
+# Voicebox Service Scope
+VOICEBOX_SERVICE_SCOPE=<your-voicebox-scope>
+```
+
+| Environment Variable | Required | Description |
+| --- | --- | --- |
+| `OKTA_AUTHORIZATION_SERVER_ID` | Yes | ID of the custom authorization server |
+| `OKTA_AUTHORIZATION_SERVER_AUDIENCE` | Yes | Audience configured in the authorization server |
+| `OKTA_BACKEND_CLIENT_ID` | Yes | Client ID of the Launchpad Backend API Services app |
+| `OKTA_BACKEND_CLIENT_SECRET` | Conditional | Client secret (if not using private key) |
+| `OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE` | Conditional | Path to private key file (if not using client secret) |
+| `VOICEBOX_SERVICE_SCOPE` | Yes | Scope for Voicebox service access |
+
+> [!NOTE]
+> If both `OKTA_BACKEND_CLIENT_SECRET` and `OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE` are configured, private key authentication takes precedence.
+
+#### Complete Launchpad Configuration Example
+
+```bash
+# Login Web App
+OKTA_AUTH_ENABLED=true
+OKTA_DOMAIN=your-domain.okta.com
+OKTA_CLIENT_ID=0oasvuwo2ktPBT6Jb697
+OKTA_CLIENT_SECRET=<login-app-client-secret>
+OKTA_POST_LOGOUT_REDIRECT_URI=http://localhost:8080
+OKTA_REQUIRE_PKCE=true
+
+# Custom Authorization Server (shared across Launchpad and Voicebox Service)
+OKTA_AUTHORIZATION_SERVER_ID=ausx5bsy1p2Oy2RVm697
+OKTA_AUTHORIZATION_SERVER_AUDIENCE=stardog-services
+
+# Backend API Services App (for token exchange)
+OKTA_BACKEND_CLIENT_ID=0oax6j3ssnoYAPeo2697
+OKTA_BACKEND_CLIENT_SECRET=<backend-client-secret>
+
+# Voicebox Service
+VOICEBOX_SERVICE_ENDPOINT=http://voicebox-service:8000
+VOICEBOX_SERVICE_SCOPE=voicebox
+```
+
+### Voicebox Service Configuration
+
+Configure the Voicebox Service to validate incoming JWTs from Launchpad and exchange them for LLM Gateway tokens.
+
+#### JWT Authentication Settings
+
+| Environment Variable | Required | Description |
+| --- | --- | --- |
+| `REQUIRE_JWT_AUTH` | Yes | Set to `true` to require JWT authentication |
+| `JWT_ISSUER` | Yes | Issuer URL: `https://{domain}/oauth2/{authorization-server-id}` |
+| `JWT_JWKS_URI` | Yes | JWKS URL: `https://{domain}/oauth2/{authorization-server-id}/v1/keys` |
+| `JWT_AUDIENCE` | Yes | Expected audience, must match Launchpad's `OKTA_AUTHORIZATION_SERVER_AUDIENCE` |
+| `JWT_REQUIRED_SCOPE` | Yes | Required scope, must match Launchpad's `VOICEBOX_SERVICE_SCOPE` |
+
+Optional JWT settings:
+
+| Environment Variable | Default | Description |
+| --- | --- | --- |
+| `JWT_SCOPE_CLAIM_NAME` | `scp` | Name of the scope claim in the JWT |
+| `JWT_SUBJECT_CLAIM_NAME` | `sub` | Name of the subject claim in the JWT |
+| `JWT_ALLOWED_ALGORITHMS` | `RS256` | Allowed signing algorithms |
+| `JWT_LEEWAY_SECONDS` | `60` | Clock skew tolerance in seconds |
+| `JWKS_CACHE_TTL` | `3600` | How long to cache JWKS keys (seconds) |
+
+#### Token Exchange Settings (for LLM Gateway)
+
+| Environment Variable | Required | Description |
+| --- | --- | --- |
+| `TOKEN_EXCHANGE_PROVIDER` | Yes | Set to `okta` |
+| `OKTA_CLIENT_ID` | Yes | Voicebox Service application client ID |
+| `OKTA_DISCOVERY_URL` | Yes | OpenID Connect discovery URL for the authorization server |
+| `OKTA_LLM_GATEWAY_AUDIENCE` | Yes | Audience for the LLM Gateway tokens |
+| `OKTA_LLM_GATEWAY_SCOPE` | Yes | Scope to request for LLM Gateway access (must match what the LLM Gateway expects) |
+| `OKTA_CLIENT_SECRET` | Conditional | Client secret (if not using private key) |
+| `OKTA_PRIVATE_KEY_PATH` | Conditional | Path to private key file (if not using client secret) |
+
+> [!NOTE]
+> **Using a different authorization server for LLM Gateway:** If the LLM Gateway uses a separate authorization server, set `OKTA_DISCOVERY_URL` to point to that server's discovery endpoint and `OKTA_LLM_GATEWAY_AUDIENCE` to match its audience. You must also add Voicebox's authorization server as a trusted server in the LLM Gateway's authorization server configuration.
+
+Optional token exchange settings:
+
+| Environment Variable | Default | Description |
+| --- | --- | --- |
+| `TOKEN_CACHE_TTL_SECONDS` | `3600` | Maximum time to cache exchanged tokens |
+| `TOKEN_CACHE_EXPIRY_BUFFER_SECONDS` | `300` | Refresh tokens this many seconds before expiry |
+
+#### Voicebox Configuration File
+
+When using JWT authentication with token exchange, you must configure the Voicebox Service to use the `openai` LLM provider. The exchanged LLM Gateway token will be automatically injected into the `Authorization` header for requests to the LLM Gateway.
+
+See [Voicebox Configuration File](#voicebox-configuration-file) for the full configuration reference. Here's an example configuration for use with JWT authentication:
+
+```json
+{
+  "enable_external_llm": true,
+  "enable_analytics": true,
+  "enable_charts": true,
+  "default_llm_config": {
+    "llm_provider": "openai",
+    "llm_name": "gpt-4o",
+    "server_url": "https://your-llm-gateway.example.com/v1/",
+    "provider_args": {
+      "headers": {
+        "X-LLM-Gateway-Id": "your-gateway-id"
+      }
+    }
+  }
+}
+```
+
+> [!IMPORTANT]
+> The `llm_provider` must be set to `openai` for token exchange to work. The `server_url` should point to your LLM Gateway/proxy endpoint. You can include additional custom headers your LLM Gateway requires via `provider_args.headers`.
+
+#### Complete Voicebox Service Configuration Example
+
+```bash
+# JWT Authentication (validates tokens from Launchpad)
+REQUIRE_JWT_AUTH=true
+JWT_ISSUER=https://your-domain.okta.com/oauth2/ausx5bsy1p2Oy2RVm697
+JWT_JWKS_URI=https://your-domain.okta.com/oauth2/ausx5bsy1p2Oy2RVm697/v1/keys
+JWT_AUDIENCE=stardog-services
+JWT_REQUIRED_SCOPE=voicebox
+
+# Token Exchange for LLM Gateway (using same authorization server)
+TOKEN_EXCHANGE_PROVIDER=okta
+OKTA_CLIENT_ID=0oa456def
+OKTA_CLIENT_SECRET=<voicebox-service-client-secret>
+OKTA_DISCOVERY_URL=https://your-domain.okta.com/oauth2/ausx5bsy1p2Oy2RVm697/.well-known/openid-configuration
+OKTA_LLM_GATEWAY_AUDIENCE=stardog-services
+OKTA_LLM_GATEWAY_SCOPE=ai-gateway
+
+# Voicebox configuration file (must use openai provider)
+VBX_CONFIG_FILE=/voicebox-config/vbx-config.json
+LOG_LEVEL=INFO
+```
+
+### Public API Authentication (JWT)
+
+In addition to session-based authentication via the Launchpad UI, external applications can access the Voicebox API using JWT-based authentication. This allows programmatic access where the calling application authenticates users with the identity provider and passes their access tokens to Launchpad.
+
+#### Enabling Public API JWT Authentication
+
+Add the following environment variables to Launchpad:
+
+```bash
+# Enable JWT authentication for public API
+API_AUTH_JWT_ENABLED=true
+
+# Token validation settings
+API_AUTH_JWKS_URI=https://your-domain.okta.com/oauth2/{auth-server-id}/v1/keys
+API_AUTH_ISSUER=https://your-domain.okta.com/oauth2/{auth-server-id}
+API_AUTH_AUDIENCE=<your-auth-server-audience>
+
+# Optional settings
+API_AUTH_REQUIRED_SCOPES=openid,profile  # Comma-separated list of required scopes
+API_AUTH_SCOPE_CLAIM_NAME=scp            # Claim name for scopes (default: checks "scp" then "scope")
+API_AUTH_JWT_ALGORITHMS=RS256            # Allowed algorithms (default: RS256)
+
+# Required when multiple login providers are enabled
+API_AUTH_ACCESS_TOKEN_IDP=okta           # Which IDP to use for token exchange
+```
+
+| Environment Variable | Required | Description |
+| --- | --- | --- |
+| `API_AUTH_JWT_ENABLED` | Yes | Set to `true` to enable JWT authentication for public API |
+| `API_AUTH_JWKS_URI` | Yes | URL to fetch public keys for validating access tokens |
+| `API_AUTH_ISSUER` | Yes | Expected issuer claim in access tokens |
+| `API_AUTH_AUDIENCE` | Yes | Expected audience claim in access tokens |
+| `API_AUTH_REQUIRED_SCOPES` | No | Comma-separated list of scopes that must be present |
+| `API_AUTH_SCOPE_CLAIM_NAME` | No | Name of the scope claim (default: `scp`) |
+| `API_AUTH_JWT_ALGORITHMS` | No | Allowed signing algorithms (default: `RS256`) |
+| `API_AUTH_ACCESS_TOKEN_IDP` | Conditional | Required when multiple login providers are enabled |
+
+#### Making API Requests with JWT Authentication
+
+When `API_AUTH_JWT_ENABLED=true`, API clients must provide:
+
+1. **`Authorization: Bearer <access_token>`** - User's access token from the identity provider
+2. **`X-Voicebox-App-Key: <app_key>`** - The Voicebox application API key
+3. **`X-Client-Id: <client_id>`** - Client identifier for the request
+4. **`X-SD-Auth-Token: <stardog_token>`** (optional) - Override the Stardog authentication token. See [Stardog Authentication for API Requests](#stardog-authentication-for-api-requests) for details.
+
+```bash
+# Get an access token from your IDP (e.g., via OAuth authorization code flow)
+ACCESS_TOKEN="eyJhbGciOiJSUzI1NiIsInR5cCI6..."
+
+# Make a Voicebox request
+curl -X POST "https://launchpad.example.com/api/v1/voicebox/ask" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "X-Voicebox-App-Key: your-voicebox-app-key" \
+  -H "X-Client-Id: my-client-123" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Who is Bob?"}'
+```
+
+> [!NOTE]
+> The `X-Voicebox-App-Key` header separates the Voicebox application API key from the user's access token. When `API_AUTH_JWT_ENABLED=false`, you can continue using the `Authorization` header for the Voicebox App Key as documented in [Using Voicebox Programmatically](#using-voicebox-programmatically).
+
 ## Release Notes
 
 The Voicebox Service is released independently of Launchpad. 
