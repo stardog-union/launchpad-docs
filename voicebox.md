@@ -411,6 +411,72 @@ User → Launchpad → Voicebox Service → LLM Gateway (proxy to LLM provider)
 3. **Voicebox Service validates** the incoming token and exchanges it for an LLM Gateway token
 4. **LLM Gateway** (a proxy that routes requests to your LLM provider like Azure OpenAI) **receives** a scoped token that can be traced back to the original user
 
+#### UI Flow (User Logged into Launchpad)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Launchpad
+    participant Backend as Launchpad Backend App
+    participant AuthzA as Okta Authz Server A
+    participant Voicebox as Voicebox Service
+    participant AuthzB as Okta Authz Server B
+    participant LLM Gateway
+
+    User->>Launchpad: Login request
+    Launchpad->>AuthzA: OIDC authentication
+    AuthzA-->>Launchpad: User access token
+    Launchpad-->>User: Session established
+
+    User->>Launchpad: Voicebox request
+    Backend->>AuthzA: Token exchange (OBO)<br/>user token → voicebox token
+    AuthzA-->>Backend: Voicebox service token
+    Launchpad->>Voicebox: Request (with voicebox-scoped JWT)
+    Voicebox->>AuthzA: Validate token
+    Voicebox->>AuthzB: Token exchange (OBO)<br/>voicebox token → llm-gateway token
+    AuthzB-->>Voicebox: LLM Gateway token
+    Voicebox->>LLM Gateway: Request (with llm-gateway-scoped JWT)
+    LLM Gateway-->>Voicebox: LLM response
+    Voicebox-->>Launchpad: Response
+    Launchpad-->>User: Response
+```
+
+> [!NOTE]
+> This diagram shows the LLM Gateway expecting tokens issued by a different authorization server (Authz Server B, configured as a trusted server in Authz Server A). The Voicebox Service validates incoming tokens against Authz Server A, then exchanges them with Authz Server B to obtain a token with the scope required by the LLM Gateway. When all components share the same authorization server, the Voicebox Service performs both validation and exchange against Authz Server A.
+
+#### Public API Flow (External Client)
+
+```mermaid
+sequenceDiagram
+    participant Client as Public API Client
+    participant AuthzC as Okta Authz Server C
+    participant Launchpad
+    participant Backend as Launchpad Backend App
+    participant AuthzA as Okta Authz Server A
+    participant Voicebox as Voicebox Service
+    participant AuthzB as Okta Authz Server B
+    participant LLM Gateway
+
+    Client->>AuthzC: Authorization code flow
+    AuthzC-->>Client: Access token
+
+    Client->>Launchpad: API request<br/>Authorization: Bearer {token}<br/>X-Voicebox-App-Key: {key}
+    Launchpad->>AuthzC: Validate token
+    Backend->>AuthzA: Token exchange (OBO)<br/>client token → voicebox token
+    AuthzA-->>Backend: Voicebox service token
+    Launchpad->>Voicebox: Request (with voicebox-scoped JWT)
+    Voicebox->>AuthzA: Validate token
+    Voicebox->>AuthzB: Token exchange (OBO)<br/>voicebox token → llm-gateway token
+    AuthzB-->>Voicebox: LLM Gateway token
+    Voicebox->>LLM Gateway: Request (with llm-gateway-scoped JWT)
+    LLM Gateway-->>Voicebox: LLM response
+    Voicebox-->>Launchpad: Response
+    Launchpad-->>Client: Response
+```
+
+> [!NOTE]
+> This diagram shows three different authorization servers: Authz Server C issues tokens for the Public API Client, Authz Server A is used by Launchpad and Voicebox Service, and Authz Server B issues tokens for the LLM Gateway. Launchpad validates the client's token against Authz Server C (configured as a trusted server in Authz Server A), then the Backend App exchanges it with Authz Server A for a voicebox-scoped token. When all components share the same authorization server, all validation and exchange operations use that single server.
+
 This architecture provides:
 - **Scoped Authorization**: Each service receives only the permissions it needs
 - **Audit Trail**: User identity flows through the entire chain for compliance
