@@ -173,7 +173,7 @@ Okta requires a separate API Services application for token exchange (different 
    - **Name**: e.g., "Launchpad Backend"
 5. After creation, note:
    - **Client ID** → `OKTA_BACKEND_CLIENT_ID`
-   - **Client Secret** → `OKTA_BACKEND_CLIENT_SECRET`
+   - **Client Secret** → `OKTA_BACKEND_CLIENT_SECRET` (or configure public/private key → `OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE`)
 6. Under **General** → **Advanced** → **Non-interactive grants**:
    - Check **Token Exchange**
 7. Do NOT enable "Require DPoP header"
@@ -181,18 +181,24 @@ Okta requires a separate API Services application for token exchange (different 
 <img width="657" height="1231" alt="Screenshot 2025-12-11 at 11 43 08 AM" src="https://github.com/user-attachments/assets/2010394b-a461-4eb7-bc51-7dd86940de4a" />
 
 
+> [!NOTE]
+> The screenshot shows public/private key authentication. See [Private Key Authentication](#private-key-authentication) for configuration details.
+
 **Verify:** The application shows "Token Exchange" enabled under grants.
 
 ### Step 4: Create the Voicebox Service Application
 
-1. **Applications** → **Create App Integration** → **API Services**
-2. Configure:
+1. Go to **Applications** → **Applications**
+2. Click **Create App Integration**
+3. Select **API Services**
+4. Configure:
    - **Name**: e.g., "Voicebox Service"
-3. Note:
+5. After creation, note:
    - **Client ID** → Voicebox's `OKTA_CLIENT_ID`
-   - **Client Secret** → Voicebox's `OKTA_CLIENT_SECRET`
-4. Enable **Token Exchange** under Non-interactive grants
-5. Do NOT enable "Require DPoP header"
+   - **Client Secret** → Voicebox's `OKTA_CLIENT_SECRET` (or configure public/private key → `OKTA_PRIVATE_KEY_PATH`)
+6. Under **General** → **Advanced** → **Non-interactive grants**:
+   - Check **Token Exchange**
+7. Do NOT enable "Require DPoP header"
 
 <img width="649" height="1120" alt="Screenshot 2025-12-11 at 11 58 17 AM" src="https://github.com/user-attachments/assets/bab55834-092d-492c-87f9-9909f0aa131d" />
 
