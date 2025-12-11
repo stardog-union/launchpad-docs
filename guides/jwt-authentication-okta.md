@@ -62,7 +62,7 @@ OKTA_CLIENT_ID=0oaVoiceboxApp789
 OKTA_CLIENT_SECRET=<voicebox-app-secret>
 OKTA_DISCOVERY_URL=https://your-domain.okta.com/oauth2/aus123abc/.well-known/openid-configuration
 OKTA_LLM_GATEWAY_AUDIENCE=stardog-services
-OKTA_LLM_GATEWAY_SCOPE=ai-gateway
+OKTA_LLM_GATEWAY_SCOPE=llm-gateway
 ```
 
 **Voicebox config file** (`vbx-config.json`):
@@ -139,7 +139,8 @@ sequenceDiagram
    https://{domain}/oauth2/{AUTHORIZATION_SERVER_ID}/.well-known/oauth-authorization-server
    ```
 
-<!-- TODO: Screenshot showing where to find the Authorization Server ID in the Metadata URI -->
+<img width="1039" height="831" alt="Screenshot 2025-12-11 at 11 41 26 AM" src="https://github.com/user-attachments/assets/47a3a728-b6de-4850-ad98-3d6caeb42408" />
+
 
 **Verify:** The authorization server appears in your list and you can access its settings.
 
@@ -151,12 +152,15 @@ sequenceDiagram
 | Scope Name | Description |
 |------------|-------------|
 | `voicebox` | Access to Voicebox service |
-| `ai-gateway` | Access to LLM Gateway |
+| `llm-gateway` | Access to LLM Gateway |
 
 > [!NOTE]
 > You can name these scopes whatever you prefer. Just ensure consistency across your configuration.
 
 **Verify:** Both scopes appear in the Scopes tab.
+
+<img width="774" height="700" alt="Screenshot 2025-12-11 at 12 01 26 PM" src="https://github.com/user-attachments/assets/5677a933-682d-44c4-80e2-37d0686ae1b0" />
+
 
 ### Step 3: Create the Launchpad Backend Application
 
@@ -174,7 +178,8 @@ Okta requires a separate API Services application for token exchange (different 
    - Check **Token Exchange**
 7. Do NOT enable "Require DPoP header"
 
-<!-- TODO: Screenshot showing the Token Exchange checkbox under Non-interactive grants -->
+<img width="657" height="1231" alt="Screenshot 2025-12-11 at 11 43 08 AM" src="https://github.com/user-attachments/assets/2010394b-a461-4eb7-bc51-7dd86940de4a" />
+
 
 **Verify:** The application shows "Token Exchange" enabled under grants.
 
@@ -188,6 +193,9 @@ Okta requires a separate API Services application for token exchange (different 
    - **Client Secret** → Voicebox's `OKTA_CLIENT_SECRET`
 4. Enable **Token Exchange** under Non-interactive grants
 5. Do NOT enable "Require DPoP header"
+
+<img width="649" height="1120" alt="Screenshot 2025-12-11 at 11 58 17 AM" src="https://github.com/user-attachments/assets/bab55834-092d-492c-87f9-9909f0aa131d" />
+
 
 **Verify:** The application shows "Token Exchange" enabled.
 
@@ -219,7 +227,9 @@ Allows Launchpad backend to exchange tokens for Voicebox access.
    - Under **Advanced** → **Core grants**: Check **Token Exchange**
    - **Scopes**: `voicebox`
 
-<!-- TODO: Screenshot showing Access Policy rule with Token Exchange checked under Core grants -->
+<img width="914" height="700" alt="Screenshot 2025-12-11 at 11 45 59 AM" src="https://github.com/user-attachments/assets/0abc3162-10a1-4c6d-9bc5-97920ba736d9" />
+
+<img width="472" height="927" alt="Screenshot 2025-12-11 at 11 47 35 AM" src="https://github.com/user-attachments/assets/4b622687-c406-41fe-9c54-9eeea58dc5de" />
 
 #### Policy 3: Voicebox Token Exchange
 
@@ -231,7 +241,11 @@ Allows Voicebox to exchange tokens for LLM Gateway access.
 2. **Add Rule**:
    - **Name**: "Exchange for LLM Gateway"
    - Under **Advanced** → **Core grants**: Check **Token Exchange**
-   - **Scopes**: `ai-gateway`
+   - **Scopes**: `llm-gateway`
+
+<img width="965" height="773" alt="Screenshot 2025-12-11 at 11 51 22 AM" src="https://github.com/user-attachments/assets/954d54b6-714c-4eff-b1c6-0e98f41ae19e" />
+
+<img width="486" height="934" alt="Screenshot 2025-12-11 at 11 51 48 AM" src="https://github.com/user-attachments/assets/e1be3831-e2b3-45c5-84ee-cfb2aab27c37" />
 
 **Verify:** Use Okta's **Token Preview** tab to test token exchange with each application.
 
@@ -301,7 +315,7 @@ OKTA_CLIENT_ID=<voicebox-app-client-id>
 OKTA_CLIENT_SECRET=<voicebox-app-client-secret>
 OKTA_DISCOVERY_URL=https://{domain}/oauth2/{auth-server-id}/.well-known/openid-configuration
 OKTA_LLM_GATEWAY_AUDIENCE=<llm-gateway-audience>
-OKTA_LLM_GATEWAY_SCOPE=ai-gateway
+OKTA_LLM_GATEWAY_SCOPE=llm-gateway
 ```
 
 Optional settings:
@@ -391,7 +405,7 @@ In some architectures, different components use different authorization servers:
 When using different servers, you must configure **trusted server** relationships. The downstream server must trust the upstream server's tokens.
 
 **To add a trusted server in Okta:**
-In your authorization server settings, add the issuer URL of the upstream server to the trusted servers list.
+In your authorization server settings, add the upstream authorization server to the trusted servers list.
 
 #### Multi-Server Flow Diagram
 
