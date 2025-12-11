@@ -401,6 +401,16 @@ The Voicebox Service is released independently of Launchpad.
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
 
+## 0.24.0 Release (Dec 11, 2025)
+
+* Sanitize XSD IRIs in example queries
+* Handle default prefix in schema serialization
+* Prevent dataset description errors when statistics is missing
+* Fix date/time reference errors in result summarization
+* Use more robust LLM formatting during query linting
+* Do not include BITES schema when querying the knowledge graph
+* Backend support for on behalf of flow token exchange for LLM providers
+
 ## 0.23.0 Release (Nov 19, 2025)
 
 * Several improvements to Think Mode
