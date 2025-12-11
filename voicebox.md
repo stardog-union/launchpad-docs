@@ -480,7 +480,6 @@ sequenceDiagram
 This architecture provides:
 - **Scoped Authorization**: Each service receives only the permissions it needs
 - **Audit Trail**: User identity flows through the entire chain for compliance
-- **Independent Control**: Access to each service can be managed separately
 
 > [!IMPORTANT]
 > This authentication flow requires using an **OpenAI-compatible LLM provider** (`llm_provider: openai` in your Voicebox configuration). Token exchange for the LLM Gateway is not supported with other providers (Bedrock, Databricks, etc.).
@@ -526,7 +525,7 @@ Create custom scopes for accessing the Voicebox service and LLM Gateway.
 | Scope Name | Description |
 | --- | --- |
 | `voicebox` | Access to Voicebox service (used by Launchpad → Voicebox). You can name this whatever you prefer. |
-| `ai-gateway` | Access to LLM Gateway (used by Voicebox → LLM Gateway). This must match the scope your LLM Gateway/proxy expects for authentication. |
+| `ai-gateway` | Access to LLM Gateway (used by Voicebox → LLM Gateway). This must match the scope your LLM Gateway/proxy expects for authentication. It can be named whatever you prefer, but ensure it matches the LLM Gateway configuration. |
 
 > [!NOTE]
 > If your LLM Gateway uses a **different authorization server** than Launchpad/Voicebox, the `ai-gateway` scope must be created on (or already exist in) **that** authorization server, not the one documented here. The scope name must match what the LLM Gateway expects for authentication.
