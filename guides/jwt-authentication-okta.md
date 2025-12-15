@@ -44,6 +44,14 @@ OKTA_BACKEND_CLIENT_ID=0oaBackendApp456
 OKTA_BACKEND_CLIENT_SECRET=<backend-app-secret>
 VOICEBOX_SERVICE_ENDPOINT=http://voicebox-service:8000
 VOICEBOX_SERVICE_SCOPE=voicebox
+
+# Public API Authentication (add these if using programmatic access)
+# These values come from the authorization server issuing tokens to your external apps
+# This can be the same auth server as above, or a different one
+API_AUTH_JWT_ENABLED=true
+API_AUTH_JWKS_URI=https://your-domain.okta.com/oauth2/aus123abc/v1/keys
+API_AUTH_ISSUER=https://your-domain.okta.com/oauth2/aus123abc
+API_AUTH_AUDIENCE=stardog-services
 ```
 
 **Voicebox Service:**
@@ -57,11 +65,12 @@ JWT_AUDIENCE=stardog-services
 JWT_REQUIRED_SCOPE=voicebox
 
 # Token exchange (for LLM Gateway)
+# Note: These are the Voicebox Service app credentials (Step 4), NOT Launchpad's
 TOKEN_EXCHANGE_PROVIDER=okta
 OKTA_CLIENT_ID=0oaVoiceboxApp789
 OKTA_CLIENT_SECRET=<voicebox-app-secret>
 OKTA_DISCOVERY_URL=https://your-domain.okta.com/oauth2/aus123abc/.well-known/openid-configuration
-OKTA_LLM_GATEWAY_AUDIENCE=stardog-services
+OKTA_LLM_GATEWAY_AUDIENCE=llm-gateway-api
 OKTA_LLM_GATEWAY_SCOPE=llm-gateway
 ```
 
@@ -359,6 +368,9 @@ The exchanged token is automatically added to the `Authorization` header for LLM
 
 External applications can access the Voicebox API using their own OAuth tokens (instead of session cookies).
 
+> [!NOTE]
+> Public API authentication requires the full Okta setup above (Steps 1-5) plus the Launchpad and Voicebox Service configuration.
+
 ### Enable Public API JWT Auth
 
 Add to Launchpad:
@@ -381,16 +393,21 @@ curl -X POST "https://launchpad.example.com/api/v1/voicebox/ask" \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -H "X-Voicebox-App-Key: your-app-key" \
   -H "X-Client-Id: my-client" \
+  -H "X-SD-Auth-Token: $STARDOG_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"message": "Who is Bob?"}'
 ```
 
 Required headers:
 - `Authorization: Bearer <token>` — User's access token from your IDP
-- `X-Voicebox-App-Key` — Voicebox application API key
+- `X-Voicebox-App-Key` — [Voicebox application API key](../voicebox.md#creating-a-voicebox-application-and-associated-api-key)
 - `X-Client-Id` — Client identifier
+- `X-SD-Auth-Token` — Stardog authentication token (e.g., JWT from Okta for Stardog SSO connection)
 
 The OAuth token identifies the **user** making the request. The Voicebox App Key identifies the **application** and determines which Voicebox configuration (connection, database) to use.
+
+> [!NOTE]
+> Your application must obtain the user's access token using an authorization code flow (or similar user-interactive flow). The token must represent a real user, not a client credentials token.
 
 ---
 
