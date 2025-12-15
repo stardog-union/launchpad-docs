@@ -252,6 +252,15 @@ The `VOICEBOX_SERVICE_ENDPOINT` option is used to specify the endpoint for the [
 - **Required:** No
 - **Default:** not set
 
+#### `VOICEBOX_SERVICE_SCOPE`
+
+The `VOICEBOX_SERVICE_SCOPE` specifies the OAuth scope for Voicebox service authentication when using JWT-based authentication with Okta.
+
+See [JWT Authentication with Okta](./guides/jwt-authentication-okta.md) for complete setup instructions.
+
+- **Required:** No (only required when using JWT authentication)
+- **Default:** not set
+
 #### `VOICEBOX_THREE_ENABLED`
 
 The `VOICEBOX_THREE_ENABLED` option enables the "Think Mode" feature in Voicebox, which uses a multi-agent architecture and Voicebox 3 to enable chain-of-thought reasoning for handling complex, multi-step questions. When enabled, users will see a "Think Mode" button in the Voicebox input interface.
@@ -280,6 +289,23 @@ The `COPY_CONNECTION_TOKEN_BUTTON_ENABLED` option controls whether the "Copy Tok
 
 - **Required:** No
 - **Default:** `true`
+
+### Public API JWT Authentication Configuration
+
+The following environment variables configure JWT-based authentication for the Launchpad public API (`/api/v1/*`). This allows external applications to access the Voicebox API using access tokens from an identity provider.
+
+See [JWT Authentication with Okta — Public API Authentication](./guides/jwt-authentication-okta.md#public-api-authentication) for complete setup instructions.
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `API_AUTH_JWT_ENABLED` | No | `false` | Enable JWT authentication for public API |
+| `API_AUTH_JWKS_URI` | If JWT enabled | — | URL to fetch public keys (JWKS) for token validation |
+| `API_AUTH_ISSUER` | If JWT enabled | — | Expected issuer (`iss`) claim in access tokens |
+| `API_AUTH_AUDIENCE` | If JWT enabled | — | Expected audience (`aud`) claim in access tokens |
+| `API_AUTH_REQUIRED_SCOPES` | No | — | Comma-separated list of required scopes |
+| `API_AUTH_SCOPE_CLAIM_NAME` | No | `scp` | Claim name containing scopes (falls back to `scope`) |
+| `API_AUTH_JWT_ALGORITHMS` | No | `RS256` | Allowed signing algorithms |
+| `API_AUTH_ACCESS_TOKEN_IDP` | If multiple IDPs | — | IDP for token exchange (`okta`) |
 
 ### Provider Configuration
 
