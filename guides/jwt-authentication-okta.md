@@ -220,12 +220,12 @@ Create policies to control which applications can request which scopes.
 
 #### Policy 1: User Login
 
-Allows users to log into Launchpad.
+Allows users to log into Launchpad using your existing login application.
 
 1. In your authorization server, go to **Access Policies**
 2. **Add Policy**:
    - **Name**: "Launchpad Login"
-   - **Assign to**: Your Launchpad login web application
+   - **Assign to**: Your existing Launchpad login web application (the same one configured with `OKTA_CLIENT_ID`)
 3. **Add Rule**:
    - **Name**: "Allow login"
    - **Scopes**: `openid`, `profile`, `email`, `offline_access`
