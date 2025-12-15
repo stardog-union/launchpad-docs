@@ -366,7 +366,7 @@ The exchanged token is automatically added to the `Authorization` header for LLM
 
 ## Public API Authentication
 
-External applications can access the Voicebox API using their own OAuth tokens (instead of session cookies).
+External applications can access the Voicebox API programmatically using their own OAuth tokens.
 
 > [!NOTE]
 > Public API authentication requires the full Okta setup above (Steps 1-5) plus the Launchpad and Voicebox Service configuration.
