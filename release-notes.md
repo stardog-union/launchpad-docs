@@ -34,6 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| [3.7.0](#370-release-2025-12-18) | `v3.7.0` | [3.4.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v340-release) | [3.1.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v312-release) | [5.9.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v590-release) | [1.4.25](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1425-release) |
 | [3.6.1](#361-release-2025-10-30) | `v3.6.1` | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v300-release) | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v300-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
 | [3.6.0](#360-release-2025-10-20) | `v3.6.0` | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v300-release) | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v300-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
 | [3.5.0](#350-release-2025-10-02) | `v3.5.0` | [2.50.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2503-release) | [2.15.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2151-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
@@ -45,9 +46,24 @@ Launchpad v3 uses semantic versioning.
 | [3.0.1](#301-release-2025-02-21) | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | [3.0.0](#300-release-2025-01-30) | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
 
+## 3.7.0 Release (2025-12-18)
+
+> [!IMPORTANT]
+> **Recommended Stardog Version:** [`v11.2.0+`](https://docs.stardog.com/release-notes/stardog-platform#1120-release-2025-10-01)
+>
+> **Recommended Voicebox Service Version:** [`v0.24.0+`](./voicebox.md#0240-release-dec-11-2025)
+>
+> If you intend to use JWT authentication with Okta for Voicebox, you **must** use `v0.24.0+` of the Voicebox Service.
+
+### New Features
+
+- Adds support for SSL/TLS termination directly in Launchpad. You can now configure Launchpad to terminate SSL/TLS connections without the use of an external reverse proxy by setting `SSL_ENABLED=true` and providing certificate and private key files. When enabled, Launchpad listens for HTTPS connections on port `8443`. See [Terminating SSL/TLS Connections](./README.md#terminating-ssltls-connections) for setup instructions.
+
+- Adds JWT authentication support for Voicebox and the Launchpad public API using Okta's On-Behalf-Of (OBO) token exchange flow. This enables audit trails tracking which user made each LLM request through the entire service chain, scoped tokens where each service receives only the permissions it needs, and support for corporate security requirements where LLM Gateways require OAuth bearer tokens. See the new [JWT Authentication with Okta](./guides/jwt-authentication-okta.md) guide for complete setup instructions.
+
 ## 3.6.1 Release (2025-10-30)
 
-## Bug Fixes
+### Bug Fixes
 
 - Fixes an issue where Voicebox requests to generate charts and do analysis based on a Voicebox response were failing for SSO connections. 
 
