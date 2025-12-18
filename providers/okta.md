@@ -4,6 +4,9 @@
 
 Okta can be used both as a login provider to authenticate users into Launchpad and as an SSO connection provider to authenticate users against Stardog endpoints.
 
+> [!TIP]
+> For Voicebox JWT authentication with Okta (On-Behalf-Of token exchange flow), see [JWT Authentication with Okta](../guides/jwt-authentication-okta.md).
+
 ## Login Provider Configuration
 
 The following configuration options are available for Okta SSO.
@@ -65,6 +68,18 @@ The `OKTA_POST_LOGOUT_REDIRECT_URI` is the URL that users will be redirected to 
 
 - **Required:** No
 - **Default:** not set
+
+### JWT Authentication Variables
+
+The following variables are only required when using [JWT Authentication with Okta](../guides/jwt-authentication-okta.md) for Voicebox service communication.
+
+| Variable | Description |
+|----------|-------------|
+| `OKTA_AUTHORIZATION_SERVER_ID` | ID of the custom authorization server |
+| `OKTA_AUTHORIZATION_SERVER_AUDIENCE` | Audience value configured in the authorization server |
+| `OKTA_BACKEND_CLIENT_ID` | Client ID of the API Services app for token exchange |
+| `OKTA_BACKEND_CLIENT_SECRET` | Client secret (if not using private key) |
+| `OKTA_BACKEND_CLIENT_PRIVATE_KEY_FILE` | Path to private key file (if not using client secret) |
 
 ### How to Create an Okta Application to login with Okta in Launchpad
 

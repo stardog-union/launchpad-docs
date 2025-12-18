@@ -393,6 +393,18 @@ The following environment variables are used with OpenAI.
 | --- | --- | --- |
 | `OPENAI_API_KEY` | `Y` | OpenAI API key |
 
+## JWT Authentication & Token Exchange
+
+For enterprise deployments requiring OAuth-based authentication between Launchpad, Voicebox, and your LLM Gateway, see the dedicated guide:
+
+**[JWT Authentication with Okta](./guides/jwt-authentication-okta.md)**
+
+This guide covers:
+- Okta authorization server setup
+- On-Behalf-Of (OBO) token exchange configuration
+- Launchpad and Voicebox Service environment variables
+- Public API JWT authentication
+
 ## Release Notes
 
 The Voicebox Service is released independently of Launchpad. 

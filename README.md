@@ -15,7 +15,7 @@
 - Launchpad contains all Stardog Applications - Studio, Explorer, Designer, Knowledge Catalog
 - Launchpad must be configured with an SSO provider (e.g. Microsoft Entra) to manage user authentication and authorization. 
 - Launchpad persists data to a local directory that should be mounted to a volume for persistence.
-- Launchpad does not handle SSL termination. It is recommended to use a reverse proxy like Nginx or Apache to handle SSL termination.
+- Launchpad does not handle SSL/TLS termination by default. For a production instance of Launchpad, either use a reverse proxy like Nginx or Apache to termiante SSL/TLS connections, or follow the steps below to configure Launchpad to [terminate SSL/TLS connections](#terminating-ssltls-connections).
 
 https://github.com/user-attachments/assets/71652eb8-6106-4413-be44-995a1bf08245
 
@@ -48,11 +48,13 @@ This is the general guide to getting Launchpad up and running. For more detailed
 > Existing customers with access to Stardog's private JFrog Artifactory can continue to pull Launchpad images from `stardog-stardog-apps.jfrog.io/launchpad:<tag>`. Authenticate with `docker login stardog-stardog-apps.jfrog.io` before pulling if your environment still relies on that registry.
 
 2. Configure Launchpad and optionally your Stardog servers.
-   - Launchpad must be configured with an SSO provider to log users in with.
+   - Launchpad must be configured with a provider to log users in to the Launchpad console.
+      - Launchpad supports several SSO login providers.
+      - For testing, Launchpad also supports configuring a shared basic authentication user.
    - Launchpad can optionally be configured with "SSO Connections", allowing users to use SSO to connect to Stardog endpoints that have also been configured to accept JWT tokens from the SSO provider. Without SSO Connections, users will need to manually enter their Stardog credentials to connect to Stardog endpoints.
       - The SSO provider for connections can be from the same provider as the main SSO provider or a different provider. They should, however, be different applications in the SSO provider. For example, Microsoft Entra can be used as the Launchpad SSO (main) provider and also as the SSO provider for connections, but Launchpad and each of the SSO connections (the Stardog endpoints) should be different "App Registrations" in Microsoft Entra.
       - The SSO provider must be configured to issue JWT tokens that can be used to authenticate with Stardog.
-      - See [Provider Configuration](#provider-configuration) for more information on configuring SSO providers.
+   - See [Provider Configuration](#provider-configuration) for more information on configuring providers.
 
 3. Create and run the Launchpad container
 
@@ -117,6 +119,24 @@ docker run \
 >  runAsGroup: 100001
 >```
 
+## Terminating SSL/TLS Connections
+
+By default, Launchpad listens for HTTP connections on port `8080`. Starting with Launchpad v3.7.0, you can configure Launchpad to support SSL/TLS connections without the use of an external reverse proxy.
+
+To enable SSL/TLS termination mode in Launchpad, add the following three environment variables to Launchpad's configuration:
+
+```bash
+SSL_ENABLED=true
+SSL_CERTIFICATE_FILE=<path_in_the_launchpad_container_to_launchpad-ssl.cert.pem>
+SSL_PRIVATE_KEY_FILE=<path_in_the_launchpad_container_to_launchpad-ssl.key.pem>
+```
+
+You need to provide Launchpad with a certificate and the corresponding private key file so that it can terminate SSL/TLS connections originating from a user's web browser. The certificate and private key files must be included in Launchpad's container; this can be done by mounting the directory containing the files as a volume in Launchpad's container.
+
+> [!NOTE]
+> Launchpad uses Nginx internally as the reverse proxy when `SSL_ENABLED=true`. The Nginx website provides additional information about its [certificate requirements](https://nginx.org/en/docs/http/configuring_https_servers.html).
+
+When `SSL_ENABLED=true` in Launchpad's configuration, Launchpad listens for HTTPS connections on port `8443`. You will also need to adjust the value of the `BASE_URL` environment variable in Launchpad's configuration, setting it to match the HTTPS-enabled URL that a user will access from the web browser.
 
 ## Getting Help
 
@@ -168,28 +188,28 @@ This section details the general configuration options available in Launchpad.
 <a name="base_url"></a>
 #### `BASE_URL`
 
-The `BASE_URL` is used to set the base URL for Launchpad. This is the URL that users will use to access Launchpad. 
+The `BASE_URL` option is used to set the base URL for Launchpad. This is the URL that users will use to access Launchpad. 
 
 - **Required:** Yes
 - **Default:** not set
 
 #### `COOKIE_SECRET`
 
-The `COOKIE_SECRET` is used to set the secret used to sign cookies in Launchpad. This should be a large, random string.
+The `COOKIE_SECRET` option is used to set the secret used to sign cookies in Launchpad. This should be a large, random string.
 
 - **Required:** Yes
 - **Default:** not set
 
 #### `SESSION_EXPIRATION`
 
-The `SESSION_EXPIRATION` is used to set the expiration time in **seconds** for user sessions in Launchpad. 
+The `SESSION_EXPIRATION` option is used to set the expiration time in **seconds** for user sessions in Launchpad. 
 
-- Required: No
-- Default: `43200` (12 hours)
+- **Required:** No
+- **Default:** `43200` (12 hours)
 
 #### `GUNICORN_WORKERS`
 
-The `GUNICORN_WORKERS` is used to set the number of Gunicorn workers to use for Launchpad. By default, this is set to `2 * CPU cores + 1`. This should work for most use cases, but can be overridden to increase or decrease the number of workers. This is useful for environments with limited resources like memory. This setting should be provided as a positive integer.
+The `GUNICORN_WORKERS` option is used to set the number of Gunicorn workers to use for Launchpad. By default, this is set to `2 * CPU cores + 1`. This should work for most use cases, but can be overridden to increase or decrease the number of workers. This is useful for environments with limited resources like memory. This setting should be provided as a positive integer.
 
 - **Required:** No
 - **Default:** `2 * CPU cores + 1`
@@ -199,16 +219,46 @@ The `GUNICORN_WORKERS` is used to set the number of Gunicorn workers to use for 
 The `DESIGNER_STORAGE_ENABLED` option is used to configure the storage location for projects in Stardog Designer. By default, this should be set to `false`, resulting in projects being stored in a user browser's local storage. If set to `true`, projects will be stored in the Launchpad database under your Launchpad user account.
 
 > [!TIP]
-> It's recommended to set this to `true` to avoid accidental data loss of Designer projects if the user clears their browser's local storage.
+> It is recommended to set this to `true` to avoid accidental data loss of Designer projects if the user clears their browser's local storage.
 
 - **Required:** No
 - **Default:** `false`
 
-#### `VOICEBOX_SERVICE_ENDPOINT`
+#### `SSL_ENABLED`
 
-The `VOICEBOX_SERVICE_ENDPOINT` is used to specify the endpoint for the [Voicebox Service](./voicebox.md#voicebox-service). This is used to enable the Voicebox in Launchpad.
+The `SSL_ENABLED` option is used to enable SSL/TLS connection termination by Launchpad.
 
 - **Required:** No
+- **Default:** `false`
+
+#### `SSL_CERTIFICATE_FILE`
+
+The `SSL_CERTIFICATE_FILE` option specifies the path within the Launchpad container to the certificate file used by Nginx in its SSL/TLS server configuration. The file containing the corresponding private key must be specified with the `SSL_PRIVATE_KEY_FILE` option.
+
+- **Required:** No, unless `SSL_ENABLED=true`
+- **Default:** not set
+
+#### `SSL_PRIVATE_KEY_FILE`
+
+The `SSL_PRIVATE_KEY_FILE` option specifies the path within the Launchpad container to the private key file used by Nginx in its SSL/TLS server configuration. The file containing the corresponding certificate must be specified with the `SSL_CERTIFICATE_FILE` option.
+
+- **Required:** No, unless `SSL_ENABLED=true`
+- **Default:** not set
+
+#### `VOICEBOX_SERVICE_ENDPOINT`
+
+The `VOICEBOX_SERVICE_ENDPOINT` option is used to specify the endpoint for the [Voicebox Service](./voicebox.md#voicebox-service). This is used to enable the Voicebox in Launchpad.
+
+- **Required:** No
+- **Default:** not set
+
+#### `VOICEBOX_SERVICE_SCOPE`
+
+The `VOICEBOX_SERVICE_SCOPE` specifies the OAuth scope for Voicebox service authentication when using JWT-based authentication with Okta.
+
+See [JWT Authentication with Okta](./guides/jwt-authentication-okta.md) for complete setup instructions.
+
+- **Required:** No (only required when using JWT authentication)
 - **Default:** not set
 
 #### `VOICEBOX_THREE_ENABLED`
@@ -239,6 +289,23 @@ The `COPY_CONNECTION_TOKEN_BUTTON_ENABLED` option controls whether the "Copy Tok
 
 - **Required:** No
 - **Default:** `true`
+
+### Public API JWT Authentication Configuration
+
+The following environment variables configure JWT-based authentication for the Launchpad public API (`/api/v1/*`). This allows external applications to access the Voicebox API using access tokens from an identity provider.
+
+See [JWT Authentication with Okta — Public API Authentication](./guides/jwt-authentication-okta.md#public-api-authentication) for complete setup instructions.
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `API_AUTH_JWT_ENABLED` | No | `false` | Enable JWT authentication for public API |
+| `API_AUTH_JWKS_URI` | If JWT enabled | — | URL to fetch public keys (JWKS) for token validation |
+| `API_AUTH_ISSUER` | If JWT enabled | — | Expected issuer (`iss`) claim in access tokens |
+| `API_AUTH_AUDIENCE` | If JWT enabled | — | Expected audience (`aud`) claim in access tokens |
+| `API_AUTH_REQUIRED_SCOPES` | No | — | Comma-separated list of required scopes |
+| `API_AUTH_SCOPE_CLAIM_NAME` | No | `scp` | Claim name containing scopes (falls back to `scope`) |
+| `API_AUTH_JWT_ALGORITHMS` | No | `RS256` | Allowed signing algorithms |
+| `API_AUTH_ACCESS_TOKEN_IDP` | If multiple IDPs | — | IDP for token exchange (`okta`) |
 
 ### Provider Configuration
 
