@@ -393,6 +393,66 @@ The following environment variables are used with OpenAI.
 | --- | --- | --- |
 | `OPENAI_API_KEY` | `Y` | OpenAI API key |
 
+### Advanced Customization
+
+For deployments with multiple Stardog servers or databases, you can provide different Voicebox configurations for each endpoint and database combination. This allows you to customize LLM settings, enable/disable features, or use different models based on the target Stardog server.
+
+#### Configuration Directory
+
+Instead of (or in addition to) a single configuration file, you can specify a directory containing multiple configuration files:
+
+| Environment Variable | **Required** | **Description** |
+| --- | --- | --- |
+| `VBX_CONFIG_DIR` | `N` | The **absolute path** to a directory containing Voicebox configuration files. All `.json` files in this directory will be loaded. |
+
+#### Endpoint and Database Matching
+
+Each configuration file can include `endpoint` and `database` fields to specify which Stardog connections it applies to:
+
+```json
+{
+  "endpoint": "https://stardog-prod.example.com:5820",
+  "database": "my-database",
+  "default_llm_config": {
+    "llm_provider": "bedrock",
+    "llm_name": "us.meta.llama3-1-70b-instruct-v1:0"
+  }
+}
+```
+
+| **Field** | **Description** |
+| --- | --- |
+| `endpoint` | The Stardog server URL to match. Use `*` to match any endpoint. |
+| `database` | The database name to match. Use `*` to match any database. |
+
+#### Matching Priority
+
+When a request is made, Voicebox selects the most specific matching configuration:
+
+1. **Exact match** - Config with matching endpoint AND database
+2. **Endpoint wildcard** - Config with matching endpoint and `database: "*"`
+3. **Global wildcard** - Config with `endpoint: "*"` and `database: "*"`
+
+#### Example Setup
+
+```
+/voicebox-config/
+├── default.json           # endpoint: "*", database: "*"
+├── prod-server.json       # endpoint: "https://prod.example.com:5820", database: "*"
+└── prod-analytics.json    # endpoint: "https://prod.example.com:5820", database: "analytics"
+```
+
+With this setup:
+- Requests to `prod.example.com` with database `analytics` use `prod-analytics.json`
+- Requests to `prod.example.com` with any other database use `prod-server.json`
+- All other requests use `default.json`
+
+> [!NOTE]
+> If both `VBX_CONFIG_FILE` and `VBX_CONFIG_DIR` are specified, configurations from both sources are loaded. No two configuration files can have the same endpoint and database combination.
+
+> [!IMPORTANT]
+> If no matching configuration is found for a request, Voicebox will return an error. You should provide a global default configuration (`endpoint: "*"`, `database: "*"`) unless you intentionally want to disable Voicebox for specific endpoints or databases.
+
 ## JWT Authentication & Token Exchange
 
 For enterprise deployments requiring OAuth-based authentication between Launchpad, Voicebox, and your LLM Gateway, see the dedicated guide:
