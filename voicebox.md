@@ -413,6 +413,14 @@ The Voicebox Service is released independently of Launchpad.
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
 
+## 0.25.0 Release (Feb 5, 2026)
+
+* Add endpoint/database-specific Voicebox configuration support
+* Add #debug command to show query generation diagnostics
+* Support executing queries with GRAPH keyword
+* Sanitize var names that start or end with underscore
+* Slimmer base image with reduced vulnerabilities
+
 ## 0.24.0 Release (Dec 11, 2025)
 
 * Sanitize XSD IRIs in example queries
