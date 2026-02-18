@@ -138,6 +138,10 @@ You need to provide Launchpad with a certificate and the corresponding private k
 
 When `SSL_ENABLED=true` in Launchpad's configuration, Launchpad listens for HTTPS connections on port `8443`. You will also need to adjust the value of the `BASE_URL` environment variable in Launchpad's configuration, setting it to match the HTTPS-enabled URL that a user will access from the web browser.
 
+## Stardog Unit Usage Tracking
+
+<!-- TODO: Fill out this section with details on configuring and using Stardog unit usage tracking. -->
+
 ## Getting Help
 
 Issues are disabled on this repository. All support requests and feedback should be routed directly to either your dedicated Customer Success Manager (CSM) or Stardog Support.
