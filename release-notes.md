@@ -34,6 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| [3.8.0](#380-release-2026-02-19) | `v3.8.0` | [3.7.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v370-release) | [3.1.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v314-release) | [5.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v593-release) | [1.4.27](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1427-release) |
 | [3.7.0](#370-release-2025-12-18) | `v3.7.0` | [3.4.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v340-release) | [3.1.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v312-release) | [5.9.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v590-release) | [1.4.25](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1425-release) |
 | [3.6.1](#361-release-2025-10-30) | `v3.6.1` | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v300-release) | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v300-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
 | [3.6.0](#360-release-2025-10-20) | `v3.6.0` | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v300-release) | [3.0.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v300-release) | [5.8.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v584-release) | [1.4.22](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1422-release) |
@@ -45,6 +46,24 @@ Launchpad v3 uses semantic versioning.
 | [3.1.0](#310-release-2025-04-03) | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | [3.0.1](#301-release-2025-02-21) | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | [3.0.0](#300-release-2025-01-30) | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.8.0 Release (2026-02-19)
+
+> [!IMPORTANT]
+> **Recommended Stardog Version:** [`v12.0.0+`](https://docs.stardog.com/release-notes/stardog-platform#1200-release)
+>
+> **Recommended Voicebox Service Version:** [`v0.25.0+`](./voicebox.md#0250-release-feb-5-2026)
+>
+> If you intend to use Stardog unit usage tracking, you **must** use `v12.0.0+` of Stardog and `v0.25.0+` of the Voicebox Service.
+
+### New Features
+
+- Adds an "Advanced Details" section to the connection page, allowing users to view SSO connection settings and internal endpoint configuration for a connection.
+- Adds the ability to track Stardog unit usage for a given endpoint.
+
+### Security
+
+- Change to using a hardened Docker base image, significantly reducing security vulnerabilities.
 
 ## 3.7.0 Release (2025-12-18)
 
