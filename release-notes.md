@@ -59,7 +59,7 @@ Launchpad v3 uses semantic versioning.
 ### New Features
 
 
-- Adds the ability to track [Stardog unit usage](./README.md#stardog-unit-usage-tracking) for a given endpoint.
+- Adds the ability to track [Stardog unit usage](./README.md#stardog-unit-usage-tracking-beta) for a given endpoint.
 
 <img width="2315" height="563" alt="Screenshot 2026-02-18 at 12 08 21 PM" src="https://github.com/user-attachments/assets/666f276c-9e04-46b7-a614-ea21afe033d3" />
 
