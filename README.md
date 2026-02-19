@@ -138,9 +138,23 @@ You need to provide Launchpad with a certificate and the corresponding private k
 
 When `SSL_ENABLED=true` in Launchpad's configuration, Launchpad listens for HTTPS connections on port `8443`. You will also need to adjust the value of the `BASE_URL` environment variable in Launchpad's configuration, setting it to match the HTTPS-enabled URL that a user will access from the web browser.
 
-## Stardog Unit Usage Tracking
+## Stardog Unit Usage Tracking (Beta)
 
-<!-- TODO: Fill out this section with details on configuring and using Stardog unit usage tracking. -->
+Launchpad can track and report **Stardog Unit (SDU)** usage for connections to Stardog servers (`v12.0.0+`). Usage is aggregated from the Stardog Platform and, where applicable, from Voicebox usage events. Users can **download** a day-wise usage report as a CSV.
+
+### Voicebox Usage
+
+Launchpad collects Voicebox usage **daily at 1:30 AM UTC** for the previous calendar day (midnight-to-midnight UTC). This includes both in-app Voicebox usage and Voicebox public API endpoints. 
+Platform SDU data is not included in this run; it is synced on demand when users run **Sync Stardog Unit Usage**.
+
+### Sync Platform Usage
+
+Sync pulls SDU usage from the Stardog Platform for the connection, and stores it in Launchpad’s usage metrics. The Sync option is disabled while a sync is in progress or when data is already synced through yesterday midnight UTC.
+
+### Download Report
+
+The downloaded report combines platform SDU data (synced from the Stardog server) and Voicebox usage. Usage is aggregated across all connections that share the same endpoint. Once both platform and Voicebox usage data are available for an endpoint, user can download a consolidated report.
+
 
 ## Getting Help
 
