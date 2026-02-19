@@ -63,6 +63,9 @@ Launchpad v3 uses semantic versioning.
 
 <img width="2315" height="563" alt="Screenshot 2026-02-18 at 12 08 21 PM" src="https://github.com/user-attachments/assets/666f276c-9e04-46b7-a614-ea21afe033d3" />
 
+> [!NOTE]
+> Stardog unit usage tracking is in beta.
+
 - Adds an "Advanced" section to the connection page, allowing users to view SSO connection settings and internal endpoint configuration for a connection.
 
 <img width="2317" height="919" alt="Screenshot 2026-02-18 at 11 47 02 AM" src="https://github.com/user-attachments/assets/9123593f-66a5-4d46-ab1d-473520a56e2e" />
