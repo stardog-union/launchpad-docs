@@ -472,6 +472,11 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 0.26.0 Release (Mar 19, 2026)
+
+* Add HTTP basic authentication support for OpenAI
+* Support Azure Service Principal (SPN) authentication for Azure AI
+* Include timing and LLM usage information in #debug output by
 
 ## 0.25.0 Release (Feb 5, 2026)
 
