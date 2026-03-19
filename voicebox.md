@@ -476,7 +476,8 @@ The Voicebox Service is released independently of Launchpad.
 
 * Add HTTP basic authentication support for OpenAI
 * Support Azure Service Principal (SPN) authentication for Azure AI
-* Include timing and LLM usage information in #debug output by
+* Include timing and LLM usage information in #debug output
+* Update dependencies to address security advisories
 
 ## 0.25.0 Release (Feb 5, 2026)
 
