@@ -241,7 +241,7 @@ The following LLM providers are supported:
 
 #### Azure AI Configuration
 
-Voicebox can use an Azure AI endpoint deployed within [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry). 
+Voicebox can use an Azure AI endpoint deployed within [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry).
 
 The following configuration options are used with Azure LLM in the Voicebox configuration file. Update the `AZURE_AI_ENDPOINT` in the server URL to point to your endpoint.
 
@@ -251,11 +251,54 @@ The following configuration options are used with Azure LLM in the Voicebox conf
 | `llm_name` | `Meta-Llama-3.1-70B-Instruct` , `Meta-Llama-3.3-70B-Instruct`, `Llama-4-Maverick-17B-128E-Instruct-FP8` |
 | `server_url` | `https://AZURE_AI_ENDPOINT.services.ai.azure.com/models` |
 
-The following environment variables are used with Azure.
+##### API Key Authentication
+
+The simplest way to authenticate with Azure AI is using an API key.
 
 | Environment Variable | **Required** | **Description** |
 | --- | --- | --- |
 | `AZURE_API_KEY` | `Y` | Azure API key |
+
+##### Service Principal (SPN) Authentication
+
+As an alternative to API key authentication, Voicebox supports authenticating to Azure AI Services using a Service Principal via the OAuth 2.0 client credentials flow. When SPN variables are configured, the API key is not required.
+
+**Client Secret Authentication**
+
+| Environment Variable | **Required** | **Description** |
+| --- | --- | --- |
+| `AZURE_TENANT_ID` | `Y` | Azure Entra ID tenant ID |
+| `AZURE_CLIENT_ID` | `Y` | Service Principal application (client) ID |
+| `AZURE_CLIENT_SECRET` | `Y` | Service Principal client secret |
+
+**Certificate Authentication**
+
+| Environment Variable | **Required** | **Description** |
+| --- | --- | --- |
+| `AZURE_TENANT_ID` | `Y` | Azure Entra ID tenant ID |
+| `AZURE_CLIENT_ID` | `Y` | Service Principal application (client) ID |
+| `AZURE_CLIENT_CERTIFICATE_PATH` | `Y` | Path to PEM file containing private key and certificate |
+| `AZURE_CLIENT_CERTIFICATE_PASSWORD` | `N` | Password for the certificate private key, if encrypted |
+
+> [!NOTE]
+> If both certificate and client secret are configured, certificate authentication takes priority. If neither SPN method is configured, Voicebox falls back to `AZURE_API_KEY`.
+
+**Additional SPN Configuration**
+
+| Environment Variable | **Required** | **Description** |
+| --- | --- | --- |
+| `AZURE_CREDENTIAL_SCOPES` | `N` | Token audience scope(s) for the OAuth 2.0 client credentials request, comma-separated. Defaults to `https://cognitiveservices.azure.com/.default`. |
+| `AZURE_AUTHORITY_HOST` | `N` | Authority host for sovereign clouds. Defaults to `login.microsoftonline.com`. |
+
+**Azure Setup for SPN Authentication**
+
+1. **Create a Service Principal**: Go to **Microsoft Entra ID** → **App registrations** → **New registration**. Name it (e.g. `voicebox-service`) and register. Note the **Application (client) ID** and **Directory (tenant) ID** from the Overview page.
+
+2. **Create credentials**:
+   - **Option A: Client Secret** — Go to **Certificates & secrets** → **Client secrets** → **New client secret**. Set a description and expiration, then copy the secret **Value** (shown only once).
+   - **Option B: Certificate** — Generate a certificate, upload the public cert to the app registration, and mount the combined private key + cert PEM file into the Voicebox container. Set `AZURE_CLIENT_CERTIFICATE_PATH` to the mount path.
+
+3. **Assign the [Cognitive Services User](https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/ai-machine-learning#cognitive-services-user) role**: Go to your **Azure AI Services resource** → **Access control (IAM)** → **Add role assignment**. Search for **Cognitive Services User**, select it, and assign it to your Service Principal.
 
 #### AWS Bedrock Configuration
 
@@ -391,7 +434,31 @@ The following environment variables are used with OpenAI.
 
 | Environment Variable | **Required** | **Description** |
 | --- | --- | --- |
-| `OPENAI_API_KEY` | `Y` | OpenAI API key |
+| `OPENAI_API_KEY` | `Y` (unless `basic_auth` is configured) | OpenAI API key |
+
+##### Basic Authentication
+
+For OpenAI-compatible proxies that require HTTP Basic authentication instead of an API key, you can configure `basic_auth` in `provider_args`. When `basic_auth` is configured, `OPENAI_API_KEY` is not required.
+
+```json
+{
+    "default_llm_config": {
+        "llm_provider": "openai",
+        "llm_name": "gpt-4o",
+        "server_url": "https://your-llm-proxy.example.com/v1/",
+        "provider_args": {
+            "basic_auth": {
+                "client_id": "my-client-id",
+                "client_secret": "$LLM_CLIENT_SECRET"
+            }
+        }
+    }
+}
+```
+
+The `client_id` and `client_secret` are Base64-encoded at runtime to produce an `Authorization: Basic <token>` header. Values support the same `$ENV_VAR` template substitution used by `provider_args.headers` — use environment variable references (e.g. `$LLM_CLIENT_SECRET`) for sensitive values and hardcoded strings for non-sensitive values like `client_id`.
+
+An optional `auth_scheme` field can be set within `basic_auth` to change the authorization scheme (defaults to `"Basic"`).
 
 ### Advanced Customization
 
@@ -472,6 +539,12 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 0.26.0 Release (Mar 19, 2026)
+
+* Add [HTTP basic authentication support for OpenAI](#basic-authentication)
+* Support [Azure Service Principal (SPN) authentication](#service-principal-spn-authentication) for Azure AI
+* Include timing and LLM usage information in #debug output
+* Update dependencies to address security advisories
 
 ## 0.25.0 Release (Feb 5, 2026)
 
