@@ -34,6 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| [3.8.3](#383-release-2026-03-30) | `v3.8.3` | [3.9.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v391-release) | [3.1.8](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v318-release) | [5.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5100-release) | [1.4.29](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1429-release) |
 | [3.8.2](#382-release-2026-03-23) | `v3.8.2` | [3.9.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v391-release) | [3.1.8](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v318-release) | [5.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5100-release) | [1.4.29](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1429-release) |
 | [3.8.1](#381-release-2026-02-24) | `v3.8.1` | [3.8.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v380-release) | [3.1.6](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v316-release) | [5.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v594-release) | [1.4.27](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1427-release) |
 | [3.8.0](#380-release-2026-02-19) | `v3.8.0` | [3.7.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v370-release) | [3.1.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v315-release) | [5.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v594-release) | [1.4.27](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1427-release) |
@@ -48,6 +49,12 @@ Launchpad v3 uses semantic versioning.
 | [3.1.0](#310-release-2025-04-03) | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | [3.0.1](#301-release-2025-02-21) | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | [3.0.0](#300-release-2025-01-30) | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.8.3 Release (2026-03-30)
+
+### Bug Fixes
+
+- Fixed a login failure that could occur when the identity provider returns the `email_verified` claim on the ID token as a string value instead of a boolean.
 
 ## 3.8.2 Release (2026-03-23)
 
