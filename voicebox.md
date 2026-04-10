@@ -539,6 +539,10 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 0.27.0 Release (Apr 8, 2026)
+
+* Fix streaming memory accumulation for improved memory efficiency
+
 ## 0.26.0 Release (Mar 19, 2026)
 
 * Add [HTTP basic authentication support for OpenAI](#basic-authentication)
