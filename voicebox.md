@@ -230,6 +230,7 @@ The LLM configuration is specified as a JSON object in the Voicebox configuratio
 | `llm_name` | `Y` | Name of the LLM | String |
 | `server_url` | `N` | Optional server URL for the LLM provider. May be required based on the provider configured. | URL |
 | `max_tokens` | `N` | Maximum number of tokens for LLM requests. This limit can be used to control LLM costs to prevent LLM from returning very long responses. | Integer |
+| `provider_args` | `N` | Provider-specific arguments. See [Custom Headers](#custom-headers) for details. | Object |
 
 The following LLM providers are supported:
 - [Azure AI](#azure-ai-configuration)
@@ -250,6 +251,8 @@ The following configuration options are used with Azure LLM in the Voicebox conf
 | `llm_provider` | `azure` |
 | `llm_name` | `Meta-Llama-3.1-70B-Instruct` , `Meta-Llama-3.3-70B-Instruct`, `Llama-4-Maverick-17B-128E-Instruct-FP8` |
 | `server_url` | `https://AZURE_AI_ENDPOINT.services.ai.azure.com/models` |
+
+Azure AI also supports [custom headers](#custom-headers) via `provider_args.headers`.
 
 ##### API Key Authentication
 
@@ -410,25 +413,7 @@ The following configuration options are used with OpenAI in the Voicebox configu
 | `llm_name` | `gpt-4o`, `gpt-4o-mini` |
 | `server_url` | (Optional - can be set if OpenAI endpoint is access via proxy)  |
 
-It is also possible to provide optional custom HTTP headers included in the OpenAI requests. Here is an example configuration file showing how these custom headers can be configured:
-
-```json
-{  
-    "default_llm_config": {    
-        "llm_provider": "openai",
-        "llm_name": "gpt-4o-mini",
-        "server_url": "https://api.openai.com/v1/",
-        "provider_args": {
-          "headers" : {
-        "OpenAI-Organization": "org-gnSjNrpIz0bb7V1modfLrNof",
-        "OpenAI-Project": "$PROJECT_ID"
-          }
-        } 
-    }
-}
-```
-
-The values for custom headers should be valid [Python string templates](https://docs.python.org/3/library/string.html#template-strings). The variables mentioned in template string should be defined as environment variables, e.g. in the above example there should be an environment variable named `PROJECT_ID`. Environment variables is a better choice for including sensitive values in the configuration file whereas non-sensitive values can be directly included in the configuration file, e.g. organization value in the above example.
+OpenAI also supports [custom headers](#custom-headers) via `provider_args.headers`.
 
 The following environment variables are used with OpenAI.
 
@@ -459,6 +444,49 @@ For OpenAI-compatible proxies that require HTTP Basic authentication instead of 
 The `client_id` and `client_secret` are Base64-encoded at runtime to produce an `Authorization: Basic <token>` header. Values support the same `$ENV_VAR` template substitution used by `provider_args.headers` — use environment variable references (e.g. `$LLM_CLIENT_SECRET`) for sensitive values and hardcoded strings for non-sensitive values like `client_id`.
 
 An optional `auth_scheme` field can be set within `basic_auth` to change the authorization scheme (defaults to `"Basic"`).
+
+### Custom Headers
+
+The OpenAI and Azure AI providers support custom HTTP headers included in LLM requests. Custom headers are configured via `provider_args.headers` in the LLM configuration. Here is an example:
+
+```json
+{  
+    "default_llm_config": {    
+        "llm_provider": "openai",
+        "llm_name": "gpt-4o-mini",
+        "server_url": "https://api.openai.com/v1/",
+        "provider_args": {
+          "headers" : {
+            "OpenAI-Organization": "org-gnSjNrpIz0bb7V1modfLrNof",
+            "OpenAI-Project": "$PROJECT_ID"
+          }
+        } 
+    }
+}
+```
+
+Header values support [Python string template](https://docs.python.org/3/library/string.html#template-strings) substitution. Variables referenced in the template string (e.g. `$PROJECT_ID`) should be defined as environment variables on the Voicebox Service. Environment variables are a better choice for sensitive values whereas non-sensitive values can be directly included in the configuration file.
+
+#### `$VOICEBOX_USER` Variable
+
+In addition to environment variables, the special variable `$VOICEBOX_USER` is automatically resolved to the identity of the user making the request. For web users this is the authenticated username. For [Public API](#using-voicebox-programmatically) requests this is the `X-Client-Id` header value.
+
+This allows LLM requests to carry user identity, which can be useful for auditing and access control at the LLM provider level:
+
+```json
+{  
+    "default_llm_config": {    
+        "llm_provider": "azure",
+        "llm_name": "Meta-Llama-3.3-70B-Instruct",
+        "server_url": "https://my-endpoint.services.ai.azure.com/models",
+        "provider_args": {
+          "headers" : {
+            "X-User-Identity": "$VOICEBOX_USER"
+          }
+        } 
+    }
+}
+```
 
 ### Advanced Customization
 
