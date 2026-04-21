@@ -239,7 +239,7 @@ The following LLM providers are supported:
 - [Google Vertex](#google-vertex-configuration)
 - [OpenAI](#openai-configuration)
 
-#### Azure AI Configuration
+#### Azure AI Foundry Configuration
 
 Voicebox can use an Azure AI endpoint deployed within [Azure AI Foundry](https://azure.microsoft.com/en-us/products/ai-foundry).
 
