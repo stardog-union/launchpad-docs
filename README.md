@@ -72,7 +72,16 @@ This is the general guide to getting Launchpad up and running. For more detailed
     - `/data` is the directory where Launchpad will persist data. **This should be mounted to a volume for persistence**.
 
 > [!IMPORTANT]
-> By default, the Launchpad container will run as `root` user (uid `0`). This is not recommended for production use. If you want to run the container as a different user, you can use the `--user` flag in the `docker run` command. See [Run Launchpad with a Given User](#run-launchpad-with-a-given-user) for more information.
+> Starting in v3.9.0, the Launchpad container runs as a non-root user (`launchpad`, UID `100001`) by default. Previously the default was `root` (UID `0`).
+>
+> **Upgrading from v3.8.x or earlier?** If your `/data` volume is owned by `root`, the container will fail to start. To fix this, either:
+>
+> - Change ownership on the host: `sudo chown -R 100001:100001 /path/to/launchpad/data`, or
+> - Continue running as root by passing `--user 0:0` to `docker run`.
+>
+> The container's entrypoint prints this guidance if it detects an unwritable `/data` directory.
+>
+> See [Run Launchpad with a Given User](#run-launchpad-with-a-given-user) for more on running with a custom UID.
 
 4. Access Launchpad in your browser at the [`BASE_URL`](#base_url) you configured.
 
@@ -85,7 +94,7 @@ As mentioned in the [Getting Started](#getting-started) section, Launchpad persi
 
 ## Run Launchpad with a Given User
 
-You can run Launchpad with a given user by using the `--user` flag in the `docker run` command. This is useful if you want to run Launchpad as a specific user instead of the default `root` user.
+You can run Launchpad with a given user by using the `--user` flag in the `docker run` command. This is useful if you want to run Launchpad as a specific user instead of the default `launchpad` user (UID `100001`).
 
 ```bash
 docker run \
