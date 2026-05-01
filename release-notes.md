@@ -34,6 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| [3.9.0](#390-release-2026-05-01) | `v3.9.0` | [3.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v394-release) | [3.1.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v3110-release) | [5.11.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5110-release) | [1.4.31](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1431-release) |
 | [3.8.4](#384-release-2026-04-09) | `v3.8.4` | [3.9.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v392-release) | [3.1.9](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v319-release) | [5.10.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5101-release) | [1.4.30](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1430-release) |
 | [3.8.3](#383-release-2026-03-30) | `v3.8.3` | [3.9.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v391-release) | [3.1.8](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v318-release) | [5.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5100-release) | [1.4.29](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1429-release) |
 | [3.8.2](#382-release-2026-03-23) | `v3.8.2` | [3.9.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v391-release) | [3.1.8](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v318-release) | [5.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5100-release) | [1.4.29](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1429-release) |
@@ -50,6 +51,32 @@ Launchpad v3 uses semantic versioning.
 | [3.1.0](#310-release-2025-04-03) | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | [3.0.1](#301-release-2025-02-21) | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | [3.0.0](#300-release-2025-01-30) | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.9.0 Release (2026-05-01)
+
+> [!IMPORTANT]
+> **Breaking change:** Launchpad now runs as a non-root user (`launchpad`, UID `100001`) by default. Previously the default was `root` (UID `0`).
+>
+> If you are upgrading from v3.8.x or earlier and your `/data` volume is owned by `root`, the container will fail to start. To resolve this, either:
+>
+> - Change ownership on the host: `sudo chown -R 100001:100001 /path/to/launchpad/data`, or
+> - Continue running as root by passing `--user 0:0` to `docker run`.
+>
+> The container's entrypoint prints this guidance if it detects an unwritable `/data` directory. See [Run Launchpad with a Given User](./README.md#run-launchpad-with-a-given-user) for more on running with a custom UID.
+
+> [!IMPORTANT]
+> **Recommended Stardog Version:** [`v12.0.0+`](https://docs.stardog.com/release-notes/stardog-platform#1200-release)
+>
+> **Recommended Voicebox Service Version:** [`v0.27.0+`](./voicebox.md#0270-release-apr-8-2026)
+
+### Modifications
+
+- The Launchpad Docker image now runs as a non-root user (`launchpad`, UID `100001`) by default. This improves security posture out of the box and supports deployments that require running as a non-root user. Existing flexibility is preserved: you can still run as root with `--user 0:0`, run with an arbitrary UID via `--user <uid>:0`, or use OpenShift-style random UIDs. See the upgrade notice above for migration guidance.
+- Updated bundled Stardog Applications (Designer, Explorer, Studio, Knowledge Catalog) to their latest versions.
+
+### Security
+
+- Updated internal packages and dependencies to address security vulnerabilities.
 
 ## 3.8.4 Release (2026-04-09)
 
