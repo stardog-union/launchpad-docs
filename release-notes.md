@@ -59,6 +59,10 @@ Launchpad v3 uses semantic versioning.
 
 - Updated Stardog Studio to [v5.11.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5111-release).
 
+### Security
+
+- Updated internal packages and dependencies to address security vulnerabilities.
+
 ## 3.9.0 Release (2026-05-01)
 
 > [!IMPORTANT]
