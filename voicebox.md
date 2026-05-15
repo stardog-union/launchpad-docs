@@ -233,12 +233,35 @@ The LLM configuration is specified as a JSON object in the Voicebox configuratio
 | `provider_args` | `N` | Provider-specific arguments. See [Custom Headers](#custom-headers) for details. | Object |
 
 The following LLM providers are supported:
+- [Anthropic](#anthropic-configuration)
 - [Azure AI](#azure-ai-configuration)
 - [AWS Bedrock](#aws-bedrock-configuration)
 - [Databricks](#databricks-configuration)
 - [Fireworks](#fireworks-configuration)
 - [Google Vertex](#google-vertex-configuration)
 - [OpenAI](#openai-configuration)
+
+#### Anthropic Configuration
+
+Voicebox can use [Anthropic](https://www.anthropic.com/) as an LLM provider, either directly via the Anthropic API or through [AWS Bedrock](#aws-bedrock-configuration) and Azure AI Foundry endpoints that host Anthropic models.
+
+The following configuration options are used with Anthropic in the Voicebox configuration file.
+
+| **Configuration Option** | **Available Options** |
+| --- | --- |
+| `llm_provider` | `anthropic` |
+| `llm_name` | `claude-sonnet-4-6`, `claude-haiku-4-5-20251001` |
+| `server_url` | (Optional — set to an Azure AI Foundry endpoint to use Azure-hosted Anthropic models, e.g. `https://AZURE_AI_ENDPOINT.services.ai.azure.com/anthropic/`) |
+
+The following environment variables are used with Anthropic.
+
+| Environment Variable | **Required** | **Description** |
+| --- | --- | --- |
+| `ANTHROPIC_API_KEY` | `Y` (unless using Azure AI Foundry with `AZURE_API_KEY`) | Anthropic API key |
+
+When `server_url` points to an Azure AI Foundry endpoint, you can use either `ANTHROPIC_API_KEY` or `AZURE_API_KEY` for authentication. If both are set, `ANTHROPIC_API_KEY` takes priority.
+
+Anthropic models can also be used via [AWS Bedrock](#aws-bedrock-configuration) using the `bedrock` provider.
 
 #### Azure AI Foundry Configuration
 
@@ -312,7 +335,7 @@ The following configuration options are used with Bedrock LLM in the Voicebox co
 | **Configuration Option** | **Available Options** |
 | --- | --- |
 | `llm_provider` | `bedrock` |
-| `llm_name` | `meta.llama3-1-70b-instruct-v1:0` , `us.meta.llama3-1-70b-instruct-v1:0`, `meta.llama4-maverick-17b-instruct-v1:0`, `us.meta.llama4-maverick-17b-instruct-v1:0`, (application inference profile name) |
+| `llm_name` | `meta.llama3-1-70b-instruct-v1:0` , `us.meta.llama3-1-70b-instruct-v1:0`, `meta.llama4-maverick-17b-instruct-v1:0`, `us.meta.llama4-maverick-17b-instruct-v1:0`, `us.anthropic.claude-haiku-4-5-20251001-v1:0`, (application inference profile name) |
 
 AWS Bedrock allows users to create [application inference profiles](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-create.html) to track usage and costs when invoking a model. The ARN associated with an inference profile can be used as the `llm_name` in Voicebox configuration. All LLM calls initiated by Voicebox will be done using this inference profile.
 
@@ -566,6 +589,17 @@ The Voicebox Service is released independently of Launchpad.
 
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
+
+## 0.29.0 Release (May 14, 2026)
+
+* Add support for [Anthropic](#anthropic-configuration) as an LLM provider
+* Support Anthropic models hosted on [AWS Bedrock](#aws-bedrock-configuration) and [Azure AI Foundry](#anthropic-configuration)
+* Always return query lineage even when metadata collection is disabled
+
+## 0.28.0 Release (Apr 16, 2026)
+
+* Support [custom HTTP headers](#custom-headers) for Azure AI Foundry LLM provider
+* Add [`$VOICEBOX_USER`](#voicebox_user-variable) special variable for custom headers that resolves to the authenticated username
 
 ## 0.27.0 Release (Apr 8, 2026)
 
