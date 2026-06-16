@@ -59,7 +59,7 @@ Launchpad v3 uses semantic versioning.
 ### New Features
 
 - Added a new **Stardog Units Dashboard** for monitoring Stardog usage.
-- Added support for **Auth0** as a login provider.
+- Added support for using Auth0 as a login provider to authenticate users into Launchpad. See [Auth0 Login Provider](./providers/auth0.md) for more information.
 
 ### Modifications
 
