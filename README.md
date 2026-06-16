@@ -344,6 +344,7 @@ Launchpad supports various authentication providers for both logging users into 
 | Provider | Login Provider | SSO Connections |
 | :------- | :------------- | :-------------- |
 | [Microsoft Entra](./providers/microsoft-entra.md) | ✅ | ✅ |
+| [Auth0](./providers/auth0.md) | ✅ | ❌ |
 | [Google](./providers/google.md) | ✅ | ❌ |
 | [Okta](./providers/okta.md) | ✅ | ✅ |
 | [PingOne](./providers/pingone.md) | ✅ | ✅ |
