@@ -34,6 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| [3.10.0](#3100-release-2026-06-17) | `v3.10.0` | [3.9.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v397-release) | [3.2.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v321-release) | [5.11.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5114-release) | [1.4.34](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1434-release) |
 | [3.9.1](#391-release-2026-05-01) | `v3.9.1` | [3.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v394-release) | [3.1.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v3110-release) | [5.11.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5111-release) | [1.4.31](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1431-release) |
 | [3.9.0](#390-release-2026-05-01) | `v3.9.0` | [3.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v394-release) | [3.1.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v3110-release) | [5.11.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5110-release) | [1.4.31](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1431-release) |
 | [3.8.4](#384-release-2026-04-09) | `v3.8.4` | [3.9.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v392-release) | [3.1.9](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v319-release) | [5.10.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5101-release) | [1.4.30](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1430-release) |
@@ -52,6 +53,22 @@ Launchpad v3 uses semantic versioning.
 | [3.1.0](#310-release-2025-04-03) | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | [3.0.1](#301-release-2025-02-21) | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | [3.0.0](#300-release-2025-01-30) | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.10.0 Release (2026-06-17)
+
+### New Features
+
+- Added a new **Stardog Units Dashboard** for monitoring Stardog usage.
+- Added support for using Auth0 as a login provider to authenticate users into Launchpad. See [Auth0 Login Provider](./providers/auth0.md) for more information.
+
+### Modifications
+
+- Updated branding across the Launchpad interface.
+- Updated bundled Stardog Applications (Designer, Explorer, Studio, Knowledge Catalog) to their latest versions.
+
+### Security
+
+- Updated internal packages and dependencies to address security vulnerabilities.
 
 ## 3.9.1 Release (2026-05-01)
 
