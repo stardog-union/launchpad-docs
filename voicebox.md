@@ -590,6 +590,13 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 1.0.0-beta.1 Release (June 30, 2026)
+
+> [!NOTE]
+> This is a beta build of the next-generation Voicebox Service, distributed under the `v1.0.0-beta.1` tag. It powers the Launchpad public API beta and runs alongside the stable `0.x` service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md) for deployment details.
+
+* First beta of the next-generation Voicebox Service.
+
 ## 0.29.0 Release (May 14, 2026)
 
 * Add support for [Anthropic](#anthropic-configuration) as an LLM provider
