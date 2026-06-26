@@ -4,6 +4,8 @@ A practical guide for deploying the Voicebox Service that powers the Launchpad b
 
 > [!NOTE]
 > The beta runs on a dedicated **beta** build of the Voicebox Service, tagged `v1.0.0-beta.1`. It is internal only and intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.29.0`) is unaffected by everything in this guide.
+>
+> Routing public API traffic to the beta service requires **Launchpad v3.11.0 or later** — earlier versions have no `VOICEBOX_BETA_SERVICE_ENDPOINT` routing, so the beta service receives no traffic.
 
 ## Background
 
