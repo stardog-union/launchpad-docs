@@ -58,11 +58,11 @@ Launchpad v3 uses semantic versioning.
 ## 3.11.0 Release (2026-06-30)
 
 > [!IMPORTANT]
-> The Voicebox public API beta is optional and off by default. To try it, run the experimental Voicebox Service (`v1.0.0-beta.1`) and point Launchpad at it with `VOICEBOX_EXPERIMENTAL_SERVICE_ENDPOINT`. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md) for setup. The stable Voicebox Service (`v0.29.0`) continues to serve all other Voicebox traffic.
+> The Voicebox public API beta is optional and off by default. To try it, run the beta Voicebox Service (`v1.0.0-beta.1`) and point Launchpad at it with `VOICEBOX_BETA_SERVICE_ENDPOINT`. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md) for setup. The stable Voicebox Service (`v0.29.0`) continues to serve all other Voicebox traffic.
 
 ### New Features
 
-- Added the ability to route Launchpad public API traffic to an experimental build of the Voicebox Service that powers the Voicebox beta. When the beta is enabled and `VOICEBOX_EXPERIMENTAL_SERVICE_ENDPOINT` is set, public API requests are routed to the experimental service; all other traffic continues to use the stable service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md).
+- Added the ability to route Launchpad public API traffic to a beta build of the Voicebox Service that powers the Voicebox beta. When the beta is enabled and `VOICEBOX_BETA_SERVICE_ENDPOINT` is set, public API requests are routed to the beta service; all other traffic continues to use the stable service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md).
 
 ### Security
 

@@ -3,11 +3,11 @@
 A practical guide for deploying the Voicebox Service that powers the Launchpad beta: what the frame store is, what changes versus a stateless service, what you need to set, and what logs to watch.
 
 > [!NOTE]
-> The beta runs on an **experimental** build of the Voicebox Service, tagged `v1.0.0-beta.1`. It is internal only and intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.29.0`) is unaffected by everything in this guide.
+> The beta runs on a dedicated **beta** build of the Voicebox Service, tagged `v1.0.0-beta.1`. It is internal only and intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.29.0`) is unaffected by everything in this guide.
 
 ## Background
 
-The experimental Voicebox Service produces **frames**: the tabular results behind a conversation turn. It persists them so a later turn can reuse a previous result without re-querying Stardog. Frames are written as snappy-compressed Parquet files on local disk, one file per frame, laid out as `{frame_store_path}/{context_id}/{frame_id}.parquet`.
+The beta Voicebox Service produces **frames**: the tabular results of the queries it runs against Stardog to answer a conversation turn. It persists them so a later turn can reuse a previous result without re-querying Stardog. Frames are written as snappy-compressed Parquet files on local disk, one file per frame, laid out as `{frame_store_path}/{conversation_id}/{frame_id}.parquet`.
 
 Conversation memory is separate from frames. Launchpad resends the conversation lineage on every turn, so the server holds no per-conversation memory between turns. The practical upshot is that **frames are an optimization, not a source of truth**. If a frame is missing (disk full, volume lost, expired), the service recomputes it from Stardog. Nothing is corrupted; you pay recompute time.
 
@@ -16,17 +16,40 @@ Conversation memory is separate from frames. Launchpad resends the conversation 
 The beta runs **two Voicebox Service deployments side by side from the same image at different tags**:
 
 - **stable** (the `0.x` line, currently `v0.29.0`): the existing service serving today's Voicebox endpoints. Runs as one or more instances and keeps no local frame store.
-- **experimental** (`v1.0.0-beta.1`): the new service. It persists result frames to local disk, so it runs as a **single instance**, and for the beta serves public API requests only.
+- **beta** (`v1.0.0-beta.1`): the new service. It persists result frames to local disk, so it runs as a **single instance**, and for the beta serves public API requests only.
 
-Launchpad routes per request: a public API request goes to the experimental service when a feature flag is enabled (and `VOICEBOX_EXPERIMENTAL_SERVICE_ENDPOINT` is set); everything else goes to the stable service (`VOICEBOX_SERVICE_ENDPOINT`). Both are internal only.
+Both are internal only. Launchpad talks to each through its own endpoint:
 
-| | stable (`v0.29.0`) | experimental (`v1.0.0-beta.1`) |
+```mermaid
+flowchart LR
+    LP([Launchpad])
+    LP -->|VOICEBOX_SERVICE_ENDPOINT| ST["Stable service<br/>v0.29.0 · stateless<br/>one or more instances"]
+    LP -->|VOICEBOX_BETA_SERVICE_ENDPOINT| BE["Beta service<br/>v1.0.0-beta.1 · single instance"]
+    BE --> FS[("Local frame store<br/>persistent volume")]
+```
+
+| | stable (`v0.29.0`) | beta (`v1.0.0-beta.1`) |
 | :--- | :--- | :--- |
 | Instances | one or more | exactly 1 (local-disk store) |
 | Persisted results | none (recomputed from Stardog) | local frame store on a volume |
 | Traffic | default Voicebox traffic | public API requests (flag-gated) |
 
-The rest of this guide covers the **experimental service**, which carries the storage requirements.
+### How Traffic Is Routed
+
+Launchpad routes **per request**. A request only reaches the beta service when it is a public API request *and* the beta is fully configured — the feature flag is enabled and `VOICEBOX_BETA_SERVICE_ENDPOINT` is set. Everything else falls back to the stable service, so a half-configured or unconfigured beta simply means all traffic keeps flowing to stable:
+
+```mermaid
+flowchart TD
+    R([Request reaches Launchpad]) --> Q{Public API request?}
+    Q -->|No| ST[Stable service<br/>VOICEBOX_SERVICE_ENDPOINT]
+    Q -->|Yes| C{Beta flag enabled<br/>AND VOICEBOX_BETA_SERVICE_ENDPOINT set?}
+    C -->|No| ST
+    C -->|Yes| BE[Beta service<br/>VOICEBOX_BETA_SERVICE_ENDPOINT]
+```
+
+The practical upshot: the beta is opt-in and safe to leave unconfigured. Until you set both the flag and the endpoint, the beta service receives no traffic.
+
+The rest of this guide covers the **beta service**, which carries the storage requirements.
 
 ## What Changes Versus a Stateless Deployment
 
@@ -38,15 +61,9 @@ The rest of this guide covers the **experimental service**, which carries the st
 
 ## Configuration
 
-### Required
+### Required: mount a volume
 
-Set the backend explicitly so intent is visible in config:
-
-| Environment Variable | Value | Why |
-| :--- | :--- | :--- |
-| `VOICEBOX_FRAME_STORE_BACKEND` | `local` | The default; set explicitly so the storage mode is obvious in your config. |
-
-Then mount a writable volume at the frame store path (default `/var/lib/voicebox/v4/frames`):
+Mount a writable volume at the frame store path (default `/var/lib/voicebox/frames`):
 
 - **Docker (named volume):** Mount it at the frame store path. The image pre-creates that directory owned by the non-root container user, and a named volume inherits that ownership, so no extra steps are needed. Prefer a named volume over a bind mount.
 - **Kubernetes:** Use a single-replica deployment with a `ReadWriteOnce` persistent volume mounted at the frame store path, a `Recreate` update strategy, and a security context that makes the mount writable by the non-root container user.
@@ -57,7 +74,6 @@ Most deployments only touch these. Leave the rest at their defaults.
 
 | Environment Variable | Default | When to change |
 | :--- | :--- | :--- |
-| `VOICEBOX_FRAME_STORE_LOCAL_PATH` | `/var/lib/voicebox/v4/frames` | Only if you mount the volume somewhere else. |
 | `VOICEBOX_FRAME_STORE_LOCAL_TTL_DAYS` | `7` | Lower on a small volume to reclaim disk faster; raise for longer-lived conversations. Must be `> 0` while the sweeper is enabled. |
 | `VOICEBOX_FRAME_STORE_SWEEPER_ENABLED` | `true` | Set to `false` to disable the background eviction sweeper entirely. |
 | `VOICEBOX_FRAME_STORE_LARGE_FRAME_WARN_MB` | `10` | Lower for earlier oversized-frame warnings; `0` disables them. |
@@ -83,6 +99,6 @@ Logs are emitted as structured JSON when `LOG_TYPE=JSON` (the default): each lin
 | `frame_store.readiness` | `WARNING` (`ready=false`) / `INFO` (`ready=true`) | Frame path writability changed. `ready=false` means a missing or unwritable mount. **Alert on `ready=false`.** Carries `path`, `detail`. |
 | `local_disk.large_frame` | `WARNING` | A single frame exceeded the warn threshold. Carries `size_bytes` / `threshold_bytes`. Informational; a spike can signal runaway result sizes. |
 | `frame_store_sweep.cycle` | `INFO` | A sweep pass finished: `scanned`, `deleted`, `skipped_recent`, `tmp_deleted`, `errors`, `elapsed_ms`. Watch `errors` and `elapsed_ms`. |
-| `voicebox_v4_backends` | `INFO` | Startup banner: resolved backends, frame path, and `frame_local_writable`. Use it to confirm your config and mount took effect. |
+| `voicebox_backends` | `INFO` | Startup banner: resolved backends, frame path, and `frame_local_writable`. Use it to confirm your config and mount took effect. |
 
 The readiness monitor logs only on a **change**, so a healthy service stays quiet; a single `ready=false` is the signal that something changed.
