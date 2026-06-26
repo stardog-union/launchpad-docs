@@ -32,22 +32,22 @@ flowchart LR
 | :--- | :--- | :--- |
 | Instances | one or more | exactly 1 (local-disk store) |
 | Persisted results | none (recomputed from Stardog) | local frame store on a volume |
-| Traffic | default Voicebox traffic | public API requests (flag-gated) |
+| Traffic | default Voicebox traffic | public API requests (when endpoint is set) |
 
 ### How Traffic Is Routed
 
-Launchpad routes **per request**. A request only reaches the beta service when it is a public API request *and* the beta is fully configured — the feature flag is enabled and `VOICEBOX_BETA_SERVICE_ENDPOINT` is set. Everything else falls back to the stable service, so a half-configured or unconfigured beta simply means all traffic keeps flowing to stable:
+Launchpad routes **per request**. A request only reaches the beta service when it is a public API request *and* `VOICEBOX_BETA_SERVICE_ENDPOINT` is set. Everything else falls back to the stable service, so leaving the endpoint unset simply means all traffic keeps flowing to stable:
 
 ```mermaid
 flowchart TD
     R([Request reaches Launchpad]) --> Q{Public API request?}
     Q -->|No| ST[Stable service<br/>VOICEBOX_SERVICE_ENDPOINT]
-    Q -->|Yes| C{Beta flag enabled<br/>AND VOICEBOX_BETA_SERVICE_ENDPOINT set?}
+    Q -->|Yes| C{VOICEBOX_BETA_SERVICE_ENDPOINT set?}
     C -->|No| ST
     C -->|Yes| BE[Beta service<br/>VOICEBOX_BETA_SERVICE_ENDPOINT]
 ```
 
-The practical upshot: the beta is opt-in and safe to leave unconfigured. Until you set both the flag and the endpoint, the beta service receives no traffic.
+The practical upshot: the beta is opt-in and safe to leave unconfigured. Until you set `VOICEBOX_BETA_SERVICE_ENDPOINT`, the beta service receives no traffic.
 
 The rest of this guide covers the **beta service**, which carries the storage requirements.
 

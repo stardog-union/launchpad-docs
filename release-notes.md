@@ -62,7 +62,7 @@ Launchpad v3 uses semantic versioning.
 
 ### New Features
 
-- Added the ability to route Launchpad public API traffic to a beta build of the Voicebox Service that powers the Voicebox beta. When the beta is enabled and `VOICEBOX_BETA_SERVICE_ENDPOINT` is set, public API requests are routed to the beta service; all other traffic continues to use the stable service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md).
+- Added the ability to route Launchpad public API traffic to a beta build of the Voicebox Service that powers the Voicebox beta. When `VOICEBOX_BETA_SERVICE_ENDPOINT` is set, public API requests are routed to the beta service; all other traffic continues to use the stable service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md).
 
 ### Modifications
 
