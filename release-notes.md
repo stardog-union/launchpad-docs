@@ -34,7 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
-| [3.11.0](#3110-release-2026-06-30) | `v3.11.0` | [3.9.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v397-release) | [3.2.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v321-release) | [5.11.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5114-release) | [1.4.34](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1434-release) |
+| [3.11.0](#3110-release-2026-06-30) | `v3.11.0` | [3.9.8](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v398-release) | [3.2.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v322-release) | [5.11.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5115-release) | [1.4.35](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1435-release) |
 | [3.10.0](#3100-release-2026-06-17) | `v3.10.0` | [3.9.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v397-release) | [3.2.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v321-release) | [5.11.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5114-release) | [1.4.34](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1434-release) |
 | [3.9.1](#391-release-2026-05-01) | `v3.9.1` | [3.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v394-release) | [3.1.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v3110-release) | [5.11.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5111-release) | [1.4.31](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1431-release) |
 | [3.9.0](#390-release-2026-05-01) | `v3.9.0` | [3.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v394-release) | [3.1.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v3110-release) | [5.11.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5110-release) | [1.4.31](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1431-release) |
@@ -63,6 +63,10 @@ Launchpad v3 uses semantic versioning.
 ### New Features
 
 - Added the ability to route Launchpad public API traffic to a beta build of the Voicebox Service that powers the Voicebox beta. When the beta is enabled and `VOICEBOX_BETA_SERVICE_ENDPOINT` is set, public API requests are routed to the beta service; all other traffic continues to use the stable service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md).
+
+### Modifications
+
+- Updated bundled Stardog Applications (Designer, Explorer, Studio, Knowledge Catalog) to their latest versions.
 
 ### Security
 
