@@ -47,6 +47,8 @@ flowchart TD
     C -->|Yes| BE[Beta service<br/>VOICEBOX_BETA_SERVICE_ENDPOINT]
 ```
 
+This is not a new public API. The endpoints and response format are unchanged — the beta only swaps the backend service that handles these existing public API requests, so no client changes are needed.
+
 The practical upshot: the beta is opt-in and safe to leave unconfigured. Until you set `VOICEBOX_BETA_SERVICE_ENDPOINT`, the beta service receives no traffic.
 
 The rest of this guide covers the **beta service**, which carries the storage requirements.
