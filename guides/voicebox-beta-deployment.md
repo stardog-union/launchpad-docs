@@ -1,11 +1,14 @@
-# Deploying the Voicebox Service for the Beta
+# Deploying the Voicebox Service (Public API Beta)
+
+> [!IMPORTANT]
+> **Applies to:** Launchpad v3.11.0+ · Voicebox Service `v1.0.0-beta.1` (beta)
+>
+> Routing public API traffic to the beta service requires **Launchpad v3.11.0 or later** - earlier versions have no `VOICEBOX_BETA_SERVICE_ENDPOINT` routing, so the beta service receives no traffic.
 
 A practical guide for deploying the Voicebox Service that powers the Launchpad beta: what the frame store is, what changes versus a stateless service, what you need to set, and what logs to watch.
 
 > [!NOTE]
 > The beta runs on a dedicated **beta** build of the Voicebox Service, tagged `v1.0.0-beta.1`. It is internal only and intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.29.0`) is unaffected by everything in this guide.
->
-> Routing public API traffic to the beta service requires **Launchpad v3.11.0 or later** — earlier versions have no `VOICEBOX_BETA_SERVICE_ENDPOINT` routing, so the beta service receives no traffic.
 
 ## Background
 
@@ -49,7 +52,7 @@ flowchart TD
     C -->|Yes| BE[Beta service<br/>VOICEBOX_BETA_SERVICE_ENDPOINT]
 ```
 
-This is not a new public API. The endpoints and response format are unchanged — the beta only swaps the backend service that handles these existing public API requests, so no client changes are needed.
+This is not a new public API. The endpoints and response format are unchanged - the beta only swaps the backend service that handles these existing public API requests, so no client changes are needed.
 
 The practical upshot: the beta is opt-in and safe to leave unconfigured. Until you set `VOICEBOX_BETA_SERVICE_ENDPOINT`, the beta service receives no traffic.
 
@@ -64,6 +67,9 @@ The rest of this guide covers the **beta service**, which carries the storage re
 - **A readiness endpoint exists.** `GET /system/storage-ready` reports whether the frame path is actually writable, so a bad mount surfaces at startup rather than at first query.
 
 ## Configuration
+
+> [!NOTE]
+> This section covers **only** the storage settings the beta adds. Everything else about running the Voicebox Service is unchanged: the `vbx-config.json` configuration file, the supported LLM providers (Azure AI, AWS Bedrock, OpenAI, Anthropic, Databricks, Vertex AI, Fireworks), and the standard environment variables all still apply. See [Voicebox Service Configuration](../voicebox.md#configuration) and the [Voicebox Configuration File](../voicebox.md#voicebox-configuration-file) reference.
 
 ### Required: mount a volume
 
