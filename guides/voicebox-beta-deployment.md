@@ -78,6 +78,9 @@ Mount a writable volume at the frame store path (default `/var/lib/voicebox/fram
 - **Docker (named volume):** Mount it at the frame store path. The image pre-creates that directory owned by the non-root container user, and a named volume inherits that ownership, so no extra steps are needed. Prefer a named volume over a bind mount.
 - **Kubernetes:** Use a single-replica deployment with a `ReadWriteOnce` persistent volume mounted at the frame store path, a `Recreate` update strategy, and a security context that makes the mount writable by the non-root container user.
 
+> [!NOTE]
+> The local volume is a temporary requirement for the beta. Support for persisting frames to object (blob) storage is in development; once available it will remove the need for a mounted volume and allow the service to scale across multiple replicas.
+
 ### Commonly Tuned Settings
 
 Most deployments only touch these. Leave the rest at their defaults.
