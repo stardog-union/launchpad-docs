@@ -34,6 +34,7 @@ Launchpad v3 uses semantic versioning.
 
 | Release | Image Tag | Designer Version | Explorer Version | Studio Version | Knowledge Catalog Version |
 | ----- | ----------- | ------------- | -------------- | -------------- | ------------ |
+| [3.11.0](#3110-release-2026-06-30) | `v3.11.0` | [3.9.8](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v398-release) | [3.2.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v322-release) | [5.11.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5115-release) | [1.4.35](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1435-release) |
 | [3.10.0](#3100-release-2026-06-17) | `v3.10.0` | [3.9.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v397-release) | [3.2.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v321-release) | [5.11.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5114-release) | [1.4.34](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1434-release) |
 | [3.9.1](#391-release-2026-05-01) | `v3.9.1` | [3.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v394-release) | [3.1.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v3110-release) | [5.11.1](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5111-release) | [1.4.31](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1431-release) |
 | [3.9.0](#390-release-2026-05-01) | `v3.9.0` | [3.9.4](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v394-release) | [3.1.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v3110-release) | [5.11.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v5110-release) | [1.4.31](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1431-release) |
@@ -53,6 +54,27 @@ Launchpad v3 uses semantic versioning.
 | [3.1.0](#310-release-2025-04-03) | `v3.1.0` | [2.43.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2432-release) | [2.10.2](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2102-release) | [5.7.7](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v577-release) | [1.4.13](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1413-release) |
 | [3.0.1](#301-release-2025-02-21) | `v3.0.1` | [2.42.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2420-release) | [2.10.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v2100-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.11](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1411-release) |
 | [3.0.0](#300-release-2025-01-30) | `v3.0.0` | [2.41.0](https://docs.stardog.com/release-notes/stardog-cloud/stardog-designer#v2410-release) | [2.9.3](https://docs.stardog.com/release-notes/stardog-cloud/stardog-explorer#v293-release) | [5.7.5](https://docs.stardog.com/release-notes/stardog-cloud/stardog-studio#v575-release) | [1.4.10](https://docs.stardog.com/release-notes/stardog-cloud/stardog-knowledge-catalog#v1410-release) |
+
+## 3.11.0 Release (2026-06-30)
+
+> [!IMPORTANT]
+> The Voicebox public API beta is optional and off by default. To try it, run the beta Voicebox Service (`v1.0.0-beta.1`) and point Launchpad at it with `VOICEBOX_BETA_SERVICE_ENDPOINT`. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md) for setup. The stable Voicebox Service (`v0.29.0`) continues to serve all other Voicebox traffic.
+
+### New Features
+
+- Added the ability to route existing Launchpad public API traffic to a beta build of the Voicebox Service. This is not a new API - the public API endpoints and response format are unchanged; only the backend service handling the requests is swapped. When `VOICEBOX_BETA_SERVICE_ENDPOINT` is set, public API requests are routed to the beta service; all other traffic continues to use the stable service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md).
+
+### Bug Fixes
+
+- Fixed an issue where Designer could fail to load with an `Uncaught SyntaxError: Unexpected token '<'` error. Launchpad's bundled web server now serves Designer's pre-compressed (gzipped) assets correctly.
+
+### Modifications
+
+- Updated bundled Stardog Applications (Designer, Explorer, Studio, Knowledge Catalog) to their latest versions.
+
+### Security
+
+- Updated internal packages and dependencies to address security vulnerabilities.
 
 ## 3.10.0 Release (2026-06-17)
 
