@@ -8,7 +8,7 @@
 A practical guide for deploying the Voicebox Service that powers the Launchpad beta: what the frame store is, what changes versus a stateless service, what you need to set, and what logs to watch.
 
 > [!NOTE]
-> The beta runs on a dedicated **beta** build of the Voicebox Service, tagged `v1.0.0-beta.1`. It is internal only and intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.29.0`) is unaffected by everything in this guide.
+> The beta runs on a dedicated **beta** build of the Voicebox Service, tagged `v1.0.0-beta.1`. It is not exposed publicly; clients reach it only through Launchpad's public API, which forwards requests to the service over the internal network. It is intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.30.0`) is unaffected by everything in this guide.
 
 ## Background
 
@@ -20,20 +20,20 @@ Conversation memory is separate from frames. Launchpad resends the conversation 
 
 The beta runs **two Voicebox Service deployments side by side from the same image at different tags**:
 
-- **stable** (the `0.x` line, currently `v0.29.0`): the existing service serving today's Voicebox endpoints. Runs as one or more instances and keeps no local frame store.
+- **stable** (the `0.x` line, currently `v0.30.0`): the existing service serving today's Voicebox endpoints. Runs as one or more instances and keeps no local frame store.
 - **beta** (`v1.0.0-beta.1`): the new service. It persists result frames to local disk, so it runs as a **single instance**, and for the beta serves public API requests only.
 
-Both are internal only. Launchpad talks to each through its own endpoint:
+Neither service is exposed publicly; Launchpad reaches each one over the internal network through its own endpoint:
 
 ```mermaid
 flowchart LR
     LP([Launchpad])
-    LP -->|VOICEBOX_SERVICE_ENDPOINT| ST["Stable service<br/>v0.29.0 · stateless<br/>one or more instances"]
+    LP -->|VOICEBOX_SERVICE_ENDPOINT| ST["Stable service<br/>v0.30.0 · stateless<br/>one or more instances"]
     LP -->|VOICEBOX_BETA_SERVICE_ENDPOINT| BE["Beta service<br/>v1.0.0-beta.1 · single instance"]
     BE --> FS[("Local frame store<br/>persistent volume")]
 ```
 
-| | stable (`v0.29.0`) | beta (`v1.0.0-beta.1`) |
+| | stable (`v0.30.0`) | beta (`v1.0.0-beta.1`) |
 | :--- | :--- | :--- |
 | Instances | one or more | exactly 1 (local-disk store) |
 | Persisted results | none (recomputed from Stardog) | local frame store on a volume |
@@ -52,7 +52,22 @@ flowchart TD
     C -->|Yes| BE[Beta service<br/>VOICEBOX_BETA_SERVICE_ENDPOINT]
 ```
 
+A typical configuration sets both endpoints explicitly:
+
+```bash
+VOICEBOX_SERVICE_ENDPOINT=http://voicebox-stable:8000
+VOICEBOX_BETA_SERVICE_ENDPOINT=http://voicebox-beta:8000
+```
+
 This is not a new public API. The endpoints and response format are unchanged - the beta only swaps the backend service that handles these existing public API requests, so no client changes are needed.
+
+Only these public API endpoints route to the beta service:
+
+- `POST /api/v1/voicebox/ask`
+- `POST /api/v1/voicebox/generate-query`
+- `POST /api/v1/voicebox/stream/ask`
+
+All other Voicebox traffic - including the BITES public APIs - continues to the stable service.
 
 The practical upshot: the beta is opt-in and safe to leave unconfigured. Until you set `VOICEBOX_BETA_SERVICE_ENDPOINT`, the beta service receives no traffic.
 
@@ -109,9 +124,6 @@ Logs are emitted as structured JSON when `LOG_TYPE=JSON` (the default): each lin
 | :--- | :--- | :--- |
 | `local_disk.disk_full` | `WARNING` | A write ran out of disk space. Users still get answers; frames aren't persisting. Carries `disk_free_bytes` / `disk_total_bytes`. **Alert.** Grow the volume or shorten the TTL. |
 | `frame_store.capacity` | `INFO` | Periodic volume telemetry: `disk_free_bytes`, `disk_total_bytes`, `file_count`. Alert proactively when free space drops below a threshold (for example 15 percent). |
-| `frame_store.readiness` | `WARNING` (`ready=false`) / `INFO` (`ready=true`) | Frame path writability changed. `ready=false` means a missing or unwritable mount. **Alert on `ready=false`.** Carries `path`, `detail`. |
 | `local_disk.large_frame` | `WARNING` | A single frame exceeded the warn threshold. Carries `size_bytes` / `threshold_bytes`. Informational; a spike can signal runaway result sizes. |
 | `frame_store_sweep.cycle` | `INFO` | A sweep pass finished: `scanned`, `deleted`, `skipped_recent`, `tmp_deleted`, `errors`, `elapsed_ms`. Watch `errors` and `elapsed_ms`. |
 | `voicebox_backends` | `INFO` | Startup banner: resolved backends, frame path, and `frame_local_writable`. Use it to confirm your config and mount took effect. |
-
-The readiness monitor logs only on a **change**, so a healthy service stays quiet; a single `ready=false` is the signal that something changed.
