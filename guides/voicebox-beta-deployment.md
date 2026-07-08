@@ -1,14 +1,14 @@
 # Deploying the Voicebox Service (Public API Beta)
 
 > [!IMPORTANT]
-> **Applies to:** Launchpad v3.11.0+ · Voicebox Service `v1.0.0-beta.2` (beta)
+> **Applies to:** Launchpad v3.11.0+ · Voicebox Service `v1.0.0-beta.1+` (beta)
 >
 > Routing public API traffic to the beta service requires **Launchpad v3.11.0 or later** - earlier versions have no `VOICEBOX_BETA_SERVICE_ENDPOINT` routing, so the beta service receives no traffic.
 
 A practical guide for deploying the Voicebox Service that powers the Launchpad beta: what the frame store is, what changes versus a stateless service, what you need to set, and what logs to watch.
 
 > [!NOTE]
-> The beta runs on a dedicated **beta** build of the Voicebox Service, tagged `v1.0.0-beta.2`. It is not exposed publicly; clients reach it only through Launchpad's public API, which forwards requests to the service over the internal network. It is intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.30.0`) is unaffected by everything in this guide.
+> The beta runs on a dedicated **beta** build of the Voicebox Service, distributed under `v1.0.0-beta` tags (currently `v1.0.0-beta.2`). It is not exposed publicly; clients reach it only through Launchpad's public API, which forwards requests to the service over the internal network. It is intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.30.0`) is unaffected by everything in this guide.
 
 ## Background
 
@@ -21,7 +21,7 @@ Conversation memory is separate from frames. Launchpad resends the conversation 
 The beta runs **two Voicebox Service deployments side by side from the same image at different tags**:
 
 - **stable** (the `0.x` line, currently `v0.30.0`): the existing service serving today's Voicebox endpoints. Runs as one or more instances and keeps no local frame store.
-- **beta** (`v1.0.0-beta.2`): the new service. It persists result frames to local disk, so it runs as a **single instance**, and for the beta serves public API requests only.
+- **beta** (`v1.0.0-beta.1+`): the new service. It persists result frames to local disk, so it runs as a **single instance**, and for the beta serves public API requests only.
 
 Neither service is exposed publicly; Launchpad reaches each one over the internal network through its own endpoint:
 
@@ -29,11 +29,11 @@ Neither service is exposed publicly; Launchpad reaches each one over the interna
 flowchart LR
     LP([Launchpad])
     LP -->|VOICEBOX_SERVICE_ENDPOINT| ST["Stable service<br/>v0.30.0 · stateless<br/>one or more instances"]
-    LP -->|VOICEBOX_BETA_SERVICE_ENDPOINT| BE["Beta service<br/>v1.0.0-beta.2 · single instance"]
+    LP -->|VOICEBOX_BETA_SERVICE_ENDPOINT| BE["Beta service<br/>v1.0.0-beta.1+ · single instance"]
     BE --> FS[("Local frame store<br/>persistent volume")]
 ```
 
-| | stable (`v0.30.0`) | beta (`v1.0.0-beta.2`) |
+| | stable (`v0.30.0`) | beta (`v1.0.0-beta.1+`) |
 | :--- | :--- | :--- |
 | Instances | one or more | exactly 1 (local-disk store) |
 | Persisted results | none (recomputed from Stardog) | local frame store on a volume |
