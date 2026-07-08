@@ -1,14 +1,14 @@
 # Deploying the Voicebox Service (Public API Beta)
 
 > [!IMPORTANT]
-> **Applies to:** Launchpad v3.11.0+ · Voicebox Service `v1.0.0-beta.1` (beta)
+> **Applies to:** Launchpad v3.11.0+ · Voicebox Service `v1.0.0-beta.1+` (beta)
 >
 > Routing public API traffic to the beta service requires **Launchpad v3.11.0 or later** - earlier versions have no `VOICEBOX_BETA_SERVICE_ENDPOINT` routing, so the beta service receives no traffic.
 
 A practical guide for deploying the Voicebox Service that powers the Launchpad beta: what the frame store is, what changes versus a stateless service, what you need to set, and what logs to watch.
 
 > [!NOTE]
-> The beta runs on a dedicated **beta** build of the Voicebox Service, tagged `v1.0.0-beta.1`. It is not exposed publicly; clients reach it only through Launchpad's public API, which forwards requests to the service over the internal network. It is intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.30.0`) is unaffected by everything in this guide.
+> The beta runs on a dedicated **beta** build of the Voicebox Service, distributed under `v1.0.0-beta` tags (currently `v1.0.0-beta.2`). It is not exposed publicly; clients reach it only through Launchpad's public API, which forwards requests to the service over the internal network. It is intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.30.0`) is unaffected by everything in this guide.
 
 ## Background
 
@@ -21,7 +21,7 @@ Conversation memory is separate from frames. Launchpad resends the conversation 
 The beta runs **two Voicebox Service deployments side by side from the same image at different tags**:
 
 - **stable** (the `0.x` line, currently `v0.30.0`): the existing service serving today's Voicebox endpoints. Runs as one or more instances and keeps no local frame store.
-- **beta** (`v1.0.0-beta.1`): the new service. It persists result frames to local disk, so it runs as a **single instance**, and for the beta serves public API requests only.
+- **beta** (`v1.0.0-beta.1+`): the new service. It persists result frames to local disk, so it runs as a **single instance**, and for the beta serves public API requests only.
 
 Neither service is exposed publicly; Launchpad reaches each one over the internal network through its own endpoint:
 
@@ -29,11 +29,11 @@ Neither service is exposed publicly; Launchpad reaches each one over the interna
 flowchart LR
     LP([Launchpad])
     LP -->|VOICEBOX_SERVICE_ENDPOINT| ST["Stable service<br/>v0.30.0 · stateless<br/>one or more instances"]
-    LP -->|VOICEBOX_BETA_SERVICE_ENDPOINT| BE["Beta service<br/>v1.0.0-beta.1 · single instance"]
+    LP -->|VOICEBOX_BETA_SERVICE_ENDPOINT| BE["Beta service<br/>v1.0.0-beta.1+ · single instance"]
     BE --> FS[("Local frame store<br/>persistent volume")]
 ```
 
-| | stable (`v0.30.0`) | beta (`v1.0.0-beta.1`) |
+| | stable (`v0.30.0`) | beta (`v1.0.0-beta.1+`) |
 | :--- | :--- | :--- |
 | Instances | one or more | exactly 1 (local-disk store) |
 | Persisted results | none (recomputed from Stardog) | local frame store on a volume |
@@ -84,7 +84,7 @@ The rest of this guide covers the **beta service**, which carries the storage re
 ## Configuration
 
 > [!NOTE]
-> This section covers **only** the storage settings the beta adds. Everything else about running the Voicebox Service is unchanged: the `vbx-config.json` configuration file, the supported LLM providers (Azure AI, AWS Bedrock, OpenAI, Anthropic, Databricks, Vertex AI, Fireworks), and the standard environment variables all still apply. See [Voicebox Service Configuration](../voicebox.md#configuration) and the [Voicebox Configuration File](../voicebox.md#voicebox-configuration-file) reference.
+> This section covers **only** the settings the beta adds. Everything else about running the Voicebox Service is unchanged: the `vbx-config.json` configuration file, the supported LLM providers (Azure AI, AWS Bedrock, OpenAI, Anthropic, Databricks, Vertex AI, Fireworks), and the standard environment variables all still apply. See [Voicebox Service Configuration](../voicebox.md#configuration) and the [Voicebox Configuration File](../voicebox.md#voicebox-configuration-file) reference.
 
 ### Required: mount a volume
 
@@ -105,6 +105,7 @@ Most deployments only touch these. Leave the rest at their defaults.
 | `VOICEBOX_FRAME_STORE_LOCAL_TTL_DAYS` | `7` | Lower on a small volume to reclaim disk faster; raise for longer-lived conversations. Must be `> 0` while the sweeper is enabled. |
 | `VOICEBOX_FRAME_STORE_SWEEPER_ENABLED` | `true` | Set to `false` to disable the background eviction sweeper entirely. |
 | `VOICEBOX_FRAME_STORE_LARGE_FRAME_WARN_MB` | `10` | Lower for earlier oversized-frame warnings; `0` disables them. |
+| `VOICEBOX_CODE_EXEC_TIMEOUT_SECONDS` | `30` | How long the service may spend analyzing query results while answering a question, in seconds (v1.0.0-beta.2+). Raise if the `code_executed` log shows `timeout` status on large results; must be `>= 1`. |
 
 > [!TIP]
 > **Sizing.** Rough disk need is `avg frame size × frames per turn × turns per day × TTL days`. 20 GB is a comfortable start for a small team at the 7-day default. Use the `frame_store.capacity` log (below) to trend real usage and resize from data.
@@ -126,4 +127,5 @@ Logs are emitted as structured JSON when `LOG_TYPE=JSON` (the default): each lin
 | `frame_store.capacity` | `INFO` | Periodic volume telemetry: `disk_free_bytes`, `disk_total_bytes`, `file_count`. Alert proactively when free space drops below a threshold (for example 15 percent). |
 | `local_disk.large_frame` | `WARNING` | A single frame exceeded the warn threshold. Carries `size_bytes` / `threshold_bytes`. Informational; a spike can signal runaway result sizes. |
 | `frame_store_sweep.cycle` | `INFO` | A sweep pass finished: `scanned`, `deleted`, `skipped_recent`, `tmp_deleted`, `errors`, `elapsed_ms`. Watch `errors` and `elapsed_ms`. |
+| `code_executed` | `INFO` / `ERROR` | A code-execution step finished (v1.0.0-beta.2 adds per-run telemetry): `status` (`success`, `timeout`, `op_cap`, or `error`), `duration_ms`, `input_frame_count`, `input_bytes`, `output_bytes`, `peak_rss_kb`. Repeated `timeout` suggests raising `VOICEBOX_CODE_EXEC_TIMEOUT_SECONDS`; trend `peak_rss_kb` to watch the service's memory headroom. |
 | `voicebox_backends` | `INFO` | Startup banner: resolved backends, frame path, and `frame_local_writable`. Use it to confirm your config and mount took effect. |

@@ -590,6 +590,17 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 1.0.0-beta.2 Release (July 8, 2026)
+
+> [!NOTE]
+> This is a beta build of the next-generation Voicebox Service, distributed under the `v1.0.0-beta.2` tag. It powers the Launchpad public API beta and runs alongside the stable `0.x` service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md) for deployment details.
+
+* Fix an error when answering questions against knowledge graphs where a relationship is mapped from multiple source columns
+* Pick up republished or edited knowledge graph schemas immediately instead of serving a cached schema for up to an hour
+* Fix an error when a question returned results with too many columns to summarize; these questions now complete successfully
+* Add [`VOICEBOX_CODE_EXEC_TIMEOUT_SECONDS`](./guides/voicebox-beta-deployment.md#commonly-tuned-settings) (default: `30`) to configure how long the service may spend analyzing query results while answering a question, and add per-run telemetry to the [`code_executed`](./guides/voicebox-beta-deployment.md#log-events) log event
+* Emit error tracebacks as structured log events instead of plain-text stack traces
+
 ## 1.0.0-beta.1 Release (June 30, 2026)
 
 > [!NOTE]
