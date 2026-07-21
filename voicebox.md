@@ -590,6 +590,10 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 0.30.1 Release (Jul 21, 2026)
+
+* Do not store expired tokens in the schema cache
+
 ## 1.0.0-beta.2 Release (July 8, 2026)
 
 > [!NOTE]
