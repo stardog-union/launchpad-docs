@@ -8,7 +8,7 @@
 A practical guide for deploying the Voicebox Service that powers the Launchpad beta: what the frame store is, what changes versus a stateless service, what you need to set, and what logs to watch.
 
 > [!NOTE]
-> The beta runs on a dedicated **beta** build of the Voicebox Service, distributed under `v1.0.0-beta` tags (currently `v1.0.0-beta.3`). It is not exposed publicly; clients reach it only through Launchpad's public API, which forwards requests to the service over the internal network. It is intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.30.0`) is unaffected by everything in this guide.
+> The beta runs on a dedicated **beta** build of the Voicebox Service, distributed under `v1.0.0-beta` tags (currently `v1.0.0-beta.2`). It is not exposed publicly; clients reach it only through Launchpad's public API, which forwards requests to the service over the internal network. It is intended to be temporary while the beta is in progress. The **stable** service (the `0.x` line, currently `v0.30.0`) is unaffected by everything in this guide.
 
 ## Background
 
@@ -106,9 +106,6 @@ Most deployments only touch these. Leave the rest at their defaults.
 | `VOICEBOX_FRAME_STORE_SWEEPER_ENABLED` | `true` | Set to `false` to disable the background eviction sweeper entirely. |
 | `VOICEBOX_FRAME_STORE_LARGE_FRAME_WARN_MB` | `10` | Lower for earlier oversized-frame warnings; `0` disables them. |
 | `VOICEBOX_CODE_EXEC_TIMEOUT_SECONDS` | `30` | How long the service may spend analyzing query results while answering a question, in seconds (v1.0.0-beta.2+). Raise if the `code_executed` log shows `timeout` status on large results; must be `>= 1`. |
-| `VOICEBOX_QUERY_EXEC_TIMEOUT_SECONDS` | `60` | Timeout applied to each query the service runs against Stardog, in seconds (v1.0.0-beta.3+). Raise for slow queries on large databases; set to `0` to apply no Voicebox timeout, so the Stardog endpoint's own configured query timeout governs. |
-| `VOICEBOX_QUERY_MAX_RESULTS` | `100000` | Maximum rows a single query may return, applied as the query `LIMIT` (v1.0.0-beta.3+). Lower it to reduce memory use and frame sizes on wide result sets; must be `>= 1`. |
-| `VOICEBOX_RECURSION_LIMIT` | not set | Maximum number of steps the agent may take to answer one question (v1.0.0-beta.3+). Unset uses the built-in default (35). Raise for complex, multi-step questions that report running out of steps; must be `>= 1`. |
 
 > [!TIP]
 > **Sizing.** Rough disk need is `avg frame size × frames per turn × turns per day × TTL days`. 20 GB is a comfortable start for a small team at the 7-day default. Use the `frame_store.capacity` log (below) to trend real usage and resize from data.

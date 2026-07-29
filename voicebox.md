@@ -590,21 +590,9 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
-## 1.0.0-beta.3 Release (July 29, 2026)
-
-> [!NOTE]
-> This is a beta build of the next-generation Voicebox Service, distributed under the `v1.0.0-beta.3` tag. It powers the Launchpad public API beta and runs alongside the stable `0.x` service. See [Deploying the Voicebox Service for the Beta](./guides/voicebox-beta-deployment.md) for deployment details.
-
-* Answer questions faster by loading matching example queries up front, and answer immediately when a question exactly matches a saved query
-* Return a summary of what was attempted when a question is too complex to finish, instead of a generic "cannot find an answer" response
-* Fix intermittent authentication errors when answering questions against a knowledge graph whose cached schema outlived the token that loaded it
-* Add [`VOICEBOX_QUERY_EXEC_TIMEOUT_SECONDS`](./guides/voicebox-beta-deployment.md#commonly-tuned-settings) (default: `60`), [`VOICEBOX_QUERY_MAX_RESULTS`](./guides/voicebox-beta-deployment.md#commonly-tuned-settings) (default: `100000`), and [`VOICEBOX_RECURSION_LIMIT`](./guides/voicebox-beta-deployment.md#commonly-tuned-settings) (default: unset) to tune query execution limits and the agent step cap
-* Update dependencies to address reported CVEs
-
 ## 0.30.1 Release (Jul 21, 2026)
 
 * Do not store expired tokens in the schema cache
-
 
 ## 1.0.0-beta.2 Release (July 8, 2026)
 
