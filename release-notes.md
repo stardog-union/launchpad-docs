@@ -79,7 +79,8 @@ Launchpad uses semantic versioning.
 - Voicebox Service [`v1.0.0`](./voicebox.md#100-release-august-21-2026) is generally available. Launchpad routes all Voicebox traffic to it by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox Service beta period is complete.
 - Added [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint) and [`VOICEBOX_USE_LEGACY_SERVICE`](./README.md#voicebox_use_legacy_service) to keep a previous-generation Voicebox Service deployment available as a rollback target. Traffic is never routed to it unless `VOICEBOX_USE_LEGACY_SERVICE=true`.
 
-<!-- TODO: document all compatible frame stores, with a table comparing the tradeoffs between them. -->
+- The Voicebox Service persists the results of the queries it runs, so a later turn in a conversation can reuse a result without re-querying Stardog. These **frames** can be stored on local disk, in Amazon S3, or in Azure Blob Storage. Local disk is the default and requires a persistent volume; the object backends do not, and allow the service to run more than one instance. See [Frame Stores](./guides/voicebox-deployment.md#frame-stores) for a comparison and the configuration for each.
+
 <!-- TODO: remaining 4.0.0 features. -->
 
 ### Modifications

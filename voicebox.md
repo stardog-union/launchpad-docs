@@ -135,7 +135,7 @@ X-SD-Auth-Token: <your-jwt-token>
 The Voicebox Service is distributed as a Docker image. It is an HTTP server that packages up Stardog Voicebox functionality, and is intended to be run in conjunction with Stardog Launchpad. The Voicebox Service communicates directly with whichever Stardog servers you are interacting with in Launchpad, so they should be accessible to this image when run as a container.
 
 > [!IMPORTANT]
-> As of `v1.0.0`, the Voicebox Service persists the results of the queries it runs — **frames** — so that later turns in a conversation can reuse a result without re-querying Stardog. A `v1.0.0+` deployment therefore requires a **persistent volume** and runs as a **single instance**. See [Deploying the Voicebox Service](./guides/voicebox-deployment.md) for what that involves in Docker and Kubernetes.
+> As of `v1.0.0`, the Voicebox Service persists the results of the queries it runs — **frames** — so that later turns in a conversation can reuse a result without re-querying Stardog. Frames can be stored on local disk, in Amazon S3, or in Azure Blob Storage. The default is local disk, which requires a **persistent volume** and limits the service to a **single instance**; either object backend removes both constraints. See [Frame Stores](./guides/voicebox-deployment.md#frame-stores) to choose and configure a backend.
 
 ![Voicebox Service with Launchpad Architecuture](./assets/voicebox-service-architecture.png)
 
@@ -174,7 +174,7 @@ See the [SSO Connection Configuration](./README.md#sso-connection-configuration)
    - `.env.voicebox-service` can be named anything but contains the configuration for the Voicebox Service. See [Configuration](#configuration) for more details.
    - `/host/path/to/vbx-config.json` is mounted from the host to `/voicebox-config/vbx-config.json` in the container. This configuration has more LLM specific configuration.
       - `.env.voicebox-service` should have `VBX_CONFIG_FILE=/voicebox-config/vbx-config.json` in it.
-   - `voicebox-frames` is a named volume mounted at the frame store path, where the service persists query results. This is required as of `v1.0.0`: without it, frames are written to the container's writable layer and lost on restart. See [Deploying the Voicebox Service](./guides/voicebox-deployment.md) for sizing, tuning, and the Kubernetes equivalent.
+   - `voicebox-frames` is a named volume mounted at the frame store path, where the service persists query results. This is required as of `v1.0.0` when using the default local-disk frame store: without it, frames are written to the container's writable layer and lost on restart. Omit it if you configure an [S3 or Azure Blob frame store](./guides/voicebox-deployment.md#frame-stores) instead. See [Deploying the Voicebox Service](./guides/voicebox-deployment.md) for sizing, tuning, and the Kubernetes equivalent.
    - The Voicebox Service HTTP server is exposed on port 8000 so Launchpad can communicate with it.
 
 3. Update Launchpad configuration to point to URL of the Voicebox Service.
@@ -612,7 +612,7 @@ The Voicebox Service is released independently of Launchpad.
 * Answer questions faster by loading matching example queries up front, and answer immediately when a question exactly matches a saved query
 * Return a summary of what was attempted when a question is too complex to finish, instead of a generic "cannot find an answer" response
 * Fix intermittent authentication errors when answering questions against a knowledge graph whose cached schema outlived the token that loaded it
-* Add [`VOICEBOX_QUERY_EXEC_TIMEOUT_SECONDS`](./guides/voicebox-deployment.md#commonly-tuned-settings) (default: `60`), [`VOICEBOX_QUERY_MAX_RESULTS`](./guides/voicebox-deployment.md#commonly-tuned-settings) (default: `100000`), and [`VOICEBOX_RECURSION_LIMIT`](./guides/voicebox-deployment.md#commonly-tuned-settings) (default: unset) to tune query execution limits and the agent step cap
+* Add [`VOICEBOX_QUERY_EXEC_TIMEOUT_SECONDS`](./guides/voicebox-deployment.md#tuning-the-agent) (default: `60`), [`VOICEBOX_QUERY_MAX_RESULTS`](./guides/voicebox-deployment.md#tuning-the-agent) (default: `100000`), and [`VOICEBOX_RECURSION_LIMIT`](./guides/voicebox-deployment.md#tuning-the-agent) (default: unset) to tune query execution limits and the agent step cap
 * Update dependencies to address reported CVEs
 
 ## 0.30.1 Release (Jul 21, 2026)
@@ -628,7 +628,7 @@ The Voicebox Service is released independently of Launchpad.
 * Fix an error when answering questions against knowledge graphs where a relationship is mapped from multiple source columns
 * Pick up republished or edited knowledge graph schemas immediately instead of serving a cached schema for up to an hour
 * Fix an error when a question returned results with too many columns to summarize; these questions now complete successfully
-* Add [`VOICEBOX_CODE_EXEC_TIMEOUT_SECONDS`](./guides/voicebox-deployment.md#commonly-tuned-settings) (default: `30`) to configure how long the service may spend analyzing query results while answering a question, and add per-run telemetry to the [`code_executed`](./guides/voicebox-deployment.md#log-events) log event
+* Add [`VOICEBOX_CODE_EXEC_TIMEOUT_SECONDS`](./guides/voicebox-deployment.md#tuning-the-agent) (default: `30`) to configure how long the service may spend analyzing query results while answering a question, and add per-run telemetry to the [`code_executed`](./guides/voicebox-deployment.md#log-events) log event
 * Emit error tracebacks as structured log events instead of plain-text stack traces
 
 ## 1.0.0-beta.1 Release (June 30, 2026)
