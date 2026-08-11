@@ -70,14 +70,14 @@ Launchpad uses semantic versioning.
 > 1. Set `VOICEBOX_SERVICE_ENDPOINT` to the URL currently in `VOICEBOX_BETA_SERVICE_ENDPOINT`.
 > 2. Remove `VOICEBOX_BETA_SERVICE_ENDPOINT`. Leaving it in place keeps the beta routing split active, which sends UI traffic to `v1.0.0` on previous-generation request paths, and those requests fail with `404`.
 >
-> **In both cases** you may optionally set `VOICEBOX_LEGACY_SERVICE_ENDPOINT` to your previous-generation deployment, which makes [`VOICEBOX_USE_LEGACY_SERVICE=true`](./README.md#voicebox_use_legacy_service) available as a single-option rollback.
+> **In both cases** you may optionally set `VOICEBOX_LEGACY_SERVICE_ENDPOINT` to your previous-generation deployment, which makes [`VOICEBOX_USE_LEGACY_SERVICE=true`](./README.md#voicebox_use_legacy_service) available as a single-option rollback. Treat that rollback as a temporary measure while you resolve an upgrade problem, not as a long-term configuration.
 >
 > **To verify the upgrade:** after restarting, the `voicebox_service_routing` startup log event names the endpoint Launchpad will route to. Confirm it is your `v1.0.0` deployment. Voicebox answers failing while Designer and dataset descriptions still work is the signature of a deployment still pointing at a previous-generation service.
 
 ### New Features
 
 - Voicebox Service [`v1.0.0`](./voicebox-release-notes.md#100-release-august-21-2026) is generally available. Launchpad routes all Voicebox traffic to it by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox Service beta period is complete.
-- Added [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint) and [`VOICEBOX_USE_LEGACY_SERVICE`](./README.md#voicebox_use_legacy_service) to keep a previous-generation Voicebox Service deployment available as a rollback target. Traffic is never routed to it unless `VOICEBOX_USE_LEGACY_SERVICE=true`.
+- Added [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint) and [`VOICEBOX_USE_LEGACY_SERVICE`](./README.md#voicebox_use_legacy_service) to keep a previous-generation Voicebox Service deployment available as a rollback target. Traffic is never routed to it unless `VOICEBOX_USE_LEGACY_SERVICE=true`. The rollback is intended as a temporary measure, not a long-term configuration.
 
 - The Voicebox Service persists the results of the queries it runs, so a later turn in a conversation can reuse a result without re-querying Stardog. These **frames** can be stored on local disk, in Amazon S3, or in Azure Blob Storage. Local disk is the default and requires a persistent volume; the object backends do not, and allow the service to run more than one instance. See [Frame Stores](./guides/voicebox-deployment.md#frame-stores) for a comparison and the configuration for each.
 

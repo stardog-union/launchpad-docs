@@ -311,6 +311,9 @@ The `VOICEBOX_LEGACY_SERVICE_ENDPOINT` option specifies the endpoint of a previo
 The `VOICEBOX_USE_LEGACY_SERVICE` option routes all Voicebox traffic to the deployment configured in [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](#voicebox_legacy_service_endpoint), rather than to [`VOICEBOX_SERVICE_ENDPOINT`](#voicebox_service_endpoint). Use it to roll back if you encounter problems with the current Voicebox Service.
 
 > [!IMPORTANT]
+> This option is intended as a **temporary** measure while you resolve an upgrade problem, not as a long-term configuration. A deployment left on the previous-generation service does not receive Voicebox improvements and will need to move to the current service eventually. Plan to unset it once the underlying issue is resolved.
+
+> [!IMPORTANT]
 > Set `VOICEBOX_LEGACY_SERVICE_ENDPOINT` as well. Enabling this option without a legacy endpoint configured logs a `voicebox_legacy_rollback_misconfigured` error at startup and leaves Voicebox non-functional.
 
 - **Required:** No
