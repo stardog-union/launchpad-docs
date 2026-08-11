@@ -595,7 +595,7 @@ The Voicebox Service is released independently of Launchpad.
 > [!IMPORTANT]
 > First generally available release of the next-generation Voicebox Service, distributed under the `v1.0.0` tag. It supersedes the `0.x` line and serves all Voicebox traffic in [Launchpad 4.0.0](./release-notes.md#400-release-2026-08-21) and later.
 >
-> Upgrading to Launchpad 4.0.0 requires a configuration change in every deployment, whether or not you took part in the Voicebox beta. See the [4.0.0 release notes](./release-notes.md#400-release-2026-08-21) for the steps.
+> Upgrading to Launchpad 4.0.0 requires a configuration change in every deployment, whether or not you took part in the Voicebox Service beta. See the [4.0.0 release notes](./release-notes.md#400-release-2026-08-21) for the steps.
 
 <!-- TODO: changes since 1.0.0-beta.3. -->
 

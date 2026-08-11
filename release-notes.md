@@ -59,13 +59,13 @@ Launchpad uses semantic versioning.
 ## 4.0.0 Release (2026-08-21)
 
 > [!IMPORTANT]
-> **Voicebox is now generally available, and every Launchpad deployment must change its configuration in this release.**
+> **Voicebox Service `v1.0.0` is now generally available, and every Launchpad deployment must change its configuration in this release.**
 >
 > All Voicebox traffic — the Launchpad UI and the public API alike — is now served by the [Voicebox Service](./voicebox.md#voicebox-service) `v1.0.0`. `VOICEBOX_SERVICE_ENDPOINT` now means the current Voicebox Service, and the previous-generation service has its own option, [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint).
 >
-> **If you were not in the Voicebox beta:** point [`VOICEBOX_SERVICE_ENDPOINT`](./README.md#voicebox_service_endpoint) at your Voicebox Service `v1.0.0` deployment. This is required. Left pointing at a previous-generation service, Launchpad sends current request paths to it and Voicebox requests fail with `404`.
+> **If you were not in the Voicebox Service beta:** point [`VOICEBOX_SERVICE_ENDPOINT`](./README.md#voicebox_service_endpoint) at your Voicebox Service `v1.0.0` deployment. This is required. Left pointing at a previous-generation service, Launchpad sends current request paths to it and Voicebox requests fail with `404`.
 >
-> **If you were in the Voicebox beta:** make both of these changes together.
+> **If you were in the Voicebox Service beta:** make both of these changes together.
 >
 > 1. Set `VOICEBOX_SERVICE_ENDPOINT` to the URL currently in `VOICEBOX_BETA_SERVICE_ENDPOINT`.
 > 2. Remove `VOICEBOX_BETA_SERVICE_ENDPOINT`. Leaving it in place keeps the beta routing split active, which sends UI traffic to `v1.0.0` on previous-generation request paths, and those requests fail with `404`.
@@ -76,7 +76,7 @@ Launchpad uses semantic versioning.
 
 ### New Features
 
-- Voicebox is generally available. Launchpad routes all Voicebox traffic to the Voicebox Service [`v1.0.0`](./voicebox.md#100-release-august-21-2026) by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox beta period is complete.
+- Voicebox Service [`v1.0.0`](./voicebox.md#100-release-august-21-2026) is generally available. Launchpad routes all Voicebox traffic to it by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox Service beta period is complete.
 - Added [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint) and [`VOICEBOX_USE_LEGACY_SERVICE`](./README.md#voicebox_use_legacy_service) to keep a previous-generation Voicebox Service deployment available as a rollback target. Traffic is never routed to it unless `VOICEBOX_USE_LEGACY_SERVICE=true`.
 
 <!-- TODO: document all compatible frame stores, with a table comparing the tradeoffs between them. -->
