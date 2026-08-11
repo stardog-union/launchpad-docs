@@ -1,11 +1,11 @@
 # Configuring the Voicebox Service
 
-> [!IMPORTANT]
-> **Applies to:** Voicebox Service `v1.0.0+`
-
 How to run and configure the Voicebox Service: network routing to Stardog, the environment variables it accepts, the `vbx-config.json` file and its supported LLM providers, and per-request customization.
 
-For storage backends, tuning, probes, and log events, see [Deploying the Voicebox Service](./voicebox-deployment.md). For what Voicebox is and how to use it, see [Voicebox](../voicebox.md).
+> [!NOTE]
+> Except where a step is marked otherwise, everything on this page applies to both the current Voicebox Service (`v1.0.0+`) and the previous-generation `0.x` service — the configuration file, the LLM providers, custom headers, and JWT authentication are the same in both. Storage backends and operational tuning are specific to `v1.0.0+` and are covered in [Deploying the Voicebox Service](./voicebox-deployment.md).
+
+For what Voicebox is and how to use it, see [Voicebox](../voicebox.md).
 
 ## Running the Voicebox Service
 
