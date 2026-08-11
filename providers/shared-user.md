@@ -1,5 +1,10 @@
 # Shared User Authentication
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/launchpad/login-providers/shared-user/](https://docs.stardog.com/launchpad/login-providers/shared-user/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 If you prefer not to use SSO for logging into Launchpad, you can enable shared user authentication. This is a login-only authentication method and does not support SSO connections to Stardog endpoints.
 
 > [!WARNING] 

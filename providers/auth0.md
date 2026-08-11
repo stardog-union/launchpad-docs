@@ -1,5 +1,10 @@
 # Auth0 Configuration
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/launchpad/login-providers/auth0/](https://docs.stardog.com/launchpad/login-providers/auth0/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 Auth0 can be used as a login provider to authenticate users into Launchpad. Auth0 does not currently support SSO connections to Stardog endpoints.
 
 ## Login Provider Configuration

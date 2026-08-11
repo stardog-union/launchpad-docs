@@ -1,5 +1,10 @@
 # Voicebox
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/voicebox/voicebox-service/](https://docs.stardog.com/voicebox/voicebox-service/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 [Stardog Voicebox](https://docs.stardog.com/voicebox/) is a conversational AI chat interface for your Enterprise Data. This document provides instructions for using Voicebox within Launchpad.
 
 Launchpad can operate with or without the Voicebox. To enable Voicebox, you'll need to run an additional Docker image ([Voicebox Service](#voicebox-service)) and provide its address to Launchpad. The two services communicate over HTTP.

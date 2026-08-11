@@ -1,5 +1,10 @@
 # Kerberos Configuration
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/launchpad/login-providers/kerberos/](https://docs.stardog.com/launchpad/login-providers/kerberos/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 ![Kerberos](../assets/kerberos-logo.jpg)
 
 Kerberos can be used as a login provider to authenticate users into Launchpad. Kerberos does not currently support SSO connections to Stardog endpoints.

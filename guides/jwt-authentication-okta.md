@@ -1,5 +1,10 @@
 # JWT Authentication with Okta
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/launchpad/jwt-authentication-okta/](https://docs.stardog.com/launchpad/jwt-authentication-okta/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 This guide walks through configuring JWT-based authentication for Voicebox using Okta's On-Behalf-Of (OBO) token exchange flow.
 
 ## Is This Guide For You?

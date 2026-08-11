@@ -1,6 +1,11 @@
 # Stardog Launchpad Documentation
 
 > [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/launchpad/](https://docs.stardog.com/launchpad/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
+> [!IMPORTANT]
 > The current version of Launchpad is v4. See [here](./v2-deprecated/) for the deprecated v2 documentation. 
 
 > [!NOTE]

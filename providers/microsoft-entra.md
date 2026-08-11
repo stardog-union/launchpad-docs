@@ -1,5 +1,10 @@
 # Microsoft Entra Configuration
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/launchpad/login-providers/microsoft-entra/](https://docs.stardog.com/launchpad/login-providers/microsoft-entra/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 ![Microsoft Entra](../assets/microsoft-entra-id-logo.png)
 
 Microsoft Entra can be used both as a login provider to authenticate users into Launchpad and as an SSO connection provider to authenticate users against Stardog endpoints.

@@ -1,5 +1,10 @@
 # Google Configuration
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/launchpad/login-providers/google/](https://docs.stardog.com/launchpad/login-providers/google/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 ![Google](../assets/google-logo.png)
 
 Google can be used as a login provider to authenticate users into Launchpad. Google does not currently support SSO connections to Stardog endpoints.

@@ -1,5 +1,10 @@
 # Voicebox Service Release Notes
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/release-notes/stardog-voicebox/](https://docs.stardog.com/release-notes/stardog-voicebox/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 The Voicebox Service is released independently of Launchpad. 
 
 > [!NOTE] 

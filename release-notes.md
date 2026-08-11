@@ -1,5 +1,10 @@
 # Launchpad Release Notes
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/release-notes/stardog-cloud/stardog-launchpad/](https://docs.stardog.com/release-notes/stardog-cloud/stardog-launchpad/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 Stardog Launchpad is distributed as a Docker image, which includes the Launchpad web app together with the Stardog Applications (Studio, Explorer, and Designer, Knowledge Catalog).
 
 ## Getting the Current Version of Launchpad

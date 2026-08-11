@@ -1,5 +1,10 @@
 # Configuring the Voicebox Service
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/voicebox/voicebox-service/configuration/](https://docs.stardog.com/voicebox/voicebox-service/configuration/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 How to run and configure the Voicebox Service: network routing to Stardog, the environment variables it accepts, the `vbx-config.json` file and its supported LLM providers, and per-request customization.
 
 > [!NOTE]

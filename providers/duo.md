@@ -1,5 +1,10 @@
 # Duo Configuration
 
+> [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/launchpad/login-providers/duo/](https://docs.stardog.com/launchpad/login-providers/duo/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
 ![Duo](../assets/duo-logo.jpg)
 
 [Duo](https://duo.com) can be used as a login provider to authenticate users into Launchpad using OpenID Connect (OIDC).

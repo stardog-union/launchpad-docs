@@ -1,6 +1,11 @@
 # Deploying the Voicebox Service
 
 > [!IMPORTANT]
+> **This documentation has moved.** The current version is published at
+> [docs.stardog.com/voicebox/voicebox-service/deployment/](https://docs.stardog.com/voicebox/voicebox-service/deployment/) and is no longer
+> updated here. This page is kept so existing links keep working.
+
+> [!IMPORTANT]
 > **Applies to:** Launchpad v4.0.0+ · Voicebox Service `v1.0.0+`
 >
 > Upgrading from an earlier Launchpad release requires a configuration change in every deployment. See the [4.0.0 release notes](../release-notes.md#400-release-2026-08-21) for the steps.
