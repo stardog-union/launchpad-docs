@@ -7,7 +7,7 @@
 
 A practical guide for operating the Voicebox Service: how it stores the results it computes, which storage backend to choose, what to tune, and what to watch.
 
-For a quickstart — pulling the image and running the service — see [Running the Voicebox Service](../voicebox.md#running-the-voicebox-service). For the `vbx-config.json` file and the supported LLM providers, see [Voicebox Configuration File](../voicebox.md#voicebox-configuration-file).
+For a quickstart — pulling the image and running the service — see [Running the Voicebox Service](./voicebox-configuration.md#running-the-voicebox-service). For the `vbx-config.json` file and the supported LLM providers, see [Voicebox Configuration File](./voicebox-configuration.md#voicebox-configuration-file).
 
 ## Background
 

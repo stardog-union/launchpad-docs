@@ -76,7 +76,7 @@ Launchpad uses semantic versioning.
 
 ### New Features
 
-- Voicebox Service [`v1.0.0`](./voicebox.md#100-release-august-21-2026) is generally available. Launchpad routes all Voicebox traffic to it by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox Service beta period is complete.
+- Voicebox Service [`v1.0.0`](./voicebox-release-notes.md#100-release-august-21-2026) is generally available. Launchpad routes all Voicebox traffic to it by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox Service beta period is complete.
 - Added [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint) and [`VOICEBOX_USE_LEGACY_SERVICE`](./README.md#voicebox_use_legacy_service) to keep a previous-generation Voicebox Service deployment available as a rollback target. Traffic is never routed to it unless `VOICEBOX_USE_LEGACY_SERVICE=true`.
 
 - The Voicebox Service persists the results of the queries it runs, so a later turn in a conversation can reuse a result without re-querying Stardog. These **frames** can be stored on local disk, in Amazon S3, or in Azure Blob Storage. Local disk is the default and requires a persistent volume; the object backends do not, and allow the service to run more than one instance. See [Frame Stores](./guides/voicebox-deployment.md#frame-stores) for a comparison and the configuration for each.
@@ -156,7 +156,7 @@ Launchpad uses semantic versioning.
 > [!IMPORTANT]
 > **Recommended Stardog Version:** [`v12.0.0+`](https://docs.stardog.com/release-notes/stardog-platform#1200-release)
 >
-> **Recommended Voicebox Service Version:** [`v0.27.0+`](./voicebox.md#0270-release-apr-8-2026)
+> **Recommended Voicebox Service Version:** [`v0.27.0+`](./voicebox-release-notes.md#0270-release-apr-8-2026)
 
 ### Modifications
 
@@ -200,7 +200,7 @@ Launchpad uses semantic versioning.
 > [!IMPORTANT]
 > **Recommended Stardog Version:** [`v12.0.0+`](https://docs.stardog.com/release-notes/stardog-platform#1200-release)
 >
-> **Recommended Voicebox Service Version:** [`v0.25.0+`](./voicebox.md#0250-release-feb-5-2026)
+> **Recommended Voicebox Service Version:** [`v0.25.0+`](./voicebox-release-notes.md#0250-release-feb-5-2026)
 >
 > If you intend to use Stardog unit usage tracking, you **must** use `v12.0.0+` of Stardog and `v0.25.0+` of the Voicebox Service.
 
@@ -227,7 +227,7 @@ Launchpad uses semantic versioning.
 > [!IMPORTANT]
 > **Recommended Stardog Version:** [`v11.2.0+`](https://docs.stardog.com/release-notes/stardog-platform#1120-release-2025-10-01)
 >
-> **Recommended Voicebox Service Version:** [`v0.24.0+`](./voicebox.md#0240-release-dec-11-2025)
+> **Recommended Voicebox Service Version:** [`v0.24.0+`](./voicebox-release-notes.md#0240-release-dec-11-2025)
 >
 > If you intend to use JWT authentication with Okta for Voicebox, you **must** use `v0.24.0+` of the Voicebox Service.
 
@@ -250,7 +250,7 @@ Launchpad uses semantic versioning.
 > [!IMPORTANT]
 > **Recommended Stardog Version:** [`v11.2.0+`](https://docs.stardog.com/release-notes/stardog-platform#1120-release-2025-10-01)
 > 
-> **Recommended Voicebox Service Version:** [`v0.22.0+`](./voicebox.md#0220-release-oct-16-2025)
+> **Recommended Voicebox Service Version:** [`v0.22.0+`](./voicebox-release-notes.md#0220-release-oct-16-2025)
 >
 > If you intend to use "Think Mode" or the "Voicebox Suggestions" feature in Designer, you **must** use `v0.22.0+` of the Voicebox Service.
 
@@ -331,7 +331,7 @@ Launchpad uses semantic versioning.
 
 ### New Features
 
-- Adds support for using Kerberos to log users into Launchpad. See [Kerberos Login Provider](./README.md#kerberos-login-provider) for more information.
+- Adds support for using Kerberos to log users into Launchpad. See [Kerberos Login Provider](./providers/kerberos.md) for more information.
 - Adds a "public" REST API to Launchpad to programatically interact with Voicebox. See [Using Voicebox Programmatically](./voicebox.md#using-voicebox-programmatically) for more information.
 
 ### Modifications
@@ -346,7 +346,7 @@ Launchpad uses semantic versioning.
 
 ### New Features
 
-- Adds support for using shared user authentication to log users into to Launchpad, bypassing the requirement for using an SSO login provider. This is **not** intended for production use. See [Shared User Authentication](./README.md#shared-user-authentication) for more information.
+- Adds support for using shared user authentication to log users into to Launchpad, bypassing the requirement for using an SSO login provider. This is **not** intended for production use. See [Shared User Authentication](./providers/shared-user.md) for more information.
 - Adds support for saving Designer projects to the Launchpad database instead of the user's browser's local storage. See [`DESIGNER_STORAGE_ENABLED`](./README.md#designer_storage_enabled) for more information. You must set the `DESIGNER_STORAGE_ENABLED` to `true` in Launchpad configuration to enable this feature. All Designer projects will continue to be saved to browser local storage by default.
 
 ## 3.1.0 Release (2025-04-03)

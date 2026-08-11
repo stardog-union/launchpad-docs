@@ -1,11 +1,28 @@
 # Stardog Launchpad Documentation
 
 > [!IMPORTANT]
-> The current version of Launchpad is v3. See [here](./v2-deprecated/) for the deprecated v2 documentation. 
+> The current version of Launchpad is v4. See [here](./v2-deprecated/) for the deprecated v2 documentation. 
 
 > [!NOTE]
 > See the [Release Notes](./release-notes.md) for the changelog and information about releases.
 
+## Documentation
+
+| | |
+| :--- | :--- |
+| **This page** | What Launchpad is, how to run it, and the full configuration reference. |
+| [Release Notes](./release-notes.md) | Launchpad changelog. |
+| [Login & SSO Providers](#provider-configuration) | One page per provider — Microsoft Entra, Okta, PingOne, Auth0, Google, Duo, Kerberos, and shared user. |
+| [JWT Authentication with Okta](./guides/jwt-authentication-okta.md) | End-to-end JWT authentication and token exchange setup. |
+
+Voicebox is optional and runs as a second container, with its own documentation:
+
+| | |
+| :--- | :--- |
+| [Voicebox](./voicebox.md) | What Voicebox is, its features, and using it through the public API. |
+| [Configuring the Voicebox Service](./guides/voicebox-configuration.md) | Running the service, environment variables, LLM providers, and custom headers. |
+| [Deploying the Voicebox Service](./guides/voicebox-deployment.md) | Frame store backends, tuning, health probes, and log events. |
+| [Voicebox Service Release Notes](./voicebox-release-notes.md) | Released independently of Launchpad. |
 
 ## Quick Facts
 
@@ -313,7 +330,7 @@ See [JWT Authentication with Okta](./guides/jwt-authentication-okta.md) for comp
 The `VOICEBOX_THREE_ENABLED` option enables the "Think Mode" feature in Voicebox, which uses a multi-agent architecture and Voicebox 3 to enable chain-of-thought reasoning for handling complex, multi-step questions. When enabled, users will see a "Think Mode" button in the Voicebox input interface.
 
 > [!IMPORTANT]
-> This feature requires Voicebox Service version `v0.22.0+`. See the [Voicebox Release Notes](./voicebox.md#0220-release-oct-16-2025) for more information.
+> This feature requires Voicebox Service version `v0.22.0+`. See the [Voicebox Release Notes](./voicebox-release-notes.md#0220-release-oct-16-2025) for more information.
 
 - **Required:** No
 - **Default:** `false`
@@ -323,7 +340,7 @@ The `VOICEBOX_THREE_ENABLED` option enables the "Think Mode" feature in Voicebox
 The `VOICEBOX_SUGGESTIONS_ENABLED` option enables the "Voicebox Suggestions" feature in Designer. This makes it possible to create a Voicebox-enabled Knowledge Graph, complete with spotlight questions, from just a project description, input data, and a few clicks. When enabled, users will see the new Voicebox-assisted project creation flow when creating a new project in Designer.
 
 > [!IMPORTANT]
-> This feature requires Voicebox Service version `v0.22.0+`. See the [Voicebox Release Notes](./voicebox.md#0220-release-oct-16-2025) for more information.
+> This feature requires Voicebox Service version `v0.22.0+`. See the [Voicebox Release Notes](./voicebox-release-notes.md#0220-release-oct-16-2025) for more information.
 
 - **Required:** No
 - **Default:** `false`
