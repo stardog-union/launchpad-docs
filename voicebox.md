@@ -590,6 +590,14 @@ The Voicebox Service is released independently of Launchpad.
 > [!NOTE] 
 > All available releases of the Voicebox Service are listed below. The image tag for a release is simply the release name prepended with `v` as in `v0.1.1`.
 
+## 1.0.0 Release (August 21, 2026)
+
+> [!NOTE]
+> First generally available release of the next-generation Voicebox Service, distributed under the `v1.0.0` tag. It replaces the stable `0.x` line and serves all Voicebox traffic in [Launchpad 4.0.0](./release-notes.md#400-release-2026-08-21) and later.
+
+<!-- TODO(VET-7288): changes since 1.0.0-beta.3. -->
+<!-- TODO(VET-7288): upgrade notes for deployments on the 0.x line and for beta users on VOICEBOX_BETA_SERVICE_ENDPOINT. -->
+
 ## 1.0.0-beta.3 Release (July 29, 2026)
 
 > [!NOTE]
