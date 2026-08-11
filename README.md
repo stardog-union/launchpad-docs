@@ -274,10 +274,30 @@ The `SSL_PRIVATE_KEY_FILE` option specifies the path within the Launchpad contai
 
 #### `VOICEBOX_SERVICE_ENDPOINT`
 
-The `VOICEBOX_SERVICE_ENDPOINT` option is used to specify the endpoint for the [Voicebox Service](./voicebox.md#voicebox-service). This is used to enable the Voicebox in Launchpad.
+The `VOICEBOX_SERVICE_ENDPOINT` option is used to specify the endpoint for the [Voicebox Service](./voicebox.md#voicebox-service). This is used to enable Voicebox in Launchpad. All Voicebox traffic is routed here unless [`VOICEBOX_USE_LEGACY_SERVICE`](#voicebox_use_legacy_service) is enabled.
+
+> [!IMPORTANT]
+> As of Launchpad v4.0.0, this option must point at a Voicebox Service `v1.0.0` or later deployment. See the [4.0.0 release notes](./release-notes.md#400-release-2026-08-21) for the upgrade steps.
 
 - **Required:** No
 - **Default:** not set
+
+#### `VOICEBOX_LEGACY_SERVICE_ENDPOINT`
+
+The `VOICEBOX_LEGACY_SERVICE_ENDPOINT` option specifies the endpoint of a previous-generation Voicebox Service deployment, kept available as a rollback target. Launchpad never routes traffic here unless [`VOICEBOX_USE_LEGACY_SERVICE`](#voicebox_use_legacy_service) is set to `true`.
+
+- **Required:** No
+- **Default:** not set
+
+#### `VOICEBOX_USE_LEGACY_SERVICE`
+
+The `VOICEBOX_USE_LEGACY_SERVICE` option routes all Voicebox traffic to the deployment configured in [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](#voicebox_legacy_service_endpoint), rather than to [`VOICEBOX_SERVICE_ENDPOINT`](#voicebox_service_endpoint). Use it to roll back if you encounter problems with the current Voicebox Service.
+
+> [!IMPORTANT]
+> Set `VOICEBOX_LEGACY_SERVICE_ENDPOINT` as well. Enabling this option without a legacy endpoint configured logs a `voicebox_legacy_rollback_misconfigured` error at startup and leaves Voicebox non-functional.
+
+- **Required:** No
+- **Default:** `false`
 
 #### `VOICEBOX_SERVICE_SCOPE`
 

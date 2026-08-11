@@ -58,26 +58,40 @@ Launchpad uses semantic versioning.
 
 ## 4.0.0 Release (2026-08-21)
 
-<!-- TODO(VET-7288): confirm upgrade path before publishing — what happens to VOICEBOX_BETA_SERVICE_ENDPOINT,
-     and what a deployment still on the stable 0.x Voicebox Service must change. -->
-
 > [!IMPORTANT]
-> **Voicebox is now generally available.** All Voicebox traffic is served by the Voicebox Service `v1.0.0`, and the Voicebox beta period is complete. See [Voicebox Service](./voicebox.md#voicebox-service) for deployment and configuration.
-
-<!-- TODO(VET-7288): recommended Stardog version callout, if one applies to this release. -->
+> **Voicebox is now generally available, and every Launchpad deployment must change its configuration in this release.**
+>
+> All Voicebox traffic — the Launchpad UI and the public API alike — is now served by the [Voicebox Service](./voicebox.md#voicebox-service) `v1.0.0`. `VOICEBOX_SERVICE_ENDPOINT` now means the current Voicebox Service, and the previous-generation service has its own option, [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint).
+>
+> **If you were not in the Voicebox beta:** point [`VOICEBOX_SERVICE_ENDPOINT`](./README.md#voicebox_service_endpoint) at your Voicebox Service `v1.0.0` deployment. This is required. Left pointing at a previous-generation service, Launchpad sends current request paths to it and Voicebox requests fail with `404`.
+>
+> **If you were in the Voicebox beta:** make both of these changes together.
+>
+> 1. Set `VOICEBOX_SERVICE_ENDPOINT` to the URL currently in `VOICEBOX_BETA_SERVICE_ENDPOINT`.
+> 2. Remove `VOICEBOX_BETA_SERVICE_ENDPOINT`. Leaving it in place keeps the beta routing split active, which sends UI traffic to `v1.0.0` on previous-generation request paths, and those requests fail with `404`.
+>
+> **In both cases** you may optionally set `VOICEBOX_LEGACY_SERVICE_ENDPOINT` to your previous-generation deployment, which makes [`VOICEBOX_USE_LEGACY_SERVICE=true`](./README.md#voicebox_use_legacy_service) available as a single-option rollback.
+>
+> **To verify the upgrade:** after restarting, the `voicebox_service_routing` startup log event names the endpoint Launchpad will route to. Confirm it is your `v1.0.0` deployment. Voicebox answers failing while Designer and dataset descriptions still work is the signature of a deployment still pointing at a previous-generation service.
 
 ### New Features
 
-- Voicebox Service `v1.0.0` is generally available. Launchpad now routes all Voicebox requests through it by default, replacing the stable `0.x` service and the opt-in beta introduced in [3.11.0](#3110-release-2026-06-30).
+- Voicebox is generally available. Launchpad routes all Voicebox traffic to the Voicebox Service [`v1.0.0`](./voicebox.md#100-release-august-21-2026) by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox beta period is complete.
+- Added [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint) and [`VOICEBOX_USE_LEGACY_SERVICE`](./README.md#voicebox_use_legacy_service) to keep a previous-generation Voicebox Service deployment available as a rollback target. Traffic is never routed to it unless `VOICEBOX_USE_LEGACY_SERVICE=true`.
 
-<!-- TODO(VET-7288): document all compatible frame stores, with a table comparing the tradeoffs between them. -->
-<!-- TODO(VET-7288): remaining 4.0.0 features. -->
+<!-- TODO: document all compatible frame stores, with a table comparing the tradeoffs between them. -->
+<!-- TODO: remaining 4.0.0 features. -->
 
 ### Modifications
 
 - Updated bundled Stardog Applications (Designer, Explorer, Studio, Knowledge Catalog) to their latest versions.
 
-<!-- TODO(VET-7288): Bug Fixes and Security subsections — omit either if it has no content. -->
+### Deprecations
+
+- `VOICEBOX_BETA_SERVICE_ENDPOINT` is deprecated. It is still accepted to ease the upgrade from the beta, and preserves the beta routing split exactly, but Launchpad logs a deprecation warning at startup when it is set. Migrate to `VOICEBOX_SERVICE_ENDPOINT`.
+
+<!-- TODO: Bug Fixes and Security subsections — omit either if it has no content. -->
+<!-- TODO: recommended Stardog version callout, if one applies to this release. -->
 
 ## 3.11.0 Release (2026-06-30)
 
