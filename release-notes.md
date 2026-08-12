@@ -83,10 +83,11 @@ Launchpad uses semantic versioning.
 
 - Voicebox Service [`v1.0.0`](./voicebox-release-notes.md#100-release-august-21-2026) is generally available. Launchpad routes all Voicebox traffic to it by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox Service beta period is complete.
 - Added [`VOICEBOX_LEGACY_SERVICE_ENDPOINT`](./README.md#voicebox_legacy_service_endpoint) and [`VOICEBOX_USE_LEGACY_SERVICE`](./README.md#voicebox_use_legacy_service) to keep a previous-generation Voicebox Service deployment available as a rollback target. Traffic is never routed to it unless `VOICEBOX_USE_LEGACY_SERVICE=true`. The rollback is intended as a temporary measure, not a long-term configuration.
-
 - The Voicebox Service persists the results of the queries it runs, so a later turn in a conversation can reuse a result without re-querying Stardog. These **frames** can be stored on local disk, in Amazon S3, or in Azure Blob Storage. Local disk is the default and requires a persistent volume; the object backends do not, and allow the service to run more than one instance. See [Frame Stores](./guides/voicebox-deployment.md#frame-stores) for a comparison and the configuration for each.
 
-<!-- TODO: remaining 4.0.0 features. -->
+### Bug Fixes
+
+- Fixed authentication failures under concurrent load. Launchpad's embedded database could hit lock contention during heavy writes and return a misleading `401`; it now contends less, and returns `503` when token validation genuinely cannot complete.
 
 ### Modifications
 
@@ -97,8 +98,10 @@ Launchpad uses semantic versioning.
 
 - `VOICEBOX_BETA_SERVICE_ENDPOINT` is deprecated. It is still accepted to ease the upgrade from the beta, and preserves the beta routing split exactly, but Launchpad logs a deprecation warning at startup when it is set. Migrate to `VOICEBOX_SERVICE_ENDPOINT`.
 
-<!-- TODO: Bug Fixes and Security subsections — omit either if it has no content. -->
-<!-- TODO: recommended Stardog version callout, if one applies to this release. -->
+### Security
+
+- Removed Python development dependencies from the production image, reducing the shipped dependency surface.
+- Updated internal packages and dependencies to address security vulnerabilities.
 
 ## 3.11.0 Release (2026-06-30)
 
