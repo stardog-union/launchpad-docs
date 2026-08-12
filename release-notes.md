@@ -79,6 +79,11 @@ Launchpad uses semantic versioning.
 >
 > **To verify the upgrade:** after restarting, the `voicebox_service_routing` startup log event names the endpoint Launchpad will route to. Confirm it is your `v1.0.0` deployment. Voicebox answers failing while Designer and dataset descriptions still work is the signature of a deployment still pointing at a previous-generation service.
 
+> [!IMPORTANT]
+> **Recommended Stardog Version:** [`v12.0.0+`](https://docs.stardog.com/release-notes/stardog-platform#1200-release)
+>
+> **Recommended Voicebox Service Version:** [`v1.0.0+`](./voicebox-release-notes.md#100-release-august-21-2026)
+
 ### New Features
 
 - Voicebox Service [`v1.0.0`](./voicebox-release-notes.md#100-release-august-21-2026) is generally available. Launchpad routes all Voicebox traffic to it by default, replacing both the previous-generation service and the opt-in public API beta introduced in [3.11.0](#3110-release-2026-06-30). The Voicebox Service beta period is complete.
