@@ -345,7 +345,7 @@ See [JWT Authentication with Okta](./guides/jwt-authentication-okta.md) for comp
 
 #### `VOICEBOX_THINK_MODE_ENABLED`
 
-The `VOICEBOX_THINK_MODE_ENABLED` option controls the ["Think Mode"](./voicebox.md#think-mode) feature in Voicebox, which uses a multi-agent architecture to enable chain-of-thought reasoning for handling complex, multi-step questions. When enabled, users see a "Think Mode" button in the Voicebox input interface. Set it to `false` to disable the feature.
+The `VOICEBOX_THINK_MODE_ENABLED` option controls the "Think Mode" feature in Voicebox, which uses a multi-agent architecture to enable chain-of-thought reasoning for handling complex, multi-step questions. When enabled, users see a "Think Mode" button in the Voicebox input interface. Set it to `false` to disable the feature.
 
 > [!IMPORTANT]
 > This option has no effect on the Voicebox Service `v1.0.0` or later, which reasons across multiple steps on every question. It applies only to a deployment running the previous-generation `0.x` service.

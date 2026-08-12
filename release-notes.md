@@ -96,7 +96,7 @@ Launchpad uses semantic versioning.
 
 ### Modifications
 
-- [Think Mode](./voicebox.md#think-mode) no longer applies. The Voicebox Service `v1.0.0` reasons across multiple steps on every question rather than behind a toggle, so [`VOICEBOX_THINK_MODE_ENABLED`](./README.md#voicebox_think_mode_enabled) now affects only a deployment rolled back to the previous-generation service.
+- Think Mode no longer applies. The Voicebox Service `v1.0.0` reasons across multiple steps on every question rather than behind a toggle, so [`VOICEBOX_THINK_MODE_ENABLED`](./README.md#voicebox_think_mode_enabled) now affects only a deployment rolled back to the previous-generation service.
 - Updated bundled Stardog Applications (Designer, Explorer, Studio, Knowledge Catalog) to their latest versions.
 
 ### Deprecations
