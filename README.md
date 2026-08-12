@@ -324,6 +324,16 @@ The `VOICEBOX_USE_LEGACY_SERVICE` option routes all Voicebox traffic to the depl
 - **Required:** No
 - **Default:** `false`
 
+#### `VOICEBOX_BETA_SERVICE_ENDPOINT`
+
+> [!IMPORTANT]
+> **Deprecated.** This option routed public API traffic to a beta build of the Voicebox Service during the beta period. Setting it preserves that routing split, which sends UI traffic to the current service on previous-generation request paths, and those requests fail with `404`. Launchpad logs a deprecation warning at startup when it is set.
+>
+> Set [`VOICEBOX_SERVICE_ENDPOINT`](#voicebox_service_endpoint) to your Voicebox Service deployment and remove this option. See the [4.0.0 release notes](./release-notes.md#400-release-2026-08-21) for the upgrade steps.
+
+- **Required:** No
+- **Default:** not set
+
 #### `VOICEBOX_SERVICE_SCOPE`
 
 The `VOICEBOX_SERVICE_SCOPE` specifies the OAuth scope for Voicebox service authentication when using JWT-based authentication with Okta.

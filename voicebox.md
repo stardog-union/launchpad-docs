@@ -11,24 +11,6 @@ Launchpad can operate with or without the Voicebox. To enable Voicebox, you'll n
 
 ## Voicebox Features
 
-### Think Mode
-
-> [!IMPORTANT]
-> **Think Mode does not apply to the Voicebox Service `v1.0.0` or later**, which reasons across multiple steps on every question rather than behind a toggle. Launchpad v4.0.0 routes all Voicebox traffic to `v1.0.0` by default, so this feature and its configuration option are only relevant to a deployment still running the previous-generation `0.x` service.
-
-Think Mode is powered by a multi-agent architecture, enabling chain-of-thought reasoning to handle complex, multi-step questions. When it applies, users see a "Think Mode" button in the Voicebox input interface.
-
-![Think Mode Screenshot](https://github.com/user-attachments/assets/1fcc15db-b711-44e7-9c3f-c0c53baa3aca)
-
-Think Mode is enabled by default. To turn it off on a deployment running the previous-generation service, add the following environment variable to your Launchpad configuration:
-
-```bash
-VOICEBOX_THINK_MODE_ENABLED=false
-```
-
-> [!NOTE]
-> Think Mode requires Voicebox Service version `v0.22.0+` and Stardog version `v11.2.0+`. See the [Voicebox Release Notes](./voicebox-release-notes.md#0220-release-oct-16-2025) and [Stardog Release Notes](https://docs.stardog.com/release-notes/stardog-platform#1120-release-2025-10-01) for more information.
-
 ### Voicebox Suggestions for Designer
 
 Voicebox Suggestions makes it possible to create a Voicebox-enabled Knowledge Graph, complete with spotlight questions, from just a project description, input data, and a few clicks. When enabled, users will see the new Voicebox-assisted project creation flow when creating a new project in Designer.
