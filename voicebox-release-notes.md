@@ -17,7 +17,13 @@ The Voicebox Service is released independently of Launchpad.
 >
 > Upgrading to Launchpad 4.0.0 requires a configuration change in every deployment, whether or not you took part in the Voicebox Service beta. See the [4.0.0 release notes](./release-notes.md#400-release-2026-08-21) for the steps.
 
-<!-- TODO: changes since 1.0.0-beta.3. -->
+* Answer complex, multi-step questions by planning and running a sequence of queries against Stardog, rather than translating a question into a single query
+* Reason across multiple steps on every question. Think Mode is no longer a separate mode and its toggle no longer applies
+* Build on earlier turns in a conversation: results are kept and reused, so a follow-up question can refine or analyze a previous answer without re-querying Stardog
+* Analyze returned results as part of answering, rather than only returning the table
+* Answer questions over unstructured data indexed with BITES, with document citations
+* Return a summary of what was attempted when a question is too complex to finish, instead of a generic "cannot find an answer" response
+* Choose where results are persisted — local disk, Amazon S3, or Azure Blob Storage — so the service can scale beyond a single instance
 
 ## 1.0.0-beta.3 Release (July 29, 2026)
 
