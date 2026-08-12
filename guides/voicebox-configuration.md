@@ -17,10 +17,10 @@ For what Voicebox is and how to use it, see [Voicebox](../voicebox.md).
 1. Similar to Launchpad, the Voicebox Service image can be pulled from Stardog's private Docker registry.
 
    ```bash
-   docker pull stardog-stardog-apps.jfrog.io/voicebox-service:current
+   docker pull stardog-stardog-apps.jfrog.io/voicebox-service:v1.0.0
    ```
 
-   - The `current` tag will always point to the latest version of the Voicebox Service. You can also specify a specific version tag to avoid accidental upgrades.
+   - Pinning an explicit version tag, as above, is recommended so that restarting or rebuilding never changes the version you are running. The `current` tag always points to the latest release if you would rather track it.
 
 2. To run the Voicebox Service with Docker, you can use the following command:
 
@@ -30,7 +30,7 @@ For what Voicebox is and how to use it, see [Voicebox](../voicebox.md).
    -p 8000:8000 \
    -v /host/path/to/vbx-config.json:/voicebox-config/vbx-config.json \
    -v voicebox-frames:/var/lib/voicebox/frames \
-   stardog-stardog-apps.jfrog.io/voicebox-service:current
+   stardog-stardog-apps.jfrog.io/voicebox-service:v1.0.0
    ```
 
    - `.env.voicebox-service` can be named anything but contains the configuration for the Voicebox Service. See [Configuration](#configuration) for more details.
