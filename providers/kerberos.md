@@ -1,5 +1,17 @@
 # Kerberos Configuration
 
+> [!IMPORTANT]
+> **Stardog Launchpad documentation has moved to [docs.stardog.com](https://docs.stardog.com/launchpad/).**
+>
+> This repository is an archive. It documents **Launchpad v3** and **Voicebox Service `0.x`**, and is no longer updated.
+>
+> For **Launchpad v4** and **Voicebox Service `v1.0.0`** or later, see:
+>
+> - [Stardog Launchpad](https://docs.stardog.com/launchpad/) — installing, configuring, and running Launchpad, and its login providers
+> - [Voicebox Service](https://docs.stardog.com/launchpad/voicebox-service/) — running, configuring, and deploying the Voicebox Service
+> - [Launchpad release notes](https://docs.stardog.com/release-notes/stardog-cloud/stardog-launchpad/)
+> - [Voicebox Service release notes](https://docs.stardog.com/release-notes/stardog-voicebox/)
+
 ![Kerberos](../assets/kerberos-logo.jpg)
 
 Kerberos can be used as a login provider to authenticate users into Launchpad. Kerberos does not currently support SSO connections to Stardog endpoints.
