@@ -317,6 +317,13 @@ The `COPY_CONNECTION_TOKEN_BUTTON_ENABLED` option controls whether the "Copy Tok
 - **Required:** No
 - **Default:** `true`
 
+#### `REQUIRE_SSO_CONNECTIONS`
+
+The `REQUIRE_SSO_CONNECTIONS` option restricts Launchpad to [SSO Connections](#sso-connection-configuration) only. When set to `true`, users may only create connections that authenticate with SSO. Connections that authenticate with a Stardog username and password, are rejected by Launchpad, and the non-SSO connection paths are hidden in the UI.
+
+- **Required:** No
+- **Default:** `false`
+
 ### Public API JWT Authentication Configuration
 
 The following environment variables configure JWT-based authentication for the Launchpad public API (`/api/v1/*`). This allows external applications to access the Voicebox API using access tokens from an identity provider.
@@ -371,6 +378,9 @@ SSOCONNECTION_DEVELOPMENT_AZURE_DISPLAY_NAME=Development
 
 > [!NOTE]
 > Even if your login provider is the same as your connection provider (e.g. Microsoft Entra), they should be different applications in the SSO provider. This ensures proper security boundaries between Launchpad authentication and Stardog endpoint access.
+
+> [!NOTE]
+> To require that all connections use SSO, set [`REQUIRE_SSO_CONNECTIONS=true`](#require_sso_connections). This prevents users from creating connections that authenticate with a Stardog username and password.
 
 ##### Internal Stardog Endpoint Configuration
 
