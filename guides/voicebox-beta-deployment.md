@@ -1,6 +1,18 @@
 # Deploying the Voicebox Service (Public API Beta)
 
 > [!IMPORTANT]
+> **Stardog Launchpad documentation has moved to [docs.stardog.com](https://docs.stardog.com/launchpad/).**
+>
+> This repository is an archive. It documents **Launchpad v3** and **Voicebox Service `0.x`**, and is no longer updated.
+>
+> For **Launchpad v4** and **Voicebox Service `v1.0.0`** or later, see:
+>
+> - [Stardog Launchpad](https://docs.stardog.com/launchpad/) — installing, configuring, and running Launchpad, and its login providers
+> - [Voicebox Service](https://docs.stardog.com/launchpad/voicebox-service/) — running, configuring, and deploying the Voicebox Service
+> - [Launchpad release notes](https://docs.stardog.com/release-notes/stardog-cloud/stardog-launchpad/)
+> - [Voicebox Service release notes](https://docs.stardog.com/release-notes/stardog-voicebox/)
+
+> [!IMPORTANT]
 > **Applies to:** Launchpad v3.11.0+ · Voicebox Service `v1.0.0-beta.1+` (beta)
 >
 > Routing public API traffic to the beta service requires **Launchpad v3.11.0 or later** - earlier versions have no `VOICEBOX_BETA_SERVICE_ENDPOINT` routing, so the beta service receives no traffic.

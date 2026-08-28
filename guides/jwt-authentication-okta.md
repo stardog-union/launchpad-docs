@@ -1,5 +1,17 @@
 # JWT Authentication with Okta
 
+> [!IMPORTANT]
+> **Stardog Launchpad documentation has moved to [docs.stardog.com](https://docs.stardog.com/launchpad/).**
+>
+> This repository is an archive. It documents **Launchpad v3** and **Voicebox Service `0.x`**, and is no longer updated.
+>
+> For **Launchpad v4** and **Voicebox Service `v1.0.0`** or later, see:
+>
+> - [Stardog Launchpad](https://docs.stardog.com/launchpad/) — installing, configuring, and running Launchpad, and its login providers
+> - [Voicebox Service](https://docs.stardog.com/launchpad/voicebox-service/) — running, configuring, and deploying the Voicebox Service
+> - [Launchpad release notes](https://docs.stardog.com/release-notes/stardog-cloud/stardog-launchpad/)
+> - [Voicebox Service release notes](https://docs.stardog.com/release-notes/stardog-voicebox/)
+
 This guide walks through configuring JWT-based authentication for Voicebox using Okta's On-Behalf-Of (OBO) token exchange flow.
 
 ## Is This Guide For You?
